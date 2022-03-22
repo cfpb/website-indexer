@@ -2,6 +2,8 @@
 
 CLI version of [cfgov-crawler-app](https://github.com/cfpb/cfgov-crawler-app). Crawls the consumerfinance.gov website and saves notable things in a SQLite database.
 
+![crawsqueal-screenshot](screenshot.png)
+
 ## Usage
 
 ```

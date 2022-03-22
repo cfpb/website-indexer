@@ -19,9 +19,9 @@ try {
 } catch (e) {}
 
 // Set up the CLI progress bar
-console.log('\n\n');
+console.log('\n\nCrawling consumerfinance.gov...');
 const progressBar = new cliProgress.SingleBar({
-  format: 'Crawling cf.gov... |' + colors.cyan('{bar}') + '| {percentage}% complete | {value}/{total} pages | {path}',
+  format: `| ${colors.cyan('{bar}')} | {percentage}% | {value}/{total} pages | {path}`,
   barCompleteChar: '\u2588',
   barIncompleteChar: '\u2591',
   hideCursor: true
