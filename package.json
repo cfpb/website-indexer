@@ -2,7 +2,7 @@
   "name": "crawsqueal",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "CC0",
+  "license": "CC0-1.0",
   "bin": "./index.js",
   "type": "module",
   "engines": {
