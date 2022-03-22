@@ -1,0 +1,26 @@
+{
+  "name": "crawsqueal",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "CC0",
+  "bin": "./index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=16.x"
+  },
+  "scripts": {
+    "lint": "semistandard --fix",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "ansi-colors": "^4.1.1",
+    "cheerio": "^1.0.0-rc.10",
+    "cli-progress": "^3.10.0",
+    "md5": "^2.3.0",
+    "simplecrawler": "^1.1.9",
+    "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {
+    "semistandard": "^16.0.1"
+  }
+}
