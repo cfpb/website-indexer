@@ -38,7 +38,15 @@ class DB {
         pageHash,
         timestamp
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-    return this.run(sql, Object.values(record));
+    return this.run(sql, Object.values(record).map(value => {
+      if (Object.prototype.toString.call(value) === "[object Date]") {
+        return value.toISOString();
+      } else if (typeof value === 'object') {
+        return JSON.stringify(value);
+      } else {
+        return value;
+      }
+    }));
   }
 
   run (sql, params = []) {
