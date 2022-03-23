@@ -65,7 +65,6 @@ crawler.on('fetchcomplete', function (queueItem, responseBuffer) {
 
   const record = {
     id: parser.getID(queueItem.url),
-    host: queueItem.host,
     path: queueItem.path,
     title: parser.getTitle(),
     components: parser.getComponents(),
