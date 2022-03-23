@@ -15,7 +15,6 @@ class DB {
     const sql = `
       CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (
         id PRIMARY KEY,
-        host TEXT,
         path TEXT,
         title TEXT,
         components TEXT,
@@ -30,14 +29,13 @@ class DB {
     const sql = `
       INSERT OR REPLACE INTO ${TABLE_NAME} (
         id,
-        host,
         path,
         title,
         components,
         links,
         pageHash,
         timestamp
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)`;
     return this.run(sql, Object.values(record));
   }
 
