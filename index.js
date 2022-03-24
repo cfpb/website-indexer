@@ -3,13 +3,15 @@
 import cliProgress from 'cli-progress';
 import colors from 'ansi-colors';
 import Crawler from 'simplecrawler';
+import { argv } from 'process';
 import DB from './db.js';
 import Parser from './parser.js';
 
 let APPROX_NUM_PAGES = 25900;
 
 // Set up the database
-const db = new DB('./cfgov.sqlite3');
+const dbLocation = argv[2] || './cfgov.sqlite3';
+const db = new DB(dbLocation);
 db.createTable();
 
 // Try and get the actual number of pages

@@ -39,7 +39,7 @@ class DB {
         timestamp
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     return this.run(sql, Object.values(record).map(value => {
-      if (Object.prototype.toString.call(value) === "[object Date]") {
+      if (Object.prototype.toString.call(value) === '[object Date]') {
         return value.toISOString();
       } else if (typeof value === 'object') {
         return JSON.stringify(value);

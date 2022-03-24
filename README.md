@@ -10,7 +10,7 @@ CLI version of [cfgov-crawler-app](https://github.com/cfpb/cfgov-crawler-app). C
 npx cfpb/crawsqueal
 ```
 
-It'll create a SQLite database named `./cfgov.sqlite3`, crawl the cf.gov website, and create a record for every page that has a unique URL (including query params and hashes). Takes a couple hours.
+It'll create a SQLite database named `./cfgov.sqlite3`, crawl the cf.gov website, and create a record for every page that has a unique URL (including query params and hashes). Takes a couple hours. You can optionally pass a custom filename for the database, e.g. `npx cfpb/crawsqueal db.sqlite3`.
 
 FYI [DB4S](https://github.com/sqlitebrowser/sqlitebrowser) is a neat SQLite browser.
 
