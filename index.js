@@ -56,7 +56,7 @@ crawler.addFetchCondition((queueItem, referrerQueueItem, callback) => {
 });
 
 // Do cool stuff after a page is fetched
-crawler.on('fetchcomplete', function (queueItem, responseBuffer) {
+crawler.on('fetchcomplete', async function (queueItem, responseBuffer) {
   const contentType = (queueItem.stateData && queueItem.stateData.contentType) || '';
 
   if (!contentType.includes('text/html') || queueItem.host !== crawler.host) {
@@ -72,6 +72,7 @@ crawler.on('fetchcomplete', function (queueItem, responseBuffer) {
     components: parser.getComponents(),
     links: parser.getLinks(),
     pageHash: parser.getHash(),
+    pageHtml: await parser.getHtml(),
     timestamp: new Date()
   };
 

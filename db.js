@@ -20,6 +20,7 @@ class DB {
         components TEXT,
         links TEXT,
         pageHash TEXT,
+        pageHtml TEXT,
         timestamp TEXT
       )`;
     return this.run(sql);
@@ -34,8 +35,9 @@ class DB {
         components,
         links,
         pageHash,
+        pageHtml,
         timestamp
-      ) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     return this.run(sql, Object.values(record).map(value => {
       if (Object.prototype.toString.call(value) === '[object Date]') {
         return value.toISOString();

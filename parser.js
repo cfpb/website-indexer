@@ -1,13 +1,14 @@
 import md5 from 'md5';
 import cheerio from 'cheerio';
+import { minify } from 'html-minifier-terser';
 
 // Most of this parsing logic is copied from
 // https://github.com/cfpb/cfgov-crawler-app/blob/master/src/models/page-model.js
 
 class Parser {
-  constructor (dom) {
-    this.html = dom;
-    this.$ = cheerio.load(dom);
+  constructor (domBuffer) {
+    this.html = domBuffer.toString();
+    this.$ = cheerio.load(domBuffer);
   }
 
   getID (url) {
@@ -32,6 +33,15 @@ class Parser {
 
   getHash () {
     return md5(this.html);
+  }
+
+  async getHtml () {
+    let html = this.html;
+    try {
+      return await minify(this.html, { collapseWhitespace: true });
+    } catch (error) {
+      return html;
+    }
   }
 
   getTitle () {
