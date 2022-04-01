@@ -11,11 +11,6 @@ class Parser {
     this.$ = cheerio.load(domBuffer);
   }
 
-  getID (url) {
-    // hash the full page url to get a unique identifier
-    return md5(url).substring(0, 10);
-  }
-
   getLinks () {
     const links = [];
     const $body = this.$('body');

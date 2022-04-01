@@ -11,8 +11,8 @@ let APPROX_NUM_PAGES = 25900;
 
 // Set up the database
 const dbLocation = argv[2] || './cfgov.sqlite3';
-const db = new DB(dbLocation);
-db.createTable();
+const db = await DB.connect(dbLocation);
+await db.createTables();
 
 // Try and get the actual number of pages
 try {
@@ -66,7 +66,6 @@ crawler.on('fetchcomplete', async function (queueItem, responseBuffer) {
   const parser = new Parser(responseBuffer);
 
   const record = {
-    id: parser.getID(queueItem.url),
     path: queueItem.path,
     title: parser.getTitle(),
     components: parser.getComponents(),
@@ -77,7 +76,7 @@ crawler.on('fetchcomplete', async function (queueItem, responseBuffer) {
   };
 
   try {
-    db.insert(record);
+    await db.insert(record);
     progressBar.increment({path: record.path})
   } catch (error) {
     console.error("Something went horribly wrong and there's nothing to handle the exception. Oh no.");

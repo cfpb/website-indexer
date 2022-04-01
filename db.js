@@ -1,35 +1,61 @@
-import sqlite from 'sqlite3';
+import sqlite3 from 'sqlite3';
+import { open } from 'sqlite'
 
 const TABLE_NAME = 'cfgov';
 
 class DB {
-  constructor (dbFilePath) {
-    this.db = new sqlite.Database(dbFilePath, (err) => {
-      if (err) {
-        console.error('Could not connect to database', err);
-      }
-    });
+  constructor (db) {
+    this.db = db;
   }
 
-  createTable () {
-    const sql = `
+  static async connect (dbFilePath) {
+    const db = await open({
+      filename: dbFilePath,
+      driver: sqlite3.Database
+    });
+
+    return new DB( db );
+  }
+
+  async createTables () {
+    await this.db.run(`
       CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (
-        id PRIMARY KEY,
-        path TEXT,
+        path TEXT PRIMARY KEY,
         title TEXT,
         components TEXT,
         links TEXT,
         pageHash TEXT,
         pageHtml TEXT,
         timestamp TEXT
-      )`;
-    return this.run(sql);
+      )
+    `);
+
+    await this.db.run(`
+      CREATE VIRTUAL TABLE IF NOT EXISTS ${TABLE_NAME}_fts USING fts5(
+        path,
+        pageHtml,
+        content=${TABLE_NAME}
+      )
+    `);
+
+    await this.db.run(`
+      CREATE TRIGGER IF NOT EXISTS insert_${TABLE_NAME}_fts
+      AFTER INSERT ON ${TABLE_NAME}
+      BEGIN
+        INSERT INTO ${TABLE_NAME}_fts(
+          path,
+          pageHtml
+        ) VALUES (
+          new.path,
+          new.pageHtml
+        );
+      END
+    `);
   }
 
-  insert (record) {
+  async insert (record) {
     const sql = `
-      INSERT OR REPLACE INTO ${TABLE_NAME} (
-        id,
+      INSERT INTO ${TABLE_NAME} (
         path,
         title,
         components,
@@ -37,8 +63,9 @@ class DB {
         pageHash,
         pageHtml,
         timestamp
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-    return this.run(sql, Object.values(record).map(value => {
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+    return await this.db.run(sql, Object.values(record).map(value => {
       if (Object.prototype.toString.call(value) === '[object Date]') {
         return value.toISOString();
       } else if (typeof value === 'object') {
@@ -49,29 +76,12 @@ class DB {
     }));
   }
 
-  run (sql, params = []) {
-    return new Promise((resolve, reject) => {
-      this.db.run(sql, params, function (err) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve({ id: this.lastID });
-        }
-      });
-    });
-  }
-
-  getCount () {
-    return new Promise((resolve, reject) => {
-      this.db.all(`SELECT * FROM ${TABLE_NAME}`, (err, rows) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(rows.length);
-        }
-      });
-    });
-  }
+  async getCount () {
+    const result = await this.db.get(
+      `SELECT COUNT(*) AS count FROM ${TABLE_NAME}`
+    );
+    return result.count;
+  };
 }
 
 export default DB;
