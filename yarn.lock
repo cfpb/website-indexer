@@ -2139,6 +2139,11 @@ sqlite3@^5.0.2:
   optionalDependencies:
     node-gyp "3.x"
 
+sqlite@^4.0.25:
+  version "4.0.25"
+  resolved "https://registry.yarnpkg.com/sqlite/-/sqlite-4.0.25.tgz#3710c6ea7dc94de4306f0bff77f916da02799605"
+  integrity sha512-gqCEcLF8FOTeW/na3SRYWLQkw2jZXgVj1DdgRJbm0jvrhnUgBIuNDUUm649AnBNDNHhI5XskwT8dvc8vearRLQ==
+
 sshpk@^1.7.0:
   version "1.17.0"
   resolved "https://registry.yarnpkg.com/sshpk/-/sshpk-1.17.0.tgz#578082d92d4fe612b13007496e543fa0fbcbe4c5"

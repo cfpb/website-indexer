@@ -19,6 +19,7 @@
     "html-minifier-terser": "^7.0.0-alpha.2",
     "md5": "^2.3.0",
     "simplecrawler": "^1.1.9",
+    "sqlite": "^4.0.25",
     "sqlite3": "^5.0.2"
   },
   "devDependencies": {
