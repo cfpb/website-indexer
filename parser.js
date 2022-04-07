@@ -23,7 +23,7 @@ class Parser {
       }
     });
 
-    return links;
+    return links.sort();
   }
 
   getHash () {
@@ -64,7 +64,7 @@ class Parser {
       });
     }
 
-    return components;
+    return components.sort();
   }
 }
 
