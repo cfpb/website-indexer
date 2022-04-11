@@ -1,0 +1,29 @@
+<a href="{% url 'index' %}">Home</a>
+
+<h1>{{ page.path }}</h1>
+
+<div>
+    Crawled {{ page.timestamp }} (UTC)
+    (<a href="{{ page.absolute_path }}">link</a>)
+</div>
+
+<div class="links">
+    <h2>Links</h2>
+    {% for link in page.links %}
+        {{ link }}<br>
+    {% endfor %}
+</div>
+
+<div class="components">
+    <h2>Components</h2>
+    {% for component in page.components %}
+        {{ component }}<br>
+    {% endfor %}
+</div>
+
+<div class="html">
+    <h2>Minified HTML</h2>
+    <pre>
+        {{ page.html }}
+    </pre>
+</div>
