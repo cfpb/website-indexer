@@ -31,6 +31,14 @@ class DB {
     `);
 
     await this.db.run(`
+      CREATE INDEX IF NOT EXISTS
+        ${TABLE_NAME}_timestamp_idx
+      ON ${TABLE_NAME} (
+        timestamp
+      )
+    `);
+
+    await this.db.run(`
       CREATE VIRTUAL TABLE IF NOT EXISTS ${TABLE_NAME}_fts USING fts5(
         path,
         pageHtml,
