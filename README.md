@@ -14,7 +14,9 @@ It'll create a SQLite database named `./cfgov.sqlite3`, crawl the cf.gov website
 
 ## How to query the crawler database
 
-You can use the SQLite command-line client to make queries against the crawl result,
+You can use the
+[SQLite command-line client](https://www.sqlite.org/cli.html)
+to make queries against the crawl result,
 or a graphical client such as [DB4S](https://github.com/sqlitebrowser/sqlitebrowser) if you prefer.
 
 To run the command-line client:
