@@ -1,33 +1,86 @@
-<div>
-    <form action="{% url 'index' %}" method="get">
-        {{ form }}
-        <button class="button" type="submit">Search</button>
-    </form>
+{% extends 'base_search.html' %}
+
+{% block content_main %}
+<div class="results_header">
+  <div class="results_count">
+    <h2 class="h3">
+      Showing {{ page_obj.paginator.count }} matching page{{ page_obj.paginator.count | pluralize }}
+    </h2>
+  </div>
 </div>
 
-<div>
-    {{ page_obj.paginator.count }}
-    URL{{ page_obj.paginator.count | pluralize }}
+<div class="results_list">
+  <ul class="m-list">
+    {% for page in pages %}
+    <article class="results_item">
+      <h4>
+        <a href="{{ page.get_absolute_url }}">{{ page.get_trimmed_page_title }}</a>
+      </h4>
+      <div class="u-truncate">{{ page.path }}</div>
+    </article>
+    {% endfor %}
+  </ul>
 </div>
 
-{% for page in pages %}
-    <a href="{{ page.get_absolute_url }}">{{ page.path }}</a><br>
-{% endfor %}
-
-<div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?page=1{% if pagination_query_params %}&amp;{{ pagination_query_params }}{% endif %}">&laquo; first</a>
-            <a href="?page={{ page_obj.previous_page_number }}{% if pagination_query_params %}&amp;{{ pagination_query_params }}{% endif %}">previous</a>
+{% if page_obj.paginator.count > 0 %}
+<div class="results_paginator">
+  <nav class="m-pagination" role="navigation" aria-label="Pagination">
+    {% if page_obj.has_previous %}
+    <a class="a-btn m-pagination_btn-prev" href="?page={{ page_obj.previous_page_number }}{% if pagination_query_params %}&amp;{{ pagination_query_params }}{% endif %}">
+      {% else %}
+      <a class="a-btn
+                  a-btn__disabled
+                  m-pagination_btn-prev">
         {% endif %}
-
-        <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        <span class="a-btn_icon a-btn_icon__on-left">
+          {% include 'icons/chevron-left.svg' %}
         </span>
-
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}{% if pagination_query_params %}&amp;{{ pagination_query_params }}{% endif %}">next</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}{% if pagination_query_params %}&amp;{{ pagination_query_params }}{% endif %}">last &raquo;</a>
-        {% endif %}
-    </span>
+        Previous
+      </a>
+      {% if page_obj.has_next %}
+      <a class="a-btn m-pagination_btn-next" href="?page={{ page_obj.next_page_number }}{% if pagination_query_params %}&amp;{{ pagination_query_params }}{% endif %}">
+        {% else %}
+        <a class="a-btn
+                a-btn__disabled
+                m-pagination_btn-next">
+          {% endif %}
+          Next
+          <span class="a-btn_icon a-btn_icon__on-right">
+            {% include 'icons/chevron-right.svg' %}
+          </span>
+        </a>
+        <form class="m-pagination_form" action="{% if pagination_query_params %}?{{ pagination_query_params }}{% endif %}">
+          <label for="m-pagination_current-page">
+            <span class="m-pagination_label">
+              Page
+            </span>
+            <span class="u-visually-hidden">
+              {{ page_obj.number }} out of {{ page_obj.paginator.num_pages }} total pages
+            </span>
+          </label>
+          <input id="m-pagination_current-page"
+                 class="m-pagination_current-page"
+                 name="page"
+                 type="number"
+                 min="1"
+                 max="{{ page_obj.paginator.num_pages }}"
+                 pattern="[0-9]*"
+                 inputmode="numeric"
+                 value="{{ page_obj.number }}">
+          <span class="m-pagination_label">
+            of {% widthratio page_obj.paginator.count page_obj.paginator.per_page 1 %}
+          </span>
+          <button class="a-btn
+                        a-btn__link
+                        m-pagination_btn-submit" type="submit">
+            Go
+          </button>
+          <input type="hidden" name="search_type" value="{{ form.search_type }}">
+          <input type="hidden" name="paginate_by" value="{{ form.paginate_by }}">
+          <input type="hidden" name="q" value="{{ form.q }}">
+        </form>
+  </nav>
 </div>
+{% endif %}
+
+{% endblock content_main %}

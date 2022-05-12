@@ -1,6 +1,14 @@
+From the repo's root, compile front-end assets:
+
+```
+yarn
+yarn build
+```
+
 Create a Python virtual environment and install requirements:
 
 ```
+cd viewer/
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt

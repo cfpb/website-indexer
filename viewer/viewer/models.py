@@ -25,6 +25,9 @@ class Page(models.Model):
     def get_absolute_url(self):
         return reverse("page") + "?" + urlencode({"path": self.path})
 
+    def get_trimmed_page_title(self):
+        return self.title.replace(" | Consumer Financial Protection Bureau", "")
+
     @property
     def absolute_path(self):
         return f"{settings.BASE_CRAWL_URL}{self.path}"

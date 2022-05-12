@@ -17,18 +17,23 @@ class PageListView(ListView):
     context_object_name = "pages"
     paginate_by = 50
 
+    def get_paginate_by(self, queryset):
+        return self.request.GET.get("paginate_by", self.paginate_by)
+
     def get_context_data(self, *args, **kwargs):
         qs = self.object_list
         pagination_query_params = QueryDict({}, mutable=True)
 
         form = SearchForm(self.request.GET)
         if form.is_valid():
-            q = form.cleaned_data["q"]
+            q = form.cleaned_data.get("q")
+            search_type = form.cleaned_data.get("search_type")
+            paginate_by = form.cleaned_data.get("paginate_by")
             pagination_query_params["q"] = q
 
             if q:
-                search_type = form.cleaned_data["search_type"]
                 pagination_query_params["search_type"] = search_type
+                pagination_query_params["paginate_by"] = paginate_by
 
                 if "links" == search_type:
                     qs = qs.filter(links__icontains=q)
@@ -44,7 +49,7 @@ class PageListView(ListView):
 
         return super().get_context_data(
             object_list=qs,
-            form=form,
+            form=form.cleaned_data,
             pagination_query_params=pagination_query_params.urlencode(),
         )
 
