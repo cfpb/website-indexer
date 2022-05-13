@@ -1,29 +1,92 @@
-<a href="{% url 'index' %}">Home</a>
+{% extends 'base.html' %}
 
-<h1>{{ page.path }}</h1>
-
-<div>
-    Crawled {{ page.timestamp }} (UTC)
-    (<a href="{{ page.absolute_path }}">link</a>)
-</div>
-
-<div class="links">
-    <h2>Links</h2>
-    {% for link in page.links %}
-        {{ link }}<br>
-    {% endfor %}
-</div>
-
-<div class="components">
-    <h2>Components</h2>
-    {% for component in page.components %}
-        {{ component }}<br>
-    {% endfor %}
-</div>
-
-<div class="html">
-    <h2>Minified HTML</h2>
-    <pre>
-        {{ page.html }}
-    </pre>
-</div>
+{% block content %}
+  <div class="content_wrapper search_results">
+    <div class="block block__flush-top">
+      <div class="content__flush-all-on-small content__flush-bottom">
+        <section class="content_main-inner">
+          <nav class="breadcrumbs" aria-label="Breadcrumbs">
+            {% include 'icons/chevron-left.svg' %}
+            <a id="breadcrumb_link" class="breadcrumbs_link" href="{% url 'index' %}">
+              Return to search results
+            </a>
+          </nav>
+          <div class="block block__flush-bottom">
+            <h2>Page: {{ page.get_trimmed_page_title }}</h2>
+          </div>
+          <div class="block block__flush-top">
+            <a href="{{ page.absolute_path }}">{{ page.absolute_path }}</a> (last crawled {{ page.timestamp }})
+          </div>
+          <div class="o-expandable o-expandable__padded o-expandable__background o-expandable__border u-mb20">
+            <button class="o-expandable_header o-expandable_target" title="Expand content">
+              <h3 class="h4 o-expandable_header-left o-expandable_label">
+                Links
+              </h3>
+              <span class="o-expandable_header-right o-expandable_link">
+                <span class="o-expandable_cue o-expandable_cue-open">
+                  <span class="u-visually-hidden-on-mobile">Show</span>
+                  {% include 'icons/plus-round.svg' %}
+                </span>
+                <span class="o-expandable_cue o-expandable_cue-close">
+                  <span class="u-visually-hidden-on-mobile">Hide</span>
+                  {% include 'icons/minus-round.svg' %}
+                </span>
+              </span>
+            </button>
+            <div class="o-expandable_content o-expandable_content__onload-open">
+              <ul class="m-list">
+                {% for link in page.links %}
+                  <li class="m-list_item u-truncate">{{ link }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+          <div class="o-expandable o-expandable__padded o-expandable__background o-expandable__border u-mb20">
+            <button class="o-expandable_header o-expandable_target" title="Expand content">
+              <h3 class="h4 o-expandable_header-left o-expandable_label">
+                Components
+              </h3>
+              <span class="o-expandable_header-right o-expandable_link">
+                <span class="o-expandable_cue o-expandable_cue-open">
+                  <span class="u-visually-hidden-on-mobile">Show</span>
+                  {% include 'icons/plus-round.svg' %}
+                </span>
+                <span class="o-expandable_cue o-expandable_cue-close">
+                  <span class="u-visually-hidden-on-mobile">Hide</span>
+                  {% include 'icons/minus-round.svg' %}
+                </span>
+              </span>
+            </button>
+            <div class="o-expandable_content">
+              <ul class="m-list">
+                {% for component in page.components %}
+                  <li class="m-list_item">{{ component }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+          <div class="o-expandable o-expandable__padded o-expandable__background o-expandable__border u-mb20">
+            <button class="o-expandable_header o-expandable_target" title="Expand content">
+              <h3 class="h4 o-expandable_header-left o-expandable_label">
+                Raw HTML
+              </h3>
+              <span class="o-expandable_header-right o-expandable_link">
+                <span class="o-expandable_cue o-expandable_cue-open">
+                  <span class="u-visually-hidden-on-mobile">Show</span>
+                  {% include 'icons/plus-round.svg' %}
+                </span>
+                <span class="o-expandable_cue o-expandable_cue-close">
+                  <span class="u-visually-hidden-on-mobile">Hide</span>
+                  {% include 'icons/minus-round.svg' %}
+                </span>
+              </span>
+            </button>
+            <div class="o-expandable_content">
+              <pre><code class="language-html">{{ page.html }}</code></pre>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

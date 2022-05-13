@@ -12,5 +12,14 @@ class SearchForm(forms.Form):
                 "components",
             )
         ),
-        required=False,
+    )
+    paginate_by = forms.ChoiceField(
+        choices=(
+            (c, c)
+            for c in (
+                "50",
+                "100",
+                "200",
+            )
+        ),
     )

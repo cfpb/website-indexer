@@ -60,6 +60,7 @@ venv
 #################
 *.egg-info
 .installed.cfg
+viewer/viewer/static/**
 
 # Unit test / coverage reports
 #################

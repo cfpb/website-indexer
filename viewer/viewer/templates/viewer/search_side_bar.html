@@ -1,0 +1,49 @@
+
+    <h3>Refine results</h3>
+    <form action="{% url 'index' %}" method="get" data-js-hook="behavior_change-filter">
+      <input type="hidden" name="q" value="{{ form.q }}">
+      <div>
+        <div class="o-form_group u-mb30">
+          <fieldset class="o-form_fieldset">
+            <legend class="h4">Things to search for</legend>
+            <div class="m-form-field m-form-field__radio reg-radio">
+              <input class="a-radio" type="radio" value="links" id="search_type_links" name="search_type"{% if form.search_type is None or form.search_type == 'links' %} checked{% endif %}>
+              <label class="a-label" for="search_type_links">Links</label>
+            </div>
+            <div class="m-form-field m-form-field__radio reg-radio">
+              <input class="a-radio" type="radio" value="html" id="search_type_html" name="search_type"{% if form.search_type == 'html' %} checked{% endif %}>
+              <label class="a-label" for="search_type_html">HTML</label>
+            </div>
+            <div class="m-form-field m-form-field__radio reg-radio">
+              <input class="a-radio" type="radio" value="components" id="search_type_components" name="search_type"{% if form.search_type == 'components' %} checked{% endif %}>
+              <label class="a-label" for="search_type_components">Components</label>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+      <div class="o-form_group u-mb30">
+        <fieldset class="o-form_fieldset">
+          <legend class="h4">Results per page</legend>
+          <div class="m-form-field m-form-field__radio reg-radio">
+            <input class="a-radio" type="radio" value="50" id="results_50" name="paginate_by"{% if form.paginate_by is None or form.paginate_by == '50' %} checked{% endif %}>
+            <label class="a-label" for="results_50">50 per page</label>
+          </div>
+          <div class="m-form-field m-form-field__radio reg-radio">
+            <input class="a-radio" type="radio" value="100" id="results_100" name="paginate_by"{% if form.paginate_by == '100' %} checked{% endif %}>
+            <label class="a-label" for="results_100">100 per page</label>
+          </div>
+          <div class="m-form-field m-form-field__radio reg-radio">
+            <input class="a-radio" type="radio" value="200" id="results_200" name="paginate_by"{% if form.paginate_by == '200' %} checked{% endif %}>
+            <label class="a-label" for="results_200">200 per page</label>
+          </div>
+        </fieldset>
+      </div>
+      <div class="o-form_group u-mb30">
+        <fieldset class="o-form_fieldset u-mt20">
+          <div class="input-with-btn_btn">
+            <button class="a-btn" type="submit">Update</button>
+          </div>
+        </fieldset>
+      </div>
+    </form>
+  </aside>
