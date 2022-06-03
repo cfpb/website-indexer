@@ -8,20 +8,19 @@ yarn build
 Create a Python virtual environment and install requirements:
 
 ```
-cd viewer/
-python -m venv venv
+python3.8 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
+pip install -r viewer/requirements.txt
 ```
 
 Set required environment variable pointing to crawl database:
 
 ```
-export CRAWL_DATABASE=../cfgov.sqlite3
+export CRAWL_DATABASE=cfgov.sqlite3
 ```
 
 Run the Django webserver:
 
 ```
-./manage.py runserver
+viewer/manage.py runserver
 ```
