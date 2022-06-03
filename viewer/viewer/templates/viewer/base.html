@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en" class="no-js">
   <head>
@@ -5,8 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
     <title>{% block title %}Crawsqueal{% endblock %}</title>
-    <link rel="stylesheet" href="/static/main.css">
-    <link rel="stylesheet" href="/static/crawsqueal.css">
+    <link rel="stylesheet" href="{% static "main.css" %}">
   </head>
   <body>
     <div class="skip-nav">
@@ -68,6 +69,6 @@
         </div>
       </div>
     </footer>
-    <script src="/static/crawsqueal.js" type="module"></script>
+    <script src="{% static "crawsqueal.js" %}" type="module"></script>
   </body>
 </html>
