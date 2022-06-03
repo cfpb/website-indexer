@@ -72,12 +72,23 @@ WSGI_APPLICATION = "wsgi.application"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
+    "default": {},
+    "empty": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.environ["CRAWL_DATABASE"],
-    }
+        "NAME": "file:empty?mode=memory&cache=shared",
+    },
+    "crawl": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "file:%s?mode=ro" % (
+            os.getenv(
+                "CRAWL_DATABASE",
+                str(BASE_DIR.parent / "crawl.sqlite3")
+            ),
+        ),
+    },
 }
 
+DATABASE_ROUTERS = ["viewer.db_router.DatabaseRouter"]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
