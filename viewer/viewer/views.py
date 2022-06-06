@@ -1,9 +1,9 @@
-import re
-from urllib.parse import unquote
+import codecs
+import csv
+from datetime import datetime
 
-from django.db import connections
 from django.db.models.expressions import RawSQL
-from django.http import FileResponse, Http404, HttpResponseNotFound
+from django.http import FileResponse, Http404, StreamingHttpResponse
 from django.http.request import QueryDict
 from django.views.generic import DetailView, ListView, View
 
@@ -43,10 +43,67 @@ class PageListView(ListView):
                     )
 
         return super().get_context_data(
+            all_pages=qs,
+            total_count=self.model.objects.count(),
             object_list=qs,
             form=form.cleaned_data,
             pagination_query_params=pagination_query_params.urlencode(),
         )
+
+
+class DownloadCSVView(PageListView):
+    def render_to_response(self, context, **response_kwargs):
+        if not context["total_count"]:
+            raise Http404
+
+        return StreamingHttpResponse(
+            self.generate_csv_content(context),
+            content_type="text/csv",
+            headers={
+                "Content-Disposition": "attachment; filename=\"export.csv\"",
+            }
+        )
+
+    def generate_csv_content(self, context):
+        columns = (
+            "path",
+            "title",
+            "components",
+            "links",
+            "hash",
+            "timestamp",
+        )
+
+        # Inspired by https://docs.djangoproject.com/en/4.0/howto/outputting-csv/#streaming-large-csv-files.
+        class Echo:
+            def write(self, value):
+                return value
+
+        buffer = Echo()
+
+        yield codecs.BOM_UTF8
+        yield buffer.write(u'\ufeff'.encode('utf8'))
+
+        writer = csv.writer(buffer)
+
+        yield writer.writerow(columns)
+
+        for page in context["all_pages"].iterator():
+            yield writer.writerow(
+                map(
+                    self.prep_value,
+                    [getattr(page, column) for column in columns]
+                )
+            )
+
+    @staticmethod
+    def prep_value(value):
+        if isinstance(value, list):
+            return ",".join(sorted(value))
+        elif isinstance(value, datetime):
+            return value.strftime("%Y-%m-%d %H:%M:%S")
+        else:
+            return value
 
 
 class PageDetailView(DetailView):
