@@ -102,3 +102,8 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 BASE_CRAWL_URL = "https://www.consumerfinance.gov"
+
+# django-debug-toolbar
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_COLLAPSED": True,
+}
