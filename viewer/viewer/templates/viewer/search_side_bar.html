@@ -1,6 +1,6 @@
 
     <h3>Refine results</h3>
-    <form action="{% url 'index' %}" method="get" data-js-hook="behavior_change-filter">
+    <form action="{% url 'index' %}" method="get">
       <input type="hidden" name="q" value="{{ form.q }}">
       <div>
         <div class="o-form_group u-mb30">
@@ -38,7 +38,7 @@
           </div>
         </fieldset>
       </div>
-      <div class="o-form_group u-mb30">
+      <div class="o-form_group u-mb30" id="update-button">
         <fieldset class="o-form_fieldset u-mt20">
           <div class="input-with-btn_btn">
             <button class="a-btn" type="submit">Update</button>
