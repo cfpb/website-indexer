@@ -90,7 +90,7 @@ WantedBy=multi-user.target
     print("Configuring nightly cron to run crawler")
     conn.sudo(
         f"bash -c 'cat > {CRONTAB_PATH} <<EOF\n"
-        f"40 14 * * * {conn.user} "
+        f"0 0 * * * {conn.user} "
         f"rm -f {CRAWL_DATABASE} && "
         f"cd {SOURCE_ROOT} && "
         f"yarn && yarn start {CRAWL_DATABASE}\n"
