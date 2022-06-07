@@ -1,5 +1,5 @@
 <div class="search_wrapper u-mt30">
-  <form action="{% url 'index' %}" data-js-hook="behavior_submit-search">
+  <form action="{% url 'index' %}" id="search_form">
     <input type="hidden" name="search_type" value="{{ form.search_type | default:'links' }}">
     <input type="hidden" name="paginate_by" value="{{ form.paginate_by | default:'50' }}">
     <h2 class="h4">Search terms</h2>
