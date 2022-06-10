@@ -53,9 +53,6 @@ ROOT_URLCONF = "urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [
-            os.path.join(BASE_DIR, "viewer/templates/viewer"),
-        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -72,6 +69,12 @@ WSGI_APPLICATION = "wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+CRAWL_DATABASE = os.getenv(
+    "CRAWL_DATABASE",
+    str(BASE_DIR.parent / "crawl.sqlite3")
+)
+
+
 DATABASES = {
     "default": {},
     "empty": {
@@ -80,16 +83,11 @@ DATABASES = {
     },
     "crawl": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "file:%s?mode=ro" % (
-            os.getenv(
-                "CRAWL_DATABASE",
-                str(BASE_DIR.parent / "crawl.sqlite3")
-            ),
-        ),
+        "NAME": f"file:{CRAWL_DATABASE}?mode=ro",
     },
 }
 
-DATABASE_ROUTERS = ["viewer.db_router.DatabaseRouter"]
+DATABASE_ROUTERS = ["viewer.database.DatabaseRouter"]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/

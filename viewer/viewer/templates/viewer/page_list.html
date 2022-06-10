@@ -1,4 +1,4 @@
-{% extends 'base_search.html' %}
+{% extends './base_search.html' %}
 
 {% block content_main %}
 <div class="results_header">
@@ -33,7 +33,7 @@
                   m-pagination_btn-prev">
         {% endif %}
         <span class="a-btn_icon a-btn_icon__on-left">
-          {% include 'icons/chevron-left.svg' %}
+          {% include './icons/chevron-left.svg' %}
         </span>
         Previous
       </a>
@@ -46,7 +46,7 @@
           {% endif %}
           Next
           <span class="a-btn_icon a-btn_icon__on-right">
-            {% include 'icons/chevron-right.svg' %}
+            {% include './icons/chevron-right.svg' %}
           </span>
         </a>
         <form class="m-pagination_form" action="{% if pagination_query_params %}?{{ pagination_query_params }}{% endif %}">

@@ -1,15 +1,15 @@
 import re
 from urllib.parse import unquote
 
+from django.db import connections
 from django.db.models.expressions import RawSQL
-from django.http import Http404
+from django.http import FileResponse, Http404, HttpResponseNotFound
 from django.http.request import QueryDict
-from django.template.response import TemplateResponse
-from django.views.generic import DetailView, ListView
-from django.views.generic.edit import FormMixin
+from django.views.generic import DetailView, ListView, View
 
+from .database import get_crawl_database_filename
 from .forms import SearchForm
-from .models import Page, PageHTML
+from .models import Page
 
 
 class PageListView(ListView):
@@ -67,3 +67,11 @@ class PageDetailView(DetailView):
             return Page.objects.get(path=path)
         except Page.DoesNotExist:
             raise Http404(path)
+
+
+class DownloadDatabaseView(View):
+    def get(self, request, *args, **kwargs):
+        if filename := get_crawl_database_filename():
+            return FileResponse(open(filename, "rb"))
+
+        raise Http404

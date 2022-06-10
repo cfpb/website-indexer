@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends './base.html' %}
 
 {% block content %}
   <div class="content_wrapper search_results">
@@ -6,7 +6,7 @@
       <div class="content__flush-all-on-small content__flush-bottom">
         <section class="content_main-inner">
           <nav class="breadcrumbs" aria-label="Breadcrumbs">
-            {% include 'icons/chevron-left.svg' %}
+            {% include './icons/chevron-left.svg' %}
             <a id="breadcrumb_link" class="breadcrumbs_link" href="{% url 'index' %}">
               Return to search results
             </a>
@@ -25,11 +25,11 @@
               <span class="o-expandable_header-right o-expandable_link">
                 <span class="o-expandable_cue o-expandable_cue-open">
                   <span class="u-visually-hidden-on-mobile">Show</span>
-                  {% include 'icons/plus-round.svg' %}
+                  {% include './icons/plus-round.svg' %}
                 </span>
                 <span class="o-expandable_cue o-expandable_cue-close">
                   <span class="u-visually-hidden-on-mobile">Hide</span>
-                  {% include 'icons/minus-round.svg' %}
+                  {% include './icons/minus-round.svg' %}
                 </span>
               </span>
             </button>
@@ -49,11 +49,11 @@
               <span class="o-expandable_header-right o-expandable_link">
                 <span class="o-expandable_cue o-expandable_cue-open">
                   <span class="u-visually-hidden-on-mobile">Show</span>
-                  {% include 'icons/plus-round.svg' %}
+                  {% include './icons/plus-round.svg' %}
                 </span>
                 <span class="o-expandable_cue o-expandable_cue-close">
                   <span class="u-visually-hidden-on-mobile">Hide</span>
-                  {% include 'icons/minus-round.svg' %}
+                  {% include './icons/minus-round.svg' %}
                 </span>
               </span>
             </button>
@@ -73,11 +73,11 @@
               <span class="o-expandable_header-right o-expandable_link">
                 <span class="o-expandable_cue o-expandable_cue-open">
                   <span class="u-visually-hidden-on-mobile">Show</span>
-                  {% include 'icons/plus-round.svg' %}
+                  {% include './icons/plus-round.svg' %}
                 </span>
                 <span class="o-expandable_cue o-expandable_cue-close">
                   <span class="u-visually-hidden-on-mobile">Hide</span>
-                  {% include 'icons/minus-round.svg' %}
+                  {% include './icons/minus-round.svg' %}
                 </span>
               </span>
             </button>
