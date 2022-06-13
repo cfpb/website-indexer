@@ -35,12 +35,12 @@
 <div class="results_list">
   <ul class="m-list">
     {% for page in pages %}
-    <article class="results_item">
+    <li class="results_item">
       <h4>
         <a href="{{ page.get_absolute_url }}">{{ page.get_trimmed_page_title }}</a>
       </h4>
       <div class="u-truncate">{{ page.path }}</div>
-    </article>
+    </li>
     {% endfor %}
   </ul>
 </div>
