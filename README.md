@@ -84,6 +84,10 @@ yarn
 yarn start
 ```
 
+### Testing
+
+To run Python unit tests, use [`tox`](https://tox.wiki/en/latest/).
+
 ----
 
 ## Open source licensing info
