@@ -10,7 +10,17 @@ CLI version of [cfgov-crawler-app](https://github.com/cfpb/cfgov-crawler-app). C
 npx cfpb/crawsqueal
 ```
 
-It'll create a SQLite database named `./cfgov.sqlite3`, crawl the cf.gov website, and create a record for every page that has a unique URL (including query params and hashes). Takes a couple hours. You can optionally pass a custom filename for the database, e.g. `npx cfpb/crawsqueal db.sqlite3`.
+It'll create a SQLite database named `./cfgov.sqlite3`, crawl the cf.gov website, and create a record for every page that has a unique URL (including query params and hashes). Takes a couple hours. You can optionally pass a custom filename for the database:
+
+```
+npx cfpb/crawsqueal db.sqlite3
+```
+
+You can also optionally pass an alternate domain name to crawl:
+
+```
+npx cfpb/crawsqueal db.sqlite3 https://beta.consumerfinance.gov/
+```
 
 ## How to query the crawler database
 
@@ -82,6 +92,12 @@ Note that this query uses a distinct `cfgov_fts` table that uses the SQLite [FTS
 ```
 yarn
 yarn start
+```
+
+You can also append the optional parameters described above:
+
+```
+yarn start db.sqlite3 https://beta.consumerfinance.gov/
 ```
 
 ### Testing
