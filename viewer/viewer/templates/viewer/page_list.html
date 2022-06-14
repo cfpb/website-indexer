@@ -26,7 +26,7 @@
     </a>
     {# Use an arbitrary estimate of how big the CSV is likely to be. #}
     {# Use Django's built-in width ratio tag as a way to multiply. #}
-    {% widthratio page_obj.paginator.count 1 2048 as csv_file_size %}
+    {% widthratio page_obj.paginator.count 1 256 as csv_file_size %}
     (~{{ csv_file_size | filesizeformat }})
   </div>
   {% endif %}

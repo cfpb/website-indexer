@@ -1,6 +1,9 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite'
 
+// WARNING: Do not alter the model definitions in this file without making
+// comparable changes to the schema in viewer/viewer/models.py.
+
 const TABLE_NAME = 'cfgov';
 
 class DB {

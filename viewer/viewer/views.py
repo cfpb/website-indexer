@@ -2,6 +2,7 @@ import codecs
 import csv
 from datetime import datetime
 
+from django.db.models import CharField, ExpressionWrapper, F, Func
 from django.db.models.expressions import RawSQL
 from django.http import FileResponse, Http404, StreamingHttpResponse
 from django.http.request import QueryDict
@@ -51,6 +52,10 @@ class PageListView(ListView):
         )
 
 
+class PrepDatetimeForCSV(Func):
+   function = 'DATETIME'
+
+
 class DownloadCSVView(PageListView):
     def render_to_response(self, context, **response_kwargs):
         if not context["total_count"]:
@@ -68,10 +73,8 @@ class DownloadCSVView(PageListView):
         columns = (
             "path",
             "title",
-            "components",
-            "links",
+            "crawled",
             "hash",
-            "timestamp",
         )
 
         # Inspired by https://docs.djangoproject.com/en/4.0/howto/outputting-csv/#streaming-large-csv-files.
@@ -80,30 +83,22 @@ class DownloadCSVView(PageListView):
                 return value
 
         buffer = Echo()
-
-        yield codecs.BOM_UTF8
-        yield buffer.write(u'\ufeff'.encode('utf8'))
+        yield buffer.write(codecs.BOM_UTF8) # u'\ufeff'.encode('utf8'))
 
         writer = csv.writer(buffer)
 
         yield writer.writerow(columns)
 
-        for page in context["all_pages"].iterator():
-            yield writer.writerow(
-                map(
-                    self.prep_value,
-                    [getattr(page, column) for column in columns]
+        pages = context["all_pages"] \
+            .annotate(
+                crawled=ExpressionWrapper(
+                    Func(F("timestamp"), function="DATETIME"),
+                    output_field=CharField()
                 )
             )
 
-    @staticmethod
-    def prep_value(value):
-        if isinstance(value, list):
-            return ",".join(sorted(value))
-        elif isinstance(value, datetime):
-            return value.strftime("%Y-%m-%d %H:%M:%S")
-        else:
-            return value
+        for page in pages.iterator():
+            yield writer.writerow(getattr(page, col) for col in columns)
 
 
 class PageDetailView(DetailView):
