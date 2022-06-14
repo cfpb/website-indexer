@@ -45,7 +45,7 @@
   </ul>
 </div>
 
-{% if page_obj.paginator.count > 0 %}
+{% if page_obj.paginator.num_pages > 1 %}
 <div class="results_paginator">
   <nav class="m-pagination" role="navigation" aria-label="Pagination">
     {% if page_obj.has_previous %}
