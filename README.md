@@ -116,7 +116,8 @@ python3.8 -m venv venv
 source venv/bin/activate
 pip install -r viewer/requirements.txt
 ```
-Set required environment variable pointing to crawl database:
+
+Optionally set the `CRAWL_DATABASE` environment variable to point to a local crawl database:
 
 ```
 export CRAWL_DATABASE=cfgov.sqlite3
@@ -134,7 +135,11 @@ The viewer application will be available locally at http://localhost:8000.
 
 ### Testing
 
-To run Python unit tests, use [`tox`](https://tox.wiki/en/latest/).
+To run Python unit tests, use [`tox`](https://tox.wiki/en/latest/):
+
+```
+tox
+```
 
 ### Sample database file
 
