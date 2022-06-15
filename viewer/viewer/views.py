@@ -15,10 +15,7 @@ from .models import Page
 class PageListView(ListView):
     model = Page
     context_object_name = "pages"
-    paginate_by = 50
-
-    def get_paginate_by(self, queryset):
-        return self.request.GET.get("paginate_by", self.paginate_by)
+    paginate_by = 25
 
     def get_context_data(self, *args, **kwargs):
         qs = self.object_list
@@ -28,12 +25,10 @@ class PageListView(ListView):
         if form.is_valid():
             q = form.cleaned_data.get("q")
             search_type = form.cleaned_data.get("search_type")
-            paginate_by = form.cleaned_data.get("paginate_by")
             pagination_query_params["q"] = q
 
             if q:
                 pagination_query_params["search_type"] = search_type
-                pagination_query_params["paginate_by"] = paginate_by
 
                 if "links" == search_type:
                     qs = qs.filter(links__icontains=q)

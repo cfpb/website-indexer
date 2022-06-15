@@ -21,8 +21,6 @@ if ( form && filters ) {
   document.getElementById( 'update-button' ).classList.add( 'u-hidden' );
   form.addEventListener( 'submit', ev => {
     const searchType = filters.querySelector( 'input[name="search_type"]:checked' ).value || 'links';
-    const paginateBy = filters.querySelector( 'input[name="paginate_by"]:checked' ).value || '50';
     form.querySelector( 'input[name="search_type"]' ).value = searchType;
-    form.querySelector( 'input[name="paginate_by"]' ).value = paginateBy;
   });
 }
