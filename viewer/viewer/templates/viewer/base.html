@@ -1,5 +1,8 @@
+{% load humanize %}
 {% load static %}
 {% load viewer %}
+
+{% get_last_crawl as last_crawl %}
 
 <!DOCTYPE html>
 <html lang="en" class="no-js">
@@ -23,6 +26,16 @@
             <span class="u-usa-flag"></span>
             <div class="a-tagline_text"> An official website of the <span class="u-nowrap">United States government</span>
             </div>
+          </div>
+          <div class="m-global-eyebrow-actions" style="text-align: right;">
+            <ul class="m-list m-list__horizontal">
+              <li class="m-list_item">
+                Last website crawl:
+                <a href="#last-crawl">
+                  {{ last_crawl.start | naturaltime }}
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -61,10 +74,14 @@
     </main>
     <footer class="o-footer">
       <div class="wrapper wrapper__match-content">
-        {% get_database_file_size as db_file_size %}
-        {% if db_file_size %}
         <div>
           <ul class="o-footer_list m-list">
+            <li class="m-list_item">
+              Last website crawl: {{ last_crawl.start }} - {{ last_crawl.end }}
+              ({{ last_crawl.duration | precisedelta }})
+            </li>
+            {% get_database_file_size as db_file_size %}
+            {% if db_file_size %}
             <li class="m-list_item">
               <a class="m-list_link a-link a-link__icon"
                 href="{% url "download-database" %}"
@@ -77,13 +94,12 @@
               ({{ db_file_size | filesizeformat }}) to
               <a class="m-list_link"
                   href="https://github.com/cfpb/crawsqueal#how-to-query-the-crawler-database">
-                  explore the data locally
-              </a>
+                  explore the data locally</a>.
             </li>
+            {% endif %}
           </ul>
         </div>
-        {% endif %}
-        <div{% if db_file_size %} class="o-footer-post"{% endif %}>
+        <div class="o-footer-post">
           <div class="a-tagline a-tagline__large">
             <span class="u-usa-flag"></span>
             <div class="a-tagline_text"> An official website of the <span class="u-nowrap">United States government</span>
