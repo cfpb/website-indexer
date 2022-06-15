@@ -14,6 +14,9 @@ const dbLocation = argv[2] || './cfgov.sqlite3';
 const db = await DB.connect(dbLocation);
 await db.createTables();
 
+// Configure target website.
+const startUrl = argv[3] || 'https://www.consumerfinance.gov/';
+
 // Try and get the actual number of pages
 try {
   const dbCount =  await db.getCount();
@@ -21,7 +24,7 @@ try {
 } catch (e) {}
 
 // Set up the CLI progress bar
-console.log('\n\nCrawling consumerfinance.gov...');
+console.log(`\n\nCrawling ${startUrl}...`);
 const progressBar = new cliProgress.SingleBar({
   format: `| ${colors.cyan('{bar}')} | {percentage}% | {value}/{total} pages | {path}`,
   barCompleteChar: '\u2588',
@@ -34,8 +37,8 @@ progressBar.start(APPROX_NUM_PAGES, 0, {
 });
 
 // Set up the crawler
-const crawler = new Crawler('https://www.consumerfinance.gov/');
-crawler.host = 'www.consumerfinance.gov';
+const crawler = new Crawler(startUrl);
+crawler.host = new URL(startUrl).hostname;
 crawler.maxConcurrency = 10;
 crawler.filterByDomain = true;
 crawler.parseHTMLComments = false;

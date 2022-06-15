@@ -21,23 +21,6 @@
           </fieldset>
         </div>
       </div>
-      <div class="o-form_group u-mb30">
-        <fieldset class="o-form_fieldset">
-          <legend class="h4">Results per page</legend>
-          <div class="m-form-field m-form-field__radio reg-radio">
-            <input class="a-radio" type="radio" value="50" id="results_50" name="paginate_by"{% if form.paginate_by is None or form.paginate_by == '50' %} checked{% endif %}>
-            <label class="a-label" for="results_50">50 per page</label>
-          </div>
-          <div class="m-form-field m-form-field__radio reg-radio">
-            <input class="a-radio" type="radio" value="100" id="results_100" name="paginate_by"{% if form.paginate_by == '100' %} checked{% endif %}>
-            <label class="a-label" for="results_100">100 per page</label>
-          </div>
-          <div class="m-form-field m-form-field__radio reg-radio">
-            <input class="a-radio" type="radio" value="200" id="results_200" name="paginate_by"{% if form.paginate_by == '200' %} checked{% endif %}>
-            <label class="a-label" for="results_200">200 per page</label>
-          </div>
-        </fieldset>
-      </div>
       <div class="o-form_group u-mb30" id="update-button">
         <fieldset class="o-form_fieldset u-mt20">
           <div class="input-with-btn_btn">

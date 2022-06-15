@@ -1,0 +1,41 @@
+.search_results .results_count {
+  padding-left: 1.875em;
+}
+
+.search_results .results_list {
+  padding-top: 0;
+}
+
+.search_results .results_csv {
+  margin: 0.9375em 0.9375em 3.75em 1.875em;
+}
+
+.search_results .results_list ul {
+  padding-left: 0.9375em;
+}
+
+.search_results .results_item {
+  margin: 1em 0;
+}
+
+.search_results .content_sidebar {
+  padding-top: 2em;
+}
+
+.u-truncate {
+  max-width: none !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  list-style-position: inside;
+}
+
+code.language-html {
+  max-height: 500px;
+  overflow: scroll;
+  display: block;
+}
+
+.breadcrumbs {
+  border: 0;
+}
