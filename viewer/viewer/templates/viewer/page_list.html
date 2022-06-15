@@ -16,7 +16,7 @@
       {% endif %}
     </h2>
   </div>
-  {% if total_count %}
+  {% if page_obj.paginator.count %}
   <div class="results_csv">
     <a class="a-link a-link__icon"
       href="{% url "download-csv" %}"
