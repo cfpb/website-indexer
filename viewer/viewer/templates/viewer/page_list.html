@@ -1,28 +1,51 @@
 {% extends './base_search.html' %}
 
+{% load humanize %}
+
 {% block content_main %}
 <div class="results_header">
   <div class="results_count">
     <h2 class="h3">
-      Showing {{ page_obj.paginator.count }} matching page{{ page_obj.paginator.count | pluralize }}
+      {% if page_obj.paginator.count == total_count %}
+      Showing {{ total_count | intcomma }}
+      total page{{ total_count | pluralize }}
+      {% else %}
+      Showing {{ page_obj.paginator.count | intcomma }}
+      match{{ page_obj.paginator.count | pluralize:"es" }}
+      out of {{ total_count | intcomma }} total pages
+      {% endif %}
     </h2>
   </div>
+  {% if total_count %}
+  <div class="results_csv">
+    <a class="a-link a-link__icon"
+      href="{% url "download-csv" %}"
+    >
+      <span class="a-link_text">Download CSV file</span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 19" class="cf-icon-svg"><path d="M11.16 16.153a.477.477 0 0 1-.476.475H1.316a.476.476 0 0 1-.475-.475V3.046a.476.476 0 0 1 .475-.475h6.95l2.893 2.893zm-1.11-9.925H8.059a.575.575 0 0 1-.574-.573V3.679H1.95v11.84h8.102zm-1.234 5.604L6.388 14.26a.554.554 0 0 1-.784 0l-2.428-2.428a.554.554 0 1 1 .783-.784l1.483 1.482V7.41a.554.554 0 1 1 1.108 0v5.12l1.482-1.482a.554.554 0 0 1 .784.783z"></path></svg>
+    </a>
+    {# Use an arbitrary estimate of how big the CSV is likely to be. #}
+    {# Use Django's built-in width ratio tag as a way to multiply. #}
+    {% widthratio page_obj.paginator.count 1 256 as csv_file_size %}
+    (~{{ csv_file_size | filesizeformat }})
+  </div>
+  {% endif %}
 </div>
 
 <div class="results_list">
   <ul class="m-list">
     {% for page in pages %}
-    <article class="results_item">
+    <li class="results_item">
       <h4>
         <a href="{{ page.get_absolute_url }}">{{ page.get_trimmed_page_title }}</a>
       </h4>
       <div class="u-truncate">{{ page.path }}</div>
-    </article>
+    </li>
     {% endfor %}
   </ul>
 </div>
 
-{% if page_obj.paginator.count > 0 %}
+{% if page_obj.paginator.num_pages > 1 %}
 <div class="results_paginator">
   <nav class="m-pagination" role="navigation" aria-label="Pagination">
     {% if page_obj.has_previous %}

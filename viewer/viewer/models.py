@@ -4,9 +4,8 @@ from django.urls import reverse
 from django.utils.http import urlencode
 
 
-# The models in this file were initially generated from an existing SQLite
-# database with "manage.py inspectdb".
-
+# WARNING: Do not alter the model definitions in this file without making
+# comparable changes to the schema in db.js.
 
 class Page(models.Model):
     path = models.TextField(primary_key=True)

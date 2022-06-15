@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -32,6 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "debug_toolbar",
+    "django.contrib.humanize",
     "django.contrib.staticfiles",
     "viewer",
 ]
@@ -69,23 +71,24 @@ WSGI_APPLICATION = "wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-CRAWL_DATABASE = os.getenv(
-    "CRAWL_DATABASE",
-    str(BASE_DIR.parent / "crawl.sqlite3")
-)
-
+_sample_database_path = str(BASE_DIR.parent / "sample.sqlite3")
 
 DATABASES = {
-    "default": {},
-    "empty": {
+    "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "file:empty?mode=memory&cache=shared",
-    },
-    "crawl": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": f"file:{CRAWL_DATABASE}?mode=ro",
+        "NAME": _sample_database_path,
+        "TEST": {
+            "NAME": _sample_database_path,
+            "MIGRATE": False,
+        },
     },
 }
+
+if (CRAWL_DATABASE := os.getenv("CRAWL_DATABASE")) and not "test" in sys.argv:
+    DATABASES["crawl"] = {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": f"file:{CRAWL_DATABASE}?mode=ro",
+    }
 
 DATABASE_ROUTERS = ["viewer.database.DatabaseRouter"]
 

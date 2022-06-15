@@ -1,16 +1,39 @@
 # crawsqueal 🦜
 
-CLI version of [cfgov-crawler-app](https://github.com/cfpb/cfgov-crawler-app). Crawls the consumerfinance.gov website and saves notable things in a SQLite database.
+Crawl a website, save its content to a SQLite database, and search it in your browser.
 
 ![crawsqueal-screenshot](screenshot.png)
 
-## Usage
+## Quickstart
+
+Run the crawler without needing to download this repository:
 
 ```
 npx cfpb/crawsqueal
 ```
 
-It'll create a SQLite database named `./cfgov.sqlite3`, crawl the cf.gov website, and create a record for every page that has a unique URL (including query params and hashes). Takes a couple hours. You can optionally pass a custom filename for the database, e.g. `npx cfpb/crawsqueal db.sqlite3`.
+It'll create a SQLite database named `./cfgov.sqlite3`, crawl the consumerfinance.gov website, and create a record for every page that has a unique URL (including query params and hashes). This takes a couple of hours to complete.
+
+## Running the crawler locally
+
+To run using a local copy of this repository:
+
+```
+yarn
+yarn start
+```
+
+You can optionally pass a custom filename for the database:
+
+```
+yarn start cfpb/crawsqueal db.sqlite3
+```
+
+You can also optionally pass an alternate domain name to crawl:
+
+```
+yarn start db.sqlite3 https://beta.consumerfinance.gov/
+```
 
 ## How to query the crawler database
 
@@ -77,12 +100,69 @@ sqlite> SELECT path FROM cfgov_fts WHERE cfgov_fts MATCH 'diamonds' ORDER BY pat
 
 Note that this query uses a distinct `cfgov_fts` table that uses the SQLite [FTS5 extension](https://www.sqlite.org/fts5.html) for full-text search.
 
-## Development
+## Running the viewer application
+
+From the repo's root, compile front-end assets:
 
 ```
 yarn
-yarn start
+yarn build
 ```
+
+Create a Python virtual environment and install requirements:
+
+```
+python3.8 -m venv venv
+source venv/bin/activate
+pip install -r viewer/requirements.txt
+```
+
+Optionally set the `CRAWL_DATABASE` environment variable to point to a local crawl database:
+
+```
+export CRAWL_DATABASE=cfgov.sqlite3
+```
+
+Finally, run the Django webserver:
+
+```
+viewer/manage.py runserver
+```
+
+The viewer application will be available locally at http://localhost:8000.
+
+## Development
+
+### Testing
+
+To run Python unit tests, use [`tox`](https://tox.wiki/en/latest/):
+
+```
+tox
+```
+
+### Sample database file
+
+This repository includes a sample database file ([sample.sqlite3](./sample.sqlite3)).
+This file is used by the viewer application when no other crawl database file has been specified.
+It is also used for Python unit testing purposes.
+
+The source website content used to generate this file is included in this repository
+under the [sample](./sample) subdirectory. To regenerate the test database from this content,
+first serve the sample website locally:
+
+```
+cd sample
+python -m http.server
+```
+
+Then, in another terminal at the repository root, start the crawler against the locally running site:
+
+```
+yarn start sample.sqlite3 http://localhost:8000/
+```
+
+You'll need to delete the existing sample database file before starting the crawler.
 
 ----
 
