@@ -44,7 +44,7 @@ class Parser {
   }
 
   getComponents () {
-    const SEARCH = /(?:(?:class=")|\s)((?:o|m|a)-[^_"__\s]*)/g;
+    const SEARCH = /(?:(?:class=")|\s)((?:o|m|a)-[^"\s]*)/g;
     const pageHMTL = this.html.toString();
     const prefixLookup = [
       'a-',
