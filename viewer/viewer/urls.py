@@ -16,4 +16,5 @@ urlpatterns = [
         views.DownloadDatabaseView.as_view(),
         name="download-database"
     ),
+    path("components", views.ComponentsListView.as_view(), name="components"),
 ]

@@ -20,7 +20,7 @@ if ( form && filters ) {
   // Hide the sidebar's update button. It's only needed if JS is disabled.
   document.getElementById( 'update-button' ).classList.add( 'u-hidden' );
   form.addEventListener( 'submit', ev => {
-    const searchType = filters.querySelector( 'input[name="search_type"]:checked' ).value || 'links';
+    const searchType = filters.querySelector( 'input[name="search_type"]:checked' ).value || 'title';
     form.querySelector( 'input[name="search_type"]' ).value = searchType;
   });
 }

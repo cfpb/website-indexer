@@ -3,14 +3,14 @@ import csv
 
 from django.conf import settings
 from django.db.models import CharField, ExpressionWrapper, F, Func
-from django.db.models.expressions import RawSQL
+from django.db.models import Exists, OuterRef
 from django.http import FileResponse, Http404, StreamingHttpResponse
 from django.http.request import QueryDict
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView, View
 
 from .forms import SearchForm
-from .models import Page
+from .models import Component, Page
 
 
 class PageListView(ListView):
@@ -31,17 +31,35 @@ class PageListView(ListView):
             if q:
                 pagination_query_params["search_type"] = search_type
 
-                if "links" == search_type:
-                    qs = qs.filter(links__icontains=q)
+                if "title" == search_type:
+                    qs = qs.filter(title__icontains=q).order_by("title")
+                    ordering = "title"
+                elif "path" == search_type:
+                    qs = qs.filter(path__icontains=q)
                 elif "components" == search_type:
-                    qs = qs.filter(components__icontains=q)
-                elif "html" == search_type:
+                    # This is significantly faster than the simpler
+                    # qs = qs.filter(components__name__icontains=q)
                     qs = qs.filter(
-                        path__in=RawSQL(
-                            "SELECT path FROM cfgov_fts WHERE cfgov_fts MATCH %s",
-                            [f'pageHtml : ( "{q}" )'],
+                        Exists(
+                            Page.components.through.objects.filter(
+                                page=OuterRef("id"),
+                                component__name__icontains=q
+                            )
                         )
                     )
+                elif "links" == search_type:
+                    # This is significantly faster than the simpler
+                    # qs = qs.filter(links__url_icontains=q)
+                    qs = qs.filter(
+                        Exists(
+                            Page.links.through.objects.filter(
+                                page=OuterRef("id"),
+                                link__url__icontains=q
+                            )
+                        )
+                    )
+                elif "html" == search_type:
+                    qs = qs.filter(html__icontains=q)
 
         qs = qs.only("path", "title")
 
@@ -66,7 +84,7 @@ class DownloadCSVView(PageListView):
         columns = (
             "path",
             "title",
-            "crawled",
+            "crawled_at",
             "hash",
         )
 
@@ -112,3 +130,8 @@ class PageDetailView(DetailView):
 class DownloadDatabaseView(View):
     def get(self, request, *args, **kwargs):
         return FileResponse(open(settings.CRAWL_DATABASE, "rb"))
+
+
+class ComponentsListView(ListView):
+    model = Component
+    context_object_name = "components"

@@ -7,9 +7,11 @@ class SearchForm(forms.Form):
         choices=(
             (c, c)
             for c in (
+                "title",
+                "path",
+                "components",
                 "links",
                 "html",
-                "components",
             )
         ),
     )

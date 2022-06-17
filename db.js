@@ -1,98 +1,96 @@
-import sqlite3 from 'sqlite3';
-import { open } from 'sqlite'
+import fs from 'fs';
+import Database from 'better-sqlite3';
 
 // WARNING: Do not alter the model definitions in this file without making
 // comparable changes to the schema in viewer/viewer/models.py.
-
-const TABLE_NAME = 'cfgov';
 
 class DB {
   constructor (db) {
     this.db = db;
   }
 
-  static async connect (dbFilePath) {
-    const db = await open({
-      filename: dbFilePath,
-      driver: sqlite3.Database
-    });
-
+  static connect (dbFilePath) {
+    const db = new Database(dbFilePath);
     return new DB( db );
   }
 
-  async createTables () {
-    await this.db.run(`
-      CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (
-        path TEXT PRIMARY KEY,
-        title TEXT,
-        components TEXT,
-        links TEXT,
-        pageHash TEXT,
-        pageHtml TEXT,
-        timestamp TEXT
-      )
-    `);
+  createTables () {
+    const sql = fs.readFileSync('db.sql', 'utf8');
+    this.db.exec(sql);
 
-    await this.db.run(`
-      CREATE INDEX IF NOT EXISTS
-        ${TABLE_NAME}_timestamp_idx
-      ON ${TABLE_NAME} (
-        timestamp
-      )
-    `);
-
-    await this.db.run(`
-      CREATE VIRTUAL TABLE IF NOT EXISTS ${TABLE_NAME}_fts USING fts5(
+    this.insertStatement = this.db.prepare(`
+      INSERT INTO pages (
+        crawled_at,
         path,
-        pageHtml,
-        content=${TABLE_NAME}
-      )
-    `);
-
-    await this.db.run(`
-      CREATE TRIGGER IF NOT EXISTS insert_${TABLE_NAME}_fts
-      AFTER INSERT ON ${TABLE_NAME}
-      BEGIN
-        INSERT INTO ${TABLE_NAME}_fts(
-          path,
-          pageHtml
-        ) VALUES (
-          new.path,
-          new.pageHtml
-        );
-      END
-    `);
-  }
-
-  async insert (record) {
-    const sql = `
-      INSERT INTO ${TABLE_NAME} (
-        path,
+        html,
         title,
-        components,
-        links,
-        pageHash,
-        pageHtml,
-        timestamp
-      ) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+        hash
+      ) VALUES (?, ?, ?, ?, ?)
+    `);
 
-    return await this.db.run(sql, Object.values(record).map(value => {
-      if (Object.prototype.toString.call(value) === '[object Date]') {
-        return value.toISOString();
-      } else if (typeof value === 'object') {
-        return JSON.stringify(value);
-      } else {
-        return value;
-      }
-    }));
+    this.componentStatement = this.db.prepare(`
+      INSERT OR IGNORE INTO components (
+        name
+      ) VALUES (?)
+    `);
+
+    this.pageComponentStatement = this.db.prepare(`
+      INSERT INTO pages_components (
+        page_id,
+        component_id
+      ) VALUES (?, (SELECT id FROM components WHERE name = ?))
+    `);
+
+    this.linkStatement = this.db.prepare(`
+      INSERT OR IGNORE INTO links (
+        url
+      ) VALUES (?)
+    `);
+
+    this.pageLinkStatement = this.db.prepare(`
+      INSERT INTO pages_links (
+        page_id,
+        link_id
+      ) VALUES (?, (SELECT id FROM links WHERE url = ?))
+    `);
   }
 
-  async getCount () {
-    const result = await this.db.get(
-      `SELECT COUNT(*) AS count FROM ${TABLE_NAME}`
+  insert (record) {
+    const insertResult = this.insertStatement.run([
+      record.timestamp.toISOString(),
+      record.path,
+      record.pageHtml,
+      record.title,
+      record.pageHash
+    ]);
+
+    const pageId = insertResult.lastInsertRowid;
+
+    const insertOrIgnoreElements = this.db.transaction(
+      (components, links) => {
+        for (const component of components) {
+          this.componentStatement.run([component]);
+        }
+
+        for (const link of links) {
+          this.linkStatement.run([link]);
+        }
+    });
+    insertOrIgnoreElements(record.components, record.links);
+
+    const insertOrIgnoreForeignKeys = this.db.transaction(
+      (page_id, components, links) => {
+        for (const component of components) {
+          this.pageComponentStatement.run([page_id, component]);
+        }
+
+        for (const link of links) {
+          this.pageLinkStatement.run([page_id, link]);
+        }
+      }
     );
-    return result.count;
-  };
-}
+    insertOrIgnoreForeignKeys(pageId, record.components, record.links);
+  }
+};
 
 export default DB;

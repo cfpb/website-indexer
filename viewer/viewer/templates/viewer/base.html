@@ -58,12 +58,14 @@
           <div class="content_main-inner">
             <div class="block block__sub">
               <div class="content_wrapper search_form">
-                <h1>Search <span class="search_intro__all">consumerfinance.gov</span></h1>
+                <h1>Search a snapshot of <span class="search_intro__all">consumerfinance.gov</span></h1>
+                  {% block intro %}
                   <div class="lead-paragraph">
-                    <p>
-                      <span class="search_intro__all">Search every page of consumerfinance.gov for specific text, links or source code.</span>
-                    </p>
+                    Search by page title, URL,
+                    <a href="{% url "components" %}">design components</a>,
+                    links, or raw HTML.
                   </div>
+                  {% endblock intro %}
               </div>
             </div>
             {% block content %}{% endblock content %}

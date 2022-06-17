@@ -19,14 +19,13 @@
   "dependencies": {
     "@cfpb/cfpb-expandables": "^0.15.0",
     "ansi-colors": "^4.1.1",
+    "better-sqlite3": "^7.5.3",
     "cheerio": "^1.0.0-rc.10",
     "cli-progress": "^3.10.0",
     "esbuild": "^0.14.38",
     "html-minifier-terser": "^7.0.0-alpha.2",
     "md5": "^2.3.0",
-    "simplecrawler": "^1.1.9",
-    "sqlite": "^4.0.25",
-    "sqlite3": "^5.0.2"
+    "simplecrawler": "^1.1.9"
   },
   "devDependencies": {
     "semistandard": "^16.0.1"
