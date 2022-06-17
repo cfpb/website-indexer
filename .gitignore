@@ -22,12 +22,13 @@ _site/
 *.tar
 *.zip
 
-# Logs and databases #
-######################
+# Logs and databases, except for the default database #
+#######################################################
 *.log
 *.sql
 *.sqlite
 *.sqlite3
+!sample.sqlite3
 
 # OS generated files #
 ######################
