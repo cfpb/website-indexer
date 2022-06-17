@@ -60,6 +60,7 @@ TEMPLATES = [
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
+                "viewer.context_processors.crawl_stats",
             ],
         },
     },
@@ -71,26 +72,26 @@ WSGI_APPLICATION = "wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-_sample_database_path = str(BASE_DIR.parent / "sample.sqlite3")
+_sample_db_path = str(BASE_DIR.parent / "sample.sqlite3")
+_env_db_path = os.getenv("CRAWL_DATABASE")
+
+if _env_db_path and os.path.exists(_env_db_path) and "test" not in sys.argv:
+    CRAWL_DATABASE = _env_db_path
+else:
+    CRAWL_DATABASE = _sample_db_path
+
+_sqlite_db_path = f"file:{CRAWL_DATABASE}?mode=ro"
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": _sample_database_path,
+        "NAME": _sqlite_db_path,
         "TEST": {
-            "NAME": _sample_database_path,
+            "NAME": _sqlite_db_path,
             "MIGRATE": False,
         },
     },
 }
-
-if (CRAWL_DATABASE := os.getenv("CRAWL_DATABASE")) and not "test" in sys.argv:
-    DATABASES["crawl"] = {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": f"file:{CRAWL_DATABASE}?mode=ro",
-    }
-
-DATABASE_ROUTERS = ["viewer.database.DatabaseRouter"]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
