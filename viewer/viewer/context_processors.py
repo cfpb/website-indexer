@@ -13,9 +13,11 @@ def crawl_stats(request):
         end=Max("crawled_at"),
     )
 
-    crawl_stats.update({
-        "duration": crawl_stats["end"] - crawl_stats["start"],
-        "database_size": os.path.getsize(settings.CRAWL_DATABASE),
-    })
+    crawl_stats.update(
+        {
+            "duration": crawl_stats["end"] - crawl_stats["start"],
+            "database_size": os.path.getsize(settings.CRAWL_DATABASE),
+        }
+    )
 
     return {"crawl_stats": crawl_stats}

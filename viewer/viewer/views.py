@@ -42,8 +42,7 @@ class PageListView(ListView):
                     qs = qs.filter(
                         Exists(
                             Page.components.through.objects.filter(
-                                page=OuterRef("id"),
-                                component__name__icontains=q
+                                page=OuterRef("id"), component__name__icontains=q
                             )
                         )
                     )
@@ -53,8 +52,7 @@ class PageListView(ListView):
                     qs = qs.filter(
                         Exists(
                             Page.links.through.objects.filter(
-                                page=OuterRef("id"),
-                                link__url__icontains=q
+                                page=OuterRef("id"), link__url__icontains=q
                             )
                         )
                     )
@@ -76,8 +74,8 @@ class DownloadCSVView(PageListView):
             self.generate_csv_content(context),
             content_type="text/csv",
             headers={
-                "Content-Disposition": "attachment; filename=\"export.csv\"",
-            }
+                "Content-Disposition": 'attachment; filename="export.csv"',
+            },
         )
 
     def generate_csv_content(self, context):
@@ -94,19 +92,17 @@ class DownloadCSVView(PageListView):
                 return value
 
         buffer = Echo()
-        yield buffer.write(codecs.BOM_UTF8) # u'\ufeff'.encode('utf8'))
+        yield buffer.write(codecs.BOM_UTF8)  # u'\ufeff'.encode('utf8'))
 
         writer = csv.writer(buffer)
 
         yield writer.writerow(columns)
 
-        pages = context["pages"] \
-            .annotate(
-                crawled=ExpressionWrapper(
-                    Func(F("timestamp"), function="DATETIME"),
-                    output_field=CharField()
-                )
+        pages = context["pages"].annotate(
+            crawled=ExpressionWrapper(
+                Func(F("timestamp"), function="DATETIME"), output_field=CharField()
             )
+        )
 
         for page in pages.iterator():
             yield writer.writerow(getattr(page, col) for col in columns)
