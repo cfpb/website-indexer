@@ -35,6 +35,34 @@ You can also optionally pass an alternate domain name to crawl:
 yarn start db.sqlite3 https://beta.consumerfinance.gov/
 ```
 
+### Experimental: Generate a crawl database from a WARC archive
+
+A [WARC](https://archive-it.org/blog/post/the-stack-warc-file/)
+(Web ARChive)  is a container file standard for storing web content in its original context,
+maintained by the International Internet Preservation Consortium (IIPC).
+
+Many tools exist to generate WARCs.
+The Internet Archive maintains the
+[Heritrix](https://github.com/internetarchive/heritrix3) web crawler that can generate WARCs;
+a longer list of additional tools for this purpose can be found
+[here](http://dhamaniasad.github.io/WARCTools/).
+
+The common command-line tool
+[wget](https://wiki.archiveteam.org/index.php/Wget_with_WARC_output)
+can also be used to generate WARCs. A sample script to do so can be found in this repository,
+and can be invoked like this:
+
+```sh
+./wget_crawl.sh https://www.consumerfinance.gov/
+```
+
+This will generate a WARC archive file named `crawl.warc.gz`.
+This file can then be converted to a SQLite database using a command like:
+
+```sh
+./read_warc.py create-db crawl.warc.gz crawl.sqlite3
+```
+
 ## How to query the crawler database
 
 You can use the
