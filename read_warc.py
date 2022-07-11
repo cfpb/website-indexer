@@ -101,11 +101,28 @@ def read_warc_records(warc, silent=False):
             progress_last = progress_current
 
 
+def get_body(tree):
+    body = tree.find("./body")
+
+    if body is not None:
+        drop_element_selectors = [".o-header", ".o-footer", "img", "script", "style"]
+
+        for drop_element_selector in drop_element_selectors:
+            for element in body.cssselect(drop_element_selector):
+                element.drop_tree()
+
+    return body
+
+
 SEEN_URLS = set()
 
 
 def generate_records_from_warc_record(warc_record, page_id, include_page_content=False):
     url = warc_record.rec_headers.get_header("WARC-Target-URI")
+
+    # Skip non-HTTP requests (e.g. DNS lookups).
+    if not warc_record.http_headers:
+        return
 
     # This code is needed because, surprisingly, WARCs may contain multiple
     # records pointing to the same URL. This can happen if multiple redirects
@@ -144,26 +161,26 @@ def generate_records_from_warc_record(warc_record, page_id, include_page_content
 
     html = warc_record.content_stream().read().decode("utf-8")
     tree = lxml.html.fromstring(html)
-
-    title = tree.find(".//title").text
+    title_tag = tree.find(".//title")
+    title = title_tag.text if title_tag is not None else None
     language = tree.find(".").get("lang")
 
-    body = tree.find("./body")
-
-    drop_element_selectors = [".o-header", ".o-footer", "img", "script", "style"]
-
-    for drop_element_selector in drop_element_selectors:
-        for element in body.cssselect(drop_element_selector):
-            element.drop_tree()
+    body = get_body(tree)
 
     if not include_page_content:
         yield PageRecord(timestamp, url, page_id, title, language)
     else:
-        text = WHITESPACE.sub(" ", body.text_content()).strip()
+        if body is not None:
+            text = WHITESPACE.sub(" ", body.text_content()).strip()
+        else:
+            text = None
 
         yield PageWithContentRecord(
             timestamp, url, page_id, title, language, html, text
         )
+
+    if body is None:
+        return
 
     hrefs = set(
         href
