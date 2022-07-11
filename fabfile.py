@@ -27,6 +27,7 @@ CRONTAB_NAME = "crawsqueal"
 CRONTAB_DIR = "/etc/cron.d"
 CRONTAB_PATH = f"{CRONTAB_DIR}/{CRONTAB_NAME}"
 
+
 @task
 def ls(conn):
     conn.run("ls")
@@ -64,7 +65,8 @@ def deploy(conn):
 
     # Configure gunicorn to run via systemd.
     print("Configuring gunicorn service")
-    gunicorn_config = StringIO(f"""
+    gunicorn_config = StringIO(
+        f"""
 [Unit]
 Description=cf.gov crawler
 After=network.target
@@ -79,7 +81,8 @@ Environment=CRAWL_DATABASE={CRAWL_DATABASE}
 
 [Install]
 WantedBy=multi-user.target
-    """.strip())
+    """.strip()
+    )
 
     conn.put(gunicorn_config, SYSTEMD_NAME)
     conn.sudo(f"mv {SYSTEMD_NAME} {SYSTEMD_PATH}")
