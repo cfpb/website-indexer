@@ -7,18 +7,36 @@ from django.utils.http import urlencode
 # WARNING: Do not alter the model definitions in this file without making
 # comparable changes to the schema in db.js.
 
-class Page(models.Model):
-    path = models.TextField(primary_key=True)
-    title = models.TextField()
-    components = models.JSONField()
-    links = models.JSONField()
-    hash = models.TextField(db_column="pageHash")
-    html = models.TextField(db_column="pageHtml")
-    timestamp = models.DateTimeField()
+
+class Component(models.Model):
+    name = models.TextField(unique=True, db_index=True)
 
     class Meta:
         managed = False
-        db_table = "cfgov"
+        db_table = "components"
+        ordering = ["name"]
+
+
+class Link(models.Model):
+    url = models.TextField(unique=True, db_index=True)
+
+    class Meta:
+        managed = False
+        db_table = "links"
+
+
+class Page(models.Model):
+    crawled_at = models.DateTimeField(db_index=True)
+    path = models.TextField(unique=True, db_index=True)
+    html = models.TextField(db_index=True)
+    title = models.TextField(db_index=True)
+    hash = models.TextField()
+    components = models.ManyToManyField(Component, related_name="pages")
+    links = models.ManyToManyField(Link, related_name="pages")
+
+    class Meta:
+        managed = False
+        db_table = "pages"
         ordering = ["path"]
 
     def get_absolute_url(self):
@@ -30,19 +48,3 @@ class Page(models.Model):
     @property
     def absolute_path(self):
         return f"{settings.BASE_CRAWL_URL}{self.path}"
-
-
-class PageHTML(models.Model):
-    path = models.OneToOneField(
-        primary_key=True,
-        serialize=False,
-        to="viewer.page",
-        on_delete=models.CASCADE,
-        db_column="path",
-        related_name="html_fts",
-    )
-    html = models.TextField(db_column="pageHtml")
-
-    class Meta:
-        managed = False
-        db_table = "cfgov_fts"

@@ -7,21 +7,15 @@ import { argv } from 'process';
 import DB from './db.js';
 import Parser from './parser.js';
 
-let APPROX_NUM_PAGES = 25900;
+let APPROX_NUM_PAGES = 25000;
 
 // Set up the database
-const dbLocation = argv[2] || './cfgov.sqlite3';
-const db = await DB.connect(dbLocation);
-await db.createTables();
+const dbLocation = argv[2] || './crawl.sqlite3';
+const db = DB.connect(dbLocation);
+db.createTables();
 
 // Configure target website.
 const startUrl = argv[3] || 'https://www.consumerfinance.gov/';
-
-// Try and get the actual number of pages
-try {
-  const dbCount =  await db.getCount();
-  APPROX_NUM_PAGES = dbCount > APPROX_NUM_PAGES ? dbCount : APPROX_NUM_PAGES;
-} catch (e) {}
 
 // Set up the CLI progress bar
 console.log(`\n\nCrawling ${startUrl}...`);
@@ -79,12 +73,11 @@ crawler.on('fetchcomplete', async function (queueItem, responseBuffer) {
   };
 
   try {
-    await db.insert(record);
+    db.insert(record);
     progressBar.increment({path: record.path})
   } catch (error) {
     console.error("Something went horribly wrong and there's nothing to handle the exception. Oh no.");
   }
-
 });
 
 crawler.on('complete', function () {

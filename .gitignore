@@ -26,6 +26,7 @@ _site/
 #######################################################
 *.log
 *.sql
+!db.sql
 *.sqlite
 *.sqlite3
 !sample.sqlite3

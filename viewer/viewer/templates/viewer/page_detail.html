@@ -15,7 +15,7 @@
             <h2>Page: {{ page.get_trimmed_page_title }}</h2>
           </div>
           <div class="block block__flush-top">
-            <a href="{{ page.absolute_path }}">{{ page.absolute_path }}</a> (last crawled {{ page.timestamp }})
+            <a href="{{ page.absolute_path }}">{{ page.absolute_path }}</a> (last crawled {{ page.crawled_at }})
           </div>
           <div class="o-expandable o-expandable__padded o-expandable__background o-expandable__border u-mb20">
             <button class="o-expandable_header o-expandable_target" title="Expand content">
@@ -35,8 +35,8 @@
             </button>
             <div class="o-expandable_content o-expandable_content__onload-open">
               <ul class="m-list">
-                {% for link in page.links %}
-                  <li class="m-list_item u-truncate">{{ link }}</li>
+                {% for link in page.links.all %}
+                  <li class="m-list_item u-truncate">{{ link.url }}</li>
                 {% endfor %}
               </ul>
             </div>
@@ -59,8 +59,8 @@
             </button>
             <div class="o-expandable_content">
               <ul class="m-list">
-                {% for component in page.components %}
-                  <li class="m-list_item">{{ component }}</li>
+                {% for component in page.components.all %}
+                  <li class="m-list_item">{{ component.name }}</li>
                 {% endfor %}
               </ul>
             </div>

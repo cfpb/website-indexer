@@ -18,7 +18,8 @@ class Parser {
     $body.find('.o-footer').remove();
     $body.find('a').each((i, ele) => {
       const href = this.$(ele).attr('href');
-      if (typeof (href) !== 'undefined') {
+      if ((typeof (href) !== 'undefined') &&
+          (links.indexOf(href) === -1)) {
         links.push(href);
       }
     });

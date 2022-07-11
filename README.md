@@ -12,7 +12,7 @@ Run the crawler without needing to download this repository:
 npx cfpb/crawsqueal
 ```
 
-It'll create a SQLite database named `./cfgov.sqlite3`, crawl the consumerfinance.gov website, and create a record for every page that has a unique URL (including query params and hashes). This takes a couple of hours to complete.
+It'll create a SQLite database named `./crawl.sqlite3`, crawl the consumerfinance.gov website, and create a record for every page that has a unique URL (including query params and hashes). This takes a couple of hours to complete.
 
 ## Running the crawler locally
 
@@ -45,7 +45,7 @@ or a graphical client such as [DB4S](https://github.com/sqlitebrowser/sqlitebrow
 To run the command-line client:
 
 ```
-sqlite3 cfgov.sqlite3
+sqlite3 crawl.sqlite3
 ```
 
 The following examples describe some common use cases.
@@ -55,7 +55,7 @@ The following examples describe some common use cases.
 To list the total number of URLs and crawl timestamps:
 
 ```sql
-sqlite> SELECT COUNT(*), MIN(timestamp), MAX(timestamp) FROM cfgov;
+sqlite> SELECT COUNT(*), MIN(timestamp), MAX(timestamp) FROM crawl;
 25279|2022-04-11T04:00:12.336Z|2022-04-11T06:18:11.608Z
 ```
 
