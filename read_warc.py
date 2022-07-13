@@ -162,7 +162,7 @@ def generate_records_from_warc_record(warc_record, page_id, include_page_content
     html = warc_record.content_stream().read().decode("utf-8")
     tree = lxml.html.fromstring(html)
     title_tag = tree.find(".//title")
-    title = title_tag.text if title_tag is not None else None
+    title = title_tag.text.strip() if title_tag is not None else None
     language = tree.find(".").get("lang")
 
     body = get_body(tree)
