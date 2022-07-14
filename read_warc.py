@@ -105,7 +105,14 @@ def get_body(tree):
     body = tree.find("./body")
 
     if body is not None:
-        drop_element_selectors = [".o-header", ".o-footer", "img", "script", "style"]
+        drop_element_selectors = [
+            ".o-header",
+            ".o-footer",
+            ".skip-nav",
+            "img",
+            "script",
+            "style",
+        ]
 
         for drop_element_selector in drop_element_selectors:
             for element in body.cssselect(drop_element_selector):
