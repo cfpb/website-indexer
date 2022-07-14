@@ -45,6 +45,7 @@ class PageWithContentRecord(PageRecord):
 @dataclass
 class ErrorRecord(RequestRecord):
     status_code: int
+    referrer: str
 
     table_name = "errors"
     indexes = RequestRecord.indexes + ["status_code"]
@@ -85,14 +86,20 @@ def read_warc_records(warc, silent=False):
     iterator = ArchiveIterator(warc)
     progress_bar = None
     progress_last = 0
+    warc_request = None
 
     if not silent:
         file_size = os.path.getsize(warc.name)
         progress_bar = click.progressbar(length=file_size)
 
     for warc_record in iterator:
-        if warc_record.rec_type == "response":
-            yield warc_record
+        if warc_record.rec_type == "request":
+            warc_request = warc_record
+        else:
+            if warc_record.rec_type == "response":
+                yield warc_request, warc_record
+
+            warc_request = None
 
         if progress_bar:
             progress_current = iterator.fh.tell()
@@ -124,11 +131,13 @@ def get_body(tree):
 SEEN_URLS = set()
 
 
-def generate_records_from_warc_record(warc_record, page_id, include_page_content=False):
-    url = warc_record.rec_headers.get_header("WARC-Target-URI")
+def generate_records_from_warc_record(
+    warc_request, warc_response, page_id, include_page_content=False
+):
+    url = warc_response.rec_headers.get_header("WARC-Target-URI")
 
-    # Skip non-HTTP requests (e.g. DNS lookups).
-    if not warc_record.http_headers:
+    # Skip non-HTTP responses (e.g. DNS lookups).
+    if not warc_response.http_headers:
         return
 
     # This code is needed because, surprisingly, WARCs may contain multiple
@@ -144,17 +153,22 @@ def generate_records_from_warc_record(warc_record, page_id, include_page_content
 
     SEEN_URLS.add(url)
 
-    status_code = int(warc_record.http_headers.get_statuscode())
-    content_type = warc_record.http_headers.get_header("Content-Type")
-    timestamp = warc_record.rec_headers.get_header("WARC-Date")
+    status_code = int(warc_response.http_headers.get_statuscode())
+    content_type = warc_response.http_headers.get_header("Content-Type")
+    timestamp = warc_response.rec_headers.get_header("WARC-Date")
 
-    if 300 <= status_code < 400:
-        location = warc_record.http_headers.get("Location")
-        yield RedirectRecord(timestamp, url, status_code, location)
-        return
+    if warc_request:
+        referrer = warc_request.http_headers.get_header("Referer")
+    else:
+        referrer = None
 
-    if 400 <= status_code:
-        yield ErrorRecord(timestamp, url, status_code)
+    if status_code >= 300:
+        if status_code < 400:
+            location = warc_response.http_headers.get("Location")
+            yield RedirectRecord(timestamp, url, status_code, referrer, location)
+        else:
+            yield ErrorRecord(timestamp, url, status_code, referrer)
+
         return
 
     if 200 != status_code:
@@ -166,7 +180,7 @@ def generate_records_from_warc_record(warc_record, page_id, include_page_content
     if not content_type.startswith("text/html"):
         return
 
-    html = warc_record.content_stream().read().decode("utf-8")
+    html = warc_response.content_stream().read().decode("utf-8")
     tree = lxml.html.fromstring(html)
     title_tag = tree.find(".//title")
     title = title_tag.text.strip() if title_tag is not None else None
@@ -208,9 +222,9 @@ def generate_records_from_warc_record(warc_record, page_id, include_page_content
 def generate_records(warc, max_pages=None, silent=False, include_page_content=False):
     page_id = 0
 
-    for warc_record in read_warc_records(warc, silent=silent):
+    for warc_request, warc_response in read_warc_records(warc, silent=silent):
         for record in generate_records_from_warc_record(
-            warc_record, page_id, include_page_content
+            warc_request, warc_response, page_id, include_page_content
         ):
             yield record
 
