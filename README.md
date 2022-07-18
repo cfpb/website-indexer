@@ -60,7 +60,13 @@ This will generate a WARC archive file named `crawl.warc.gz`.
 This file can then be converted to a SQLite database using a command like:
 
 ```sh
-./read_warc.py create-db crawl.warc.gz crawl.sqlite3
+viewer/manage.py warc_to_db crawl.warc.gz crawl.sqlite3
+```
+
+Alternatively, to dump a WARC archive file to a set of CSVs:
+
+```sh
+viewer/manage.py warc_to_csv crawl.warc.gz
 ```
 
 ## How to query the crawler database
