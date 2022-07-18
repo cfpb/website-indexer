@@ -1,49 +1,43 @@
 from django.db import connections
 
+from warc.models import Component, Link, Page
+
 
 class DatabaseWriter:
     def __init__(self, db):
         self.db = db
         self.connection = connections[self.db]
-        self.connection.disable_constraint_checking()
-
-        self.writers = {}
 
     def write(self, instance):
-        instance_model = instance._meta.model
+        if isinstance(instance, Page):
+            return self._write_page(instance)
+        else:
+            instance.save(using=self.db)
 
-        if instance_model not in self.writers:
-            self.writers[instance_model] = TableWriter(self.db, instance_model)
+    def _write_page(self, page):
+        Component.objects.using(self.db).bulk_create(
+            page.components.all(), ignore_conflicts=True
+        )
 
-        writer = self.writers[instance_model]
-        writer.write(instance)
+        page.components = (
+            Component.objects.using(self.db)
+            .in_bulk(
+                page.components.values_list("class_name", flat=True),
+                field_name="class_name",
+            )
+            .values()
+        )
 
-    def flush(self):
-        for writer in self.writers.values():
-            writer.flush()
+        Link.objects.using(self.db).bulk_create(page.links.all(), ignore_conflicts=True)
 
+        page.links = (
+            Link.objects.using(self.db)
+            .in_bulk(page.links.values_list("href", flat=True), field_name="href")
+            .values()
+        )
+
+        page.save(using=self.db)
+
+    def analyze(self):
         with self.connection.cursor() as cursor:
             cursor.execute("ANALYZE")
-
-
-class TableWriter:
-    def __init__(self, db, model):
-        self.db = db
-        self.model = model
-
-        self.records = list()
-        self.chunk_size = 100
-
-    def write(self, record):
-        self.records.append(record)
-
-        if len(self.records) >= self.chunk_size:
-            self._do_insert()
-
-    def flush(self):
-        if self.records:
-            self._do_insert()
-
-    def _do_insert(self):
-        self.model.objects.using(self.db).bulk_create(self.records)
-        self.records.clear()

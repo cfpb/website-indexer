@@ -9,7 +9,7 @@ from django.test import override_settings
 
 import djclick as click
 
-from warc.reader import generate_records
+from warc.reader import generate_instances
 from warc.writer import DatabaseWriter
 
 
@@ -61,9 +61,7 @@ def command(warc, db_filename, max_pages, recreate, noinput):
     click.echo("Reading WARC content into database tables...")
     writer = DatabaseWriter(db_alias)
 
-    for record in generate_records(
-        warc, max_pages=max_pages, include_page_content=True
-    ):
-        writer.write(record)
+    for instance in generate_instances(warc, max_pages=max_pages):
+        writer.write(instance)
 
-    writer.flush()
+    writer.analyze()

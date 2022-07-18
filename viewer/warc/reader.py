@@ -63,9 +63,7 @@ def get_body(tree):
 SEEN_URLS = set()
 
 
-def generate_records_from_warc_record(
-    warc_request, warc_response, page_id, include_page_content=False
-):
+def make_instance_from_warc_record(warc_request, warc_response):
     url = warc_response.rec_headers.get_header("WARC-Target-URI")
 
     # Skip non-HTTP responses (e.g. DNS lookups).
@@ -97,19 +95,16 @@ def generate_records_from_warc_record(
     if status_code >= 300:
         if status_code < 400:
             location = warc_response.http_headers.get("Location")
-            yield Redirect(
+            return Redirect(
                 timestamp=timestamp,
                 url=url,
                 status_code=status_code,
                 referrer=referrer,
-                location=location
+                location=location,
             )
         else:
-            yield Error(
-                timestamp=timestamp,
-                url=url,
-                status_code=status_code,
-                referrer=referrer
+            return Error(
+                timestamp=timestamp, url=url, status_code=status_code, referrer=referrer
             )
 
         return
@@ -131,20 +126,19 @@ def generate_records_from_warc_record(
 
     body = get_body(tree)
 
-    if not include_page_content:
-        yield Page(page_id, timestamp, url, title, language)
+    if body is not None:
+        text = WHITESPACE.sub(" ", body.text_content()).strip()
     else:
-        if body is not None:
-            text = WHITESPACE.sub(" ", body.text_content()).strip()
-        else:
-            text = None
+        text = None
 
-        yield Page(
-            page_id, timestamp, url, title, language, html, text
-        )
-
-    if body is None:
-        return
+    page = Page(
+        timestamp=timestamp,
+        url=url,
+        title=title,
+        language=language,
+        html=html,
+        text=text,
+    )
 
     hrefs = set(
         href
@@ -152,27 +146,31 @@ def generate_records_from_warc_record(
         if "a" == element.tag and "href" == attribute
     )
 
-    for href in sorted(hrefs):
-        yield Link(page_id=page_id, href=href)
+    page.links = [Link(href=href) for href in sorted(hrefs)]
 
     body_html = lxml.etree.tostring(body, encoding="unicode")
 
-    components = set(COMPONENT_SEARCH.findall(body_html))
-    for class_name in sorted(components):
-        yield Component(page_id=page_id, class_name=class_name)
+    class_names = set(COMPONENT_SEARCH.findall(body_html))
+    page.components = [
+        Component(class_name=class_name) for class_name in sorted(class_names)
+    ]
+
+    return page
 
 
-def generate_records(warc, max_pages=None, silent=False, include_page_content=False):
-    page_id = 0
+def generate_instances(warc, max_pages=None, silent=False):
+    page_count = 0
 
     for warc_request, warc_response in read_warc_records(warc, silent=silent):
-        for record in generate_records_from_warc_record(
-            warc_request, warc_response, page_id, include_page_content
-        ):
-            yield record
+        instance = make_instance_from_warc_record(warc_request, warc_response)
 
-            if isinstance(record, Page):
-                page_id += 1
+        if not instance:
+            continue
 
-        if max_pages and page_id >= max_pages:
-            break
+        yield instance
+
+        if isinstance(instance, Page):
+            page_count += 1
+
+            if max_pages and page_count >= max_pages:
+                break
