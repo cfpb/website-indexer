@@ -18,10 +18,6 @@
   margin: 1em 0;
 }
 
-/* .search_results .content_sidebar {
-  padding-top: 2em;
-} */
-
 .u-truncate {
   max-width: none !important;
   white-space: nowrap;
@@ -38,4 +34,36 @@ code.language-html {
 
 .breadcrumbs {
   border: 0;
+}
+
+.o-radio_buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.o-radio_buttons div {
+  flex: 50%;
+}
+
+.o-radio_buttons label>span
+{
+    display:block;
+    margin: 3px 0;
+    font-weight: normal;
+    font-size: small;
+}
+
+.o-radio_buttons label
+{
+    font-weight: bold;
+}
+
+.o-form__input-w-btn-alt {
+  border-left-width: 0;
+}
+
+.a-btn-alt {
+  margin-top: 15px;
 }

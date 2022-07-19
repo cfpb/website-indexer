@@ -7,8 +7,8 @@
 				name="search_type"
 				value="{{ form.search_type | default:'title' }}" />
 
-			<div class="o-form__input-w-btn">
-				<div class="o-form__input-w-btn_input-container">
+			<!-- <div class="o-form__input-w-btn"> -->
+				<div class="o-form__input-w-btn_input-container o-form__input-w-btn-alt">
 					<div class="m-btn-inside-input input-contains-label">
 						<label
 							for="query"
@@ -28,49 +28,49 @@
 				</div>
 
 				<input type="hidden" name="q" value="{{ form.q }}">
-      <div>
-        <div class="o-form_group u-mb30">
-          <fieldset class="o-form_fieldset">
-            <legend class="h4">Things to search for</legend>
+        <!-- <div class="o-form_group u-mb30"> -->
+          <div class="o-radio_buttons">
             <div class="m-form-field m-form-field__radio reg-radio">
               <input class="a-radio" type="radio" value="title" id="search_type_title" name="search_type"{% if form.search_type is None or form.search_type == 'title' %} checked{% endif %}>
-              <label class="a-label" for="search_type_title">Title</label>
+              <label class="a-label" for="search_type_title">Title <span>Search page titles</span></label>
             </div>
             <div class="m-form-field m-form-field__radio reg-radio">
               <input class="a-radio" type="radio" value="path" id="search_type_path" name="search_type"{% if form.search_type == 'path' %} checked{% endif %}>
-              <label class="a-label" for="search_type_path">URL</label>
+              <label class="a-label" for="search_type_path">URL <span>Search page URLs</span></label>
             </div>
             <div class="m-form-field m-form-field__radio reg-radio">
               <input class="a-radio" type="radio" value="components" id="search_type_components" name="search_type"{% if form.search_type == 'components' %} checked{% endif %}>
-              <label class="a-label" for="search_type_components">Components</label>
+              <label class="a-label" for="search_type_components">Components <span>Search by class names of our components</span></label>
             </div>
             <div class="m-form-field m-form-field__radio reg-radio">
               <input class="a-radio" type="radio" value="links" id="search_type_links" name="search_type"{% if form.search_type == 'links' %} checked{% endif %}>
-              <label class="a-label" for="search_type_links">Links</label>
+              <label class="a-label" for="search_type_links">Links <span>Find links on a page</span></label>
+            </div>
+			<div class="m-form-field m-form-field__radio reg-radio">
+              <input class="a-radio" type="radio" value="full" id="search_full_text" name="search_type"{% if form.search_type == 'full' %} checked{% endif %}>
+              <label class="a-label" for="search_type_links">Full text <span>Search the content of the page</span></label>
             </div>
             <div class="m-form-field m-form-field__radio reg-radio">
               <input class="a-radio" type="radio" value="html" id="search_type_html" name="search_type"{% if form.search_type == 'html' %} checked{% endif %}>
-              <label class="a-label" for="search_type_html">HTML</label>
+              <label class="a-label" for="search_type_html">HTML <span>Search HTML</span></label>
             </div>
-          </fieldset>
-        </div>
-      </div>
-      <div class="o-form_group u-mb30" id="update-button">
-        <fieldset class="o-form_fieldset u-mt20">
-          <div class="input-with-btn_btn">
-            <button class="a-btn" type="submit">Update</button>
-          </div>
-        </fieldset>
-      </div>
-
-				<div class="o-form__input-w-btn_btn-container">
+		</div>
+        <!-- </div> -->
+      	<!-- <div class="o-form_group u-mb30" id="update-button">
+        	<fieldset class="o-form_fieldset u-mt20">
+          	<div class="input-with-btn_btn">
+            	<button class="a-btn" type="submit">Update</button>
+          	</div>
+        	</fieldset>
+      	</div> -->
+				<!-- <div class="o-form__input-w-btn_btn-container"> -->
 					<button
-						class="a-btn"
+						class="a-btn a-btn-alt"
 						aria-label="Search consumerfinance.gov content and source code">
 						Search
 					</button>
-				</div>
-			</div>
+				<!-- </div> -->
+			<!-- </div> -->
 		</div>
 	</form>
 </div>
