@@ -5,6 +5,7 @@ distlib==0.3.4
 Django==4.0.3
 django-click==2.3.0
 django-debug-toolbar==3.4.0
+django-filter==22.1
 django-modelcluster==6.0
 djangorestframework==3.13.1
 djangorestframework-csv==2.1.1

@@ -169,13 +169,16 @@ class ComponentViewSet(ReadOnlyModelViewSetSpecialCSVHandling):
 class ErrorViewSet(ReadOnlyModelViewSetSpecialCSVHandling):
     queryset = Error.objects.all()
     serializer_class = ErrorSerializer
+    filterset_fields = ["status_code"]
 
 
 class RedirectViewSet(ReadOnlyModelViewSetSpecialCSVHandling):
     queryset = Redirect.objects.all()
     serializer_class = RedirectSerializer
+    filterset_fields = ["status_code"]
 
 
 class PageViewSet(ReadOnlyModelViewSetSpecialCSVHandling):
     queryset = WarcPage.objects.all()
     serializer_class = PageSerializer
+    filterset_fields = ["language"]

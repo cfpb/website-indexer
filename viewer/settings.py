@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "django.contrib.humanize",
     "django.contrib.staticfiles",
+    "django_filters",
     "rest_framework",
     "viewer",
     "warc",
@@ -129,6 +130,7 @@ DEBUG_TOOLBAR_CONFIG = {
 # django-rest-framework
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [],
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
