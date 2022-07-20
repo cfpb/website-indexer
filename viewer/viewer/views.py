@@ -2,15 +2,22 @@ import codecs
 import csv
 
 from django.conf import settings
-from django.db.models import CharField, ExpressionWrapper, F, Func
-from django.db.models import Exists, OuterRef
+from django.db.models import CharField, Exists, ExpressionWrapper, F, Func, OuterRef
 from django.http import FileResponse, Http404, StreamingHttpResponse
 from django.http.request import QueryDict
-from django.shortcuts import render
 from django.views.generic import DetailView, ListView, View
 
-from .forms import SearchForm
-from .models import Component, Page
+from rest_framework import viewsets
+
+from viewer.forms import SearchForm
+from viewer.models import Component, Page
+from viewer.serializers import (
+    ComponentSerializer,
+    ErrorSerializer,
+    PageSerializer,
+    RedirectSerializer,
+)
+from warc.models import Component as WarcComponent, Error, Page as WarcPage, Redirect
 
 
 class PageListView(ListView):
@@ -131,3 +138,44 @@ class DownloadDatabaseView(View):
 class ComponentsListView(ListView):
     model = Component
     context_object_name = "components"
+
+
+class ReadOnlyModelViewSetSpecialCSVHandling(viewsets.ReadOnlyModelViewSet):
+    @property
+    def is_rendering_csv(self):
+        return self.request.query_params.get("format") == "csv"
+
+    @property
+    def paginator(self):
+        """Disable pagination when rendering CSVs."""
+        return None if self.is_rendering_csv else super().paginator
+
+    def get_renderer_context(self):
+        """Add utf-8 BOM when rendering CSVs."""
+        context = super().get_renderer_context()
+
+        if self.is_rendering_csv:
+            context["bom"] = True
+
+        return context
+
+
+class ComponentViewSet(ReadOnlyModelViewSetSpecialCSVHandling):
+    queryset = WarcComponent.objects.all()
+    serializer_class = ComponentSerializer
+    pagination_class = None
+
+
+class ErrorViewSet(ReadOnlyModelViewSetSpecialCSVHandling):
+    queryset = Error.objects.all()
+    serializer_class = ErrorSerializer
+
+
+class RedirectViewSet(ReadOnlyModelViewSetSpecialCSVHandling):
+    queryset = Redirect.objects.all()
+    serializer_class = RedirectSerializer
+
+
+class PageViewSet(ReadOnlyModelViewSetSpecialCSVHandling):
+    queryset = WarcPage.objects.all()
+    serializer_class = PageSerializer

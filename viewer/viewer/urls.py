@@ -1,6 +1,15 @@
-from django.urls import path
+from django.urls import include, path
 
-from . import views
+from rest_framework import routers
+
+from viewer import views
+
+
+router = routers.DefaultRouter()
+router.register(r"components", views.ComponentViewSet)
+router.register(r"errors", views.ErrorViewSet)
+router.register(r"pages", views.PageViewSet)
+router.register(r"redirects", views.RedirectViewSet)
 
 
 urlpatterns = [
@@ -13,4 +22,5 @@ urlpatterns = [
         name="download-database",
     ),
     path("components", views.ComponentsListView.as_view(), name="components"),
+    path("api/", include(router.urls)),
 ]

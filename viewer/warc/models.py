@@ -10,14 +10,21 @@ class Request(models.Model):
 
     class Meta:
         abstract = True
+        ordering = ["url"]
 
 
 class Component(models.Model):
     class_name = models.TextField(unique=True, db_index=True)
 
+    class Meta:
+        ordering = ["class_name"]
+
 
 class Link(models.Model):
     href = models.TextField(unique=True, db_index=True)
+
+    class Meta:
+        ordering = ["href"]
 
 
 class Page(Request, ClusterableModel):
@@ -33,8 +40,9 @@ class ErrorBase(Request):
     status_code = models.PositiveIntegerField(db_index=True)
     referrer = models.TextField(db_index=True, null=True, blank=True)
 
-    class Meta:
+    class Meta(Request.Meta):
         abstract = True
+
 
 
 class Error(ErrorBase):

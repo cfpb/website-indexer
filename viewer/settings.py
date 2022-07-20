@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "django.contrib.humanize",
     "django.contrib.staticfiles",
+    "rest_framework",
     "viewer",
     "warc",
 ]
@@ -123,4 +124,17 @@ ALLOWED_HOSTS = ["*"]
 # django-debug-toolbar
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_COLLAPSED": True,
+}
+
+# django-rest-framework
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework_csv.renderers.CSVStreamingRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ],
+    "PAGE_SIZE": 25,
+    "UNAUTHENTICATED_USER": None,
 }
