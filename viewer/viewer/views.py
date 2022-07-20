@@ -7,17 +7,19 @@ from django.http import FileResponse, Http404, StreamingHttpResponse
 from django.http.request import QueryDict
 from django.views.generic import DetailView, ListView, View
 
-from rest_framework import viewsets
+from rest_framework.generics import ListAPIView
+from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from viewer.forms import SearchForm
-from viewer.models import Component, Page
+from viewer.models import Page
+from viewer.renderers import BetterTemplateHTMLRenderer
 from viewer.serializers import (
     ComponentSerializer,
     ErrorSerializer,
     PageSerializer,
     RedirectSerializer,
 )
-from warc.models import Component as WarcComponent, Error, Page as WarcPage, Redirect
+from warc.models import Component, Error, Page as WarcPage, Redirect
 
 
 class PageListView(ListView):
@@ -135,12 +137,7 @@ class DownloadDatabaseView(View):
         return FileResponse(open(settings.CRAWL_DATABASE, "rb"))
 
 
-class ComponentsListView(ListView):
-    model = Component
-    context_object_name = "components"
-
-
-class ReadOnlyModelViewSetSpecialCSVHandling(viewsets.ReadOnlyModelViewSet):
+class BetterCSVsMixin:
     @property
     def is_rendering_csv(self):
         return self.request.query_params.get("format") == "csv"
@@ -160,25 +157,53 @@ class ReadOnlyModelViewSetSpecialCSVHandling(viewsets.ReadOnlyModelViewSet):
         return context
 
 
-class ComponentViewSet(ReadOnlyModelViewSetSpecialCSVHandling):
-    queryset = WarcComponent.objects.all()
+class AlsoRenderHTMLMixin:
+    @property
+    def renderer_classes(self):
+        return [BetterTemplateHTMLRenderer] + super().renderer_classes
+
+
+class BetterCSVsReadOnlyModelViewSet(BetterCSVsMixin, ReadOnlyModelViewSet):
+    pass
+
+
+class BetterCSVsAndHTMLReadOnlyModelViewSet(
+    AlsoRenderHTMLMixin, BetterCSVsReadOnlyModelViewSet
+):
+    pass
+
+
+class BetterCSVsListAPIView(BetterCSVsMixin, ListAPIView):
+    pass
+
+
+class BetterCSVsAndHTMLListApiView(AlsoRenderHTMLMixin, BetterCSVsListAPIView):
+    pass
+
+
+class ComponentsListView(BetterCSVsAndHTMLListApiView):
+    queryset = Component.objects.all()
     serializer_class = ComponentSerializer
     pagination_class = None
 
+    def get_template_names(self):
+        return ["viewer/component_list.html"]
 
-class ErrorViewSet(ReadOnlyModelViewSetSpecialCSVHandling):
+
+class ErrorViewSet(BetterCSVsReadOnlyModelViewSet):
     queryset = Error.objects.all()
     serializer_class = ErrorSerializer
     filterset_fields = ["status_code"]
 
 
-class RedirectViewSet(ReadOnlyModelViewSetSpecialCSVHandling):
+class RedirectViewSet(BetterCSVsReadOnlyModelViewSet):
     queryset = Redirect.objects.all()
     serializer_class = RedirectSerializer
     filterset_fields = ["status_code"]
 
 
-class PageViewSet(ReadOnlyModelViewSetSpecialCSVHandling):
+class PageViewSet(BetterCSVsReadOnlyModelViewSet):
     queryset = WarcPage.objects.all()
     serializer_class = PageSerializer
     filterset_fields = ["language"]
+    lookup_field = "url"

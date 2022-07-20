@@ -44,7 +44,6 @@ class ErrorBase(Request):
         abstract = True
 
 
-
 class Error(ErrorBase):
     pass
 
