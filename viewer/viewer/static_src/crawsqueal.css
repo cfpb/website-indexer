@@ -1,5 +1,11 @@
+.content_main-alt {
+  border-top: 0 !important;
+  width: 100% !important;
+}
+
 .search_results .results_count {
   padding-left: 1.875em;
+  margin-top: 30px;
 }
 
 .search_results .results_list {
@@ -49,19 +55,21 @@ code.language-html {
 
 .o-radio_buttons label>span
 {
-    display:block;
-    margin: 3px 0;
-    font-weight: normal;
-    font-size: small;
+  display:block;
+  margin-top: 3px;
+  margin-bottom: 15px;
+  font-weight: normal;
+  font-size: small;
 }
 
 .o-radio_buttons label
 {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .o-form__input-w-btn-alt {
   border-left-width: 0;
+  margin-bottom: 30px;
 }
 
 .a-btn-alt {
