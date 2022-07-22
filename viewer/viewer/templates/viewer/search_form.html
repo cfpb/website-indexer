@@ -6,8 +6,6 @@
 				type="hidden"
 				name="search_type"
 				value="{{ form.search_type | default:'title' }}" />
-
-			<!-- <div class="o-form__input-w-btn"> -->
 				<div class="o-form__input-w-btn_input-container o-form__input-w-btn-alt">
 					<div class="m-btn-inside-input input-contains-label">
 						<label
@@ -26,9 +24,7 @@
 							placeholder="Search terms" />
 					</div>
 				</div>
-
-				<input type="hidden" name="q" value="{{ form.q }}">
-        <!-- <div class="o-form_group u-mb30"> -->
+		<input type="hidden" name="q" value="{{ form.q }}">
           <div class="o-radio_buttons">
             <div class="m-form-field m-form-field__radio reg-radio">
               <input class="a-radio" type="radio" value="title" id="search_type_title" name="search_type"{% if form.search_type is None or form.search_type == 'title' %} checked{% endif %}>
@@ -55,22 +51,11 @@
               <label class="a-label" for="search_type_html">HTML <span>Search HTML</span></label>
             </div>
 		</div>
-        <!-- </div> -->
-      	<!-- <div class="o-form_group u-mb30" id="update-button">
-        	<fieldset class="o-form_fieldset u-mt20">
-          	<div class="input-with-btn_btn">
-            	<button class="a-btn" type="submit">Update</button>
-          	</div>
-        	</fieldset>
-      	</div> -->
-				<!-- <div class="o-form__input-w-btn_btn-container"> -->
-					<button
-						class="a-btn a-btn-alt"
-						aria-label="Search consumerfinance.gov content and source code">
-						Search
-					</button>
-				<!-- </div> -->
-			<!-- </div> -->
+			<button
+				class="a-btn a-btn-alt"
+				aria-label="Search consumerfinance.gov content and source code">
+				Search
+			</button>
 		</div>
 	</form>
 </div>
