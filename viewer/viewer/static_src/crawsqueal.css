@@ -36,6 +36,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   list-style-position: inside;
+  margin-bottom: 15px;
 }
 
 code.language-html {

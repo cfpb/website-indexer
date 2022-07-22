@@ -1,5 +1,7 @@
 {% extends './base.html' %}
 
+{% load page_display %}
+
 {% block content %}
   <div class="content_wrapper search_results">
     <div class="block block__flush-top">
@@ -12,10 +14,10 @@
             </a>
           </nav>
           <div class="block block__flush-bottom">
-            <h2>Page: {{ page.get_trimmed_page_title }}</h2>
+            <h2>Page: {{ title | strip_title_suffix }}</h2>
           </div>
           <div class="block block__flush-top">
-            <a href="{{ page.absolute_path }}">{{ page.absolute_path }}</a> (last crawled {{ page.crawled_at }})
+            <a href="{{ url }}">{{ url }}</a> (last crawled {{ timestamp }})
           </div>
           <div class="o-expandable o-expandable__padded o-expandable__background o-expandable__border u-mb20">
             <button class="o-expandable_header o-expandable_target" title="Expand content">
@@ -35,8 +37,8 @@
             </button>
             <div class="o-expandable_content o-expandable_content__onload-open">
               <ul class="m-list">
-                {% for link in page.links.all %}
-                  <li class="m-list_item u-truncate">{{ link.url }}</li>
+                {% for link in links %}
+                  <li class="m-list_item u-truncate">{{ link }}</li>
                 {% endfor %}
               </ul>
             </div>
@@ -59,10 +61,30 @@
             </button>
             <div class="o-expandable_content">
               <ul class="m-list">
-                {% for component in page.components.all %}
-                  <li class="m-list_item">{{ component.name }}</li>
+                {% for component in components %}
+                  <li class="m-list_item">{{ component }}</li>
                 {% endfor %}
               </ul>
+            </div>
+          </div>
+          <div class="o-expandable o-expandable__padded o-expandable__background o-expandable__border u-mb20">
+            <button class="o-expandable_header o-expandable_target" title="Expand content">
+              <h3 class="h4 o-expandable_header-left o-expandable_label">
+                Text
+              </h3>
+              <span class="o-expandable_header-right o-expandable_link">
+                <span class="o-expandable_cue o-expandable_cue-open">
+                  <span class="u-visually-hidden-on-mobile">Show</span>
+                  {% include './icons/plus-round.svg' %}
+                </span>
+                <span class="o-expandable_cue o-expandable_cue-close">
+                  <span class="u-visually-hidden-on-mobile">Hide</span>
+                  {% include './icons/minus-round.svg' %}
+                </span>
+              </span>
+            </button>
+            <div class="o-expandable_content">
+              <pre>{{ text }}</pre>
             </div>
           </div>
           <div class="o-expandable o-expandable__padded o-expandable__background o-expandable__border u-mb20">
@@ -82,7 +104,7 @@
               </span>
             </button>
             <div class="o-expandable_content">
-              <pre><code class="language-html">{{ page.html }}</code></pre>
+              <pre><code class="language-html">{{ html }}</code></pre>
             </div>
           </div>
         </section>

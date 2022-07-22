@@ -1,20 +1,17 @@
 from django.urls import path
 
-from . import views
+from viewer import views
 
 
 urlpatterns = [
     path("", views.PageListView.as_view(), name="index"),
     path("page/", views.PageDetailView.as_view(), name="page"),
-    path(
-        "download-csv/",
-        views.DownloadCSVView.as_view(),
-        name="download-csv"
-    ),
+    path("components/", views.ComponentListView.as_view(), name="components"),
+    path("errors/", views.ErrorListView.as_view(), name="errors"),
+    path("redirects/", views.RedirectListView.as_view(), name="redirects"),
     path(
         "download-database/",
         views.DownloadDatabaseView.as_view(),
-        name="download-database"
+        name="download-database",
     ),
-    path("components", views.ComponentsListView.as_view(), name="components"),
 ]
