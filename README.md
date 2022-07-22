@@ -190,13 +190,20 @@ cd sample
 python -m http.server
 ```
 
-Then, in another terminal at the repository root, start the crawler against the locally running site:
+Then, in another terminal at the repository root, start a crawler against the locally running site:
 
 ```
-yarn start sample.sqlite3 http://localhost:8000/
+./wget_crawl.sh http://localhost:8000
 ```
 
-You'll need to delete the existing sample database file before starting the crawler.
+This will create a WARC archive named `crawl.warc.gz` in your working directory.
+Next, convert this to a test database file:
+
+```
+viewer/manage.py warc_to_db --recreate crawl.warc.gz sample.sqlite3
+```
+
+This will replace the existing sample database file.
 
 ----
 
