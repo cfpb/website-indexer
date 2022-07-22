@@ -190,7 +190,7 @@ cd sample
 python -m http.server
 ```
 
-Then, in another terminal at the repository root, start a crawler against the locally running site:
+Then, in another terminal at the repository root, start a crawl against the locally running site:
 
 ```
 ./wget_crawl.sh http://localhost:8000
