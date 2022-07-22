@@ -5,29 +5,33 @@ _page_values = ["timestamp", "url", "title", "language"]
 
 
 def search_components(class_name_contains, include_class_names=False):
+    queryset = Page.objects.prefetch_related("components").filter(
+        components__class_name__contains=class_name_contains
+    )
+
     values = _page_values
 
     if include_class_names:
         values = values + ["components__class_name"]
+    else:
+        queryset = queryset.distinct()
 
-    return (
-        Page.objects.prefetch_related("components")
-        .filter(components__class_name__contains=class_name_contains)
-        .values(*values)
-    )
+    return queryset.values(*values)
 
 
 def search_links(href_contains, include_hrefs=False):
+    queryset = Page.objects.prefetch_related("links").filter(
+        links__href__contains=href_contains
+    )
+
     values = _page_values
 
     if include_hrefs:
         values = values + ["links__href"]
+    else:
+        queryset = queryset.distinct()
 
-    return (
-        Page.objects.prefetch_related("links")
-        .filter(links__href__contains=href_contains)
-        .values(*values)
-    )
+    return queryset.values(*values)
 
 
 def _search_pages(**filter_kwargs):
