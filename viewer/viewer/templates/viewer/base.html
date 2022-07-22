@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-    <title>{% block title %}Crawsqueal{% endblock %}</title>
+    <title>{% block title %}Consumerfinance.gov crawler{% endblock %}</title>
     <link rel="stylesheet" href="{% static "main.css" %}">
     <link rel="stylesheet" href="{% static "crawsqueal.css" %}">
   </head>
@@ -56,17 +56,6 @@
       <div class="wrapper content_wrapper">
         <div class="content_main content__1-3">
           <div class="content_main-inner">
-            <div class="block block__sub">
-              <div class="content_wrapper search_form">
-                <h1>Consumerfinance.gov <span class="search_intro__all">crawler</span></h1>
-                  {% block intro %}
-                  <div class="lead-paragraph">
-                    Here's a brief description of what it does. Check out
-                    <a href="{% url "components" %}">common searches.</a>
-                  </div>
-                  {% endblock intro %}
-              </div>
-            </div>
             {% block content %}{% endblock content %}
           </div>
         </div>

@@ -1,6 +1,18 @@
 {% extends './base.html' %}
 
 {% block content %}
+  <div class="block block__sub">
+    <div class="content_wrapper search_form">
+      <h1>Consumerfinance.gov crawler</h1>
+        {% block intro %}
+        <div class="lead-paragraph">
+          The crawler stores a nightly snapshot of webpage data that you can search for all sorts of useful things.
+          Check out <a href="{% url 'help' %}">common searches</a>.
+        </div>
+        {% endblock intro %}
+    </div>
+  </div>
+
   <div class="content_wrapper search_form">
     {% include './search_form.html' %}
   </div>
