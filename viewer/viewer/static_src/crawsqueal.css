@@ -1,25 +1,33 @@
+.content_main-alt {
+  border-top: 0 !important;
+  width: 100% !important;
+}
+
 .search_results .results_count {
   padding-left: 1.875em;
+  padding-bottom: 15px;
+  margin-top: 30px;
+  height: 70px;
+  border: 1px solid #20aa3f;
+}
+
+.results_item h4 {
+  padding-top: 30px !important;
 }
 
 .search_results .results_list {
   padding-top: 0;
+  padding-left: 0 !important
 }
 
-.search_results .results_csv {
-  margin: 0.9375em 0.9375em 3.75em 1.875em;
-}
 
 .search_results .results_list ul {
-  padding-left: 0.9375em;
+  padding-left: 0;
 }
+
 
 .search_results .results_item {
-  margin: 1em 0;
-}
-
-.search_results .content_sidebar {
-  padding-top: 2em;
+  margin: 0;
 }
 
 .u-truncate {
@@ -28,6 +36,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   list-style-position: inside;
+  margin-bottom: 15px;
 }
 
 code.language-html {
@@ -38,4 +47,42 @@ code.language-html {
 
 .breadcrumbs {
   border: 0;
+}
+
+.o-radio_buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.o-radio_buttons div {
+  flex: 50%;
+}
+
+.o-radio_buttons label>span
+{
+  display:block;
+  margin-top: 3px;
+  margin-bottom: 15px;
+  font-weight: normal;
+  font-size: small;
+}
+
+.o-radio_buttons label
+{
+  font-weight: bold;
+}
+
+.o-form__input-w-btn-alt {
+  border-left-width: 0;
+  margin-bottom: 30px;
+}
+
+.a-btn-alt {
+  margin-top: 15px;
+}
+
+.a-link_text {
+  color: #0061c1;
 }
