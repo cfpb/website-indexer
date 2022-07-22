@@ -1,29 +1,33 @@
 
     <h3>Refine results</h3>
     <form action="{% url 'index' %}" method="get">
-      <input type="hidden" name="q" value="{{ form.q }}">
+      <input type="hidden" name="q" value="{{ request.query_params.q }}">
       <div>
         <div class="o-form_group u-mb30">
           <fieldset class="o-form_fieldset">
             <legend class="h4">Things to search for</legend>
             <div class="m-form-field m-form-field__radio reg-radio">
-              <input class="a-radio" type="radio" value="title" id="search_type_title" name="search_type"{% if form.search_type is None or form.search_type == 'title' %} checked{% endif %}>
+              <input class="a-radio" type="radio" value="title" id="search_type_title" name="search_type"{% if request.query_params.search_type is None or request.query_params.search_type == 'title' %} checked{% endif %}>
               <label class="a-label" for="search_type_title">Title</label>
             </div>
             <div class="m-form-field m-form-field__radio reg-radio">
-              <input class="a-radio" type="radio" value="path" id="search_type_path" name="search_type"{% if form.search_type == 'path' %} checked{% endif %}>
-              <label class="a-label" for="search_type_path">URL</label>
+              <input class="a-radio" type="radio" value="url" id="search_type_url" name="search_type"{% if request.query_params.search_type == 'url' %} checked{% endif %}>
+              <label class="a-label" for="search_type_url">URL</label>
             </div>
             <div class="m-form-field m-form-field__radio reg-radio">
-              <input class="a-radio" type="radio" value="components" id="search_type_components" name="search_type"{% if form.search_type == 'components' %} checked{% endif %}>
+              <input class="a-radio" type="radio" value="components" id="search_type_components" name="search_type"{% if request.query_params.search_type == 'components' %} checked{% endif %}>
               <label class="a-label" for="search_type_components">Components</label>
             </div>
             <div class="m-form-field m-form-field__radio reg-radio">
-              <input class="a-radio" type="radio" value="links" id="search_type_links" name="search_type"{% if form.search_type == 'links' %} checked{% endif %}>
+              <input class="a-radio" type="radio" value="links" id="search_type_links" name="search_type"{% if request.query_params.search_type == 'links' %} checked{% endif %}>
               <label class="a-label" for="search_type_links">Links</label>
             </div>
             <div class="m-form-field m-form-field__radio reg-radio">
-              <input class="a-radio" type="radio" value="html" id="search_type_html" name="search_type"{% if form.search_type == 'html' %} checked{% endif %}>
+              <input class="a-radio" type="radio" value="text" id="search_type_text" name="search_type"{% if request.query_params.search_type == 'text' %} checked{% endif %}>
+              <label class="a-label" for="search_type_text">Text</label>
+            </div>
+            <div class="m-form-field m-form-field__radio reg-radio">
+              <input class="a-radio" type="radio" value="html" id="search_type_html" name="search_type"{% if request.query_params.search_type == 'html' %} checked{% endif %}>
               <label class="a-label" for="search_type_html">HTML</label>
             </div>
           </fieldset>
