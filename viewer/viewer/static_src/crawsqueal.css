@@ -5,10 +5,14 @@
 
 .search_results .results_count {
   padding-left: 1.875em;
+  padding-bottom: 15px;
   margin-top: 30px;
   height: 70px;
-  padding-bottom: 15px;
-  border: 1px solid #b4b5b6;
+  border: 1px solid #20aa3f;
+}
+
+.results_item h4 {
+  padding-top: 30px !important;
 }
 
 .search_results .results_list {
@@ -21,8 +25,9 @@
   padding-left: 0;
 }
 
+
 .search_results .results_item {
-  margin: 1em 0;
+  margin: 0;
 }
 
 .u-truncate {
@@ -75,4 +80,8 @@ code.language-html {
 
 .a-btn-alt {
   margin-top: 15px;
+}
+
+.a-link_text {
+  color: #0061c1;
 }
