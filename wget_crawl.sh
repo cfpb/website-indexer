@@ -81,14 +81,13 @@ time wget \
     --reject-regex "CatID=|NavCode=|_gl=|activity_type=|authors=|book=|categories=|chartType=|charttype=|clhx=|dateInterval=|date_received_min=|dateinterval=|entx=|fdx=|filter1_topics=|filter2_topics=|form-id=|gib=|gpl=|grade_level=|has_narrative=|hltx=|hous=|houx=|insi=|insl=|inst=|iped=|issue=|language=|lens=|mta=|oid=|othg=|othr=|othx=|parl=|pelg=|perl=|pid=|ppl=|product=|prvf=|prvi=|prvl=|q=|regs=|retx=|schg=|school_subject=|searchField=|search_field=|searchfield=|size=|sort=|stag=|subl=|tab=|taxx=|title=|topic=|topics=|totl=|tran=|trnx=|tuit=|unsl=|utm_campaign=|utm_medium=|utm_source=|wkst=" \
     --recursive \
     --level="$depth" \
-    --rejected-log=rejected.log \
     --user-agent="crawsqueal" \
     "$url" 2>&1 | tee wget.log
 
 popd > /dev/null
 
-# Copy back logs and WARC file from temporary directory.
-cp "$tmp_dir"/{wget,rejected}.log .
+# Copy back log and WARC file from temporary directory.
+cp "$tmp_dir"/wget.log .
 cp "$tmp_dir"/crawl.{warc.gz,cdx} .
 
 # Clean up temporary directory.
