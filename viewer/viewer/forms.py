@@ -8,9 +8,10 @@ class SearchForm(forms.Form):
             (c, c)
             for c in (
                 "title",
-                "path",
+                "url",
                 "components",
                 "links",
+                "text",
                 "html",
             )
         ),

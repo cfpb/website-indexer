@@ -9,24 +9,52 @@ class ComponentSerializer(serializers.ModelSerializer):
         fields = ["class_name"]
 
 
-class RequestSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = ["timestamp", "url"]
+class RequestSerializer(serializers.Serializer):
+    timestamp = serializers.DateTimeField()
+    url = serializers.CharField()
 
 
 class PageSerializer(RequestSerializer):
+    title = serializers.CharField()
+    language = serializers.CharField()
+
+
+class PageWithComponentSerializer(PageSerializer):
+    class_name = serializers.CharField(source="components__class_name")
+
+
+class PageWithLinkSerializer(PageSerializer):
+    href = serializers.CharField(source="links__href")
+
+
+class PageDetailSerializer(serializers.ModelSerializer):
+    components = serializers.SlugRelatedField(
+        many=True, read_only=True, slug_field="class_name"
+    )
+
+    links = serializers.SlugRelatedField(many=True, read_only=True, slug_field="href")
+
     class Meta:
         model = Page
-        fields = RequestSerializer.Meta.fields + ["title", "language"]
+        fields = [
+            "timestamp",
+            "url",
+            "title",
+            "language",
+            "text",
+            "html",
+            "components",
+            "links",
+        ]
 
 
-class ErrorSerializer(RequestSerializer):
+class ErrorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Error
-        fields = RequestSerializer.Meta.fields + ["status_code", "referrer"]
+        fields = ["timestamp", "url", "status_code", "referrer"]
 
 
-class RedirectSerializer(ErrorSerializer):
+class RedirectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Redirect
-        fields = ErrorSerializer.Meta.fields + ["location"]
+        fields = ["timestamp", "url", "status_code", "referrer", "location"]
