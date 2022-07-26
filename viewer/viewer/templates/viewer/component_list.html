@@ -2,7 +2,7 @@
 
 {% load humanize %}
 
-{% block intro %}
+{% block content %}
 <div class="lead-paragraph">
   {{ results | length | intcomma }} total
   <a class="a-link a-link__icon"
@@ -13,9 +13,7 @@
   </a>
   component{{ results | length | pluralize }}
 </div>
-{% endblock %}
 
-{% block content %}
 <div class="results_list">
   <ul class="m-list">
     {% for component in results %}
