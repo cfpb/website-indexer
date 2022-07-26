@@ -89,16 +89,21 @@ The following examples describe some common use cases.
 To list the total number of URLs and crawl timestamps:
 
 ```sql
-sqlite> SELECT COUNT(*), MIN(timestamp), MAX(timestamp) FROM crawl;
-25279|2022-04-11T04:00:12.336Z|2022-04-11T06:18:11.608Z
+sqlite> SELECT COUNT(*), MIN(timestamp), MAX(timestamp) FROM warc_page;
+23049|2022-07-20 02:50:02|2022-07-20 08:35:23
 ```
 
-Note that page data is stored in a table named `cfgov`.
+Note that page data is stored in a table named `warc_page`.
 
 ### List pages that link to a certain URL
 
 ```sql
-sqlite> SELECT DISTINCT cfgov.path FROM cfgov, json_each(json(cfgov.links)) WHERE json_each.value LIKE '/plain-writing/' ORDER BY cfgov.path;
+sqlite> SELECT DISTINCT url
+FROM warc_page
+INNER JOIN warc_page_links ON (warc_page.id = warc_page_links.page_id)
+INNER JOIN warc_link ON (warc_page_links.link_id = warc_link.id)
+WHERE href LIKE "/plain-writing/"
+ORDER BY url ASC;
 ```
 
 To dump results to a CSV instead of the terminal:
@@ -114,25 +119,45 @@ sqlite> .mode list
 To search with wildcards, use the `%` character:
 
 ```sql
-sqlite> SELECT cfgov.path, json_each.value AS link FROM cfgov, json_each(json(cfgov.links)) WHERE json_each.value LIKE '/about-us/blog/%' ORDER BY cfgov.path, link;
+sqlite> SELECT DISTINCT url
+FROM warc_page
+INNER JOIN warc_page_links ON (warc_page.id = warc_page_links.page_id)
+INNER JOIN warc_link ON (warc_page_links.link_id = warc_link.id)
+WHERE href LIKE "/about-us/blog/"
+ORDER BY url ASC;
 ```
 
 ### List pages that contain a specific design component
 
 ```sql
-sqlite> SELECT DISTINCT cfgov.path FROM cfgov, json_each(json(cfgov.components)) WHERE json_each.value LIKE 'o-featured-content-module' ORDER BY cfgov.path;
+sqlite> SELECT DISTINCT url
+FROM warc_page
+INNER JOIN warc_page_components ON (warc_page.id = warc_page_components.page_id)
+INNER JOIN warc_component ON (warc_page_components.component_id = warc_component.id)
+WHERE warc_component.class_name LIKE "o-featured-content-module"
+ORDER BY url ASC
 ```
 
 See the [CFPB Design System](https://cfpb.github.io/design-system/)
 for a list of common components used on CFPB websites.
 
-### List pages that contain a certain phrase
+### List pages with titles containing a specific string
 
 ```sql
-sqlite> SELECT path FROM cfgov_fts WHERE cfgov_fts MATCH 'diamonds' ORDER BY path;
+SELECT url FROM warc_page WHERE title LIKE "%housing%" ORDER BY url ASC;
 ```
 
-Note that this query uses a distinct `cfgov_fts` table that uses the SQLite [FTS5 extension](https://www.sqlite.org/fts5.html) for full-text search.
+### List pages with body text containing a certain string
+
+```sql
+sqlite> SELECT url FROM warc_page WHERE text LIKE "%diamond%" ORDER BY URL asc;
+```
+
+### List pages with HTML containing a certain string
+
+```sql
+sqlite> SELECT url FROM warc_page WHERE html LIKE "%<br>%" ORDER BY URL asc;
+```
 
 ## Running the viewer application
 
