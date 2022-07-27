@@ -87,3 +87,7 @@ code.language-html {
 	font-weight: bold;
 	margin-bottom: 15px;
 }
+
+.m-list_item {
+	max-width: 60em !important;
+}
