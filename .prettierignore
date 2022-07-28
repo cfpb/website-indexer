@@ -1,0 +1,97 @@
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+_site/
+*.pem
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases, except for the default database #
+#######################################################
+*.log
+*.sql
+!db.sql
+*.sqlite
+*.sqlite3
+!sample.sqlite3
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Vim swap files #
+##################
+*.swp
+
+# Python #
+#################
+*.pyc
+*.egg-info/
+__pycache__/
+*.py[cod]
+.env
+.python-version
+venv
+
+# pyenv #
+#########
+.python-version
+
+# Django #
+#################
+*.egg-info
+.installed.cfg
+viewer/viewer/static/**
+
+# Unit test / coverage reports
+#################
+htmlcov/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+
+# Front-End #
+#############
+node_modules/
+bower_components/
+.grunt/
+src/vendor/
+dist/
+viewer/viewer/templates/viewer/search_form.html
+
+# File extensions #
+*.*
+!*.css
+!*.js
+!*.json
+!*.jsx
+!*.less
+!*.md
+!*.mdx
+!*.ts
+!*.tsx
+!*.yml
+
