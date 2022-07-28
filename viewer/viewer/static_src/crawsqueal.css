@@ -1,88 +1,93 @@
 .content_main-alt {
-  border-top: 0 !important;
-  width: 100% !important;
+	border-top: 0 !important;
+	width: 100% !important;
 }
 
 .search_results .results_count {
-  padding-left: 1.875em;
-  padding-bottom: 15px;
-  margin-top: 30px;
-  height: 70px;
-  border: 1px solid #20aa3f;
+	padding-left: 1.875em;
+	padding-bottom: 15px;
+	margin-top: 30px;
+	height: 70px;
+	border: 1px solid #20aa3f;
 }
 
 .results_item h4 {
-  padding-top: 30px !important;
+	padding-top: 30px !important;
 }
 
 .search_results .results_list {
-  padding-top: 0;
-  padding-left: 0 !important
+	padding-top: 0;
+	padding-left: 0 !important;
 }
-
 
 .search_results .results_list ul {
-  padding-left: 0;
+	padding-left: 0;
 }
 
-
 .search_results .results_item {
-  margin: 0;
+	margin: 0;
 }
 
 .u-truncate {
-  max-width: none !important;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  list-style-position: inside;
-  margin-bottom: 15px;
+	max-width: none !important;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	list-style-position: inside;
+	margin-bottom: 15px;
 }
 
 code.language-html {
-  max-height: 500px;
-  overflow: scroll;
-  display: block;
+	max-height: 500px;
+	overflow: scroll;
+	display: block;
 }
 
 .breadcrumbs {
-  border: 0;
+	border: 0;
 }
 
 .o-radio_buttons {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	width: 100%;
 }
 
 .o-radio_buttons div {
-  flex: 50%;
+	flex: 50%;
 }
 
-.o-radio_buttons label>span
-{
-  display:block;
-  margin-top: 3px;
-  margin-bottom: 15px;
-  font-weight: normal;
-  font-size: small;
+.o-radio_buttons label > span {
+	display: block;
+	margin-top: 3px;
+	margin-bottom: 15px;
+	font-weight: normal;
+	font-size: small;
 }
 
-.o-radio_buttons label
-{
-  font-weight: bold;
+.o-radio_buttons label {
+	font-weight: bold;
 }
 
 .o-form__input-w-btn-alt {
-  border-left-width: 0;
-  margin-bottom: 30px;
+	border-left-width: 0;
+	margin-bottom: 30px;
 }
 
 .a-btn-alt {
-  margin-top: 15px;
+	margin-top: 15px;
 }
 
 .a-link_text {
-  color: #0061c1;
+	color: #0061c1;
+}
+
+.u-example_text {
+	font-weight: bold;
+	margin-bottom: 15px;
+}
+
+.m-list_item {
+	max-width: 60em !important;
 }

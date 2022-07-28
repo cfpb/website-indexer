@@ -1,122 +1,153 @@
-{% extends './base.html' %}
-
-{% block content %}
+{% extends './base.html' %} {% block content %}
 <nav class="breadcrumbs" aria-label="Breadcrumbs">
-  {% include './icons/chevron-left.svg' %}
-  <a id="breadcrumb_link" class="breadcrumbs_link" href="{% url 'index' %}">
-    Consumerfinance.gov crawler
-  </a>
+	{% include './icons/chevron-left.svg' %}
+	<a id="breadcrumb_link" class="breadcrumbs_link" href="{% url 'index' %}">
+		Consumerfinance.gov crawler
+	</a>
 </nav>
 
 <div class="block">
-  <h2>Common crawler searches </h2>
+	<h2>Common crawler searches</h2>
 </div>
 
 <div class="block">
-  <p>
-    The crawler stores a nightly snapshot of webpage data that you can search for
-    all sorts of useful things.
-  </p>
-  <p>
-    You can search for single terms or exact phrases. Examples:
-  </p>
+	<p>
+		The crawler stores a nightly snapshot of webpage data that you can
+		search for all sorts of useful things.
+	</p>
+	<p>You can search for single terms or exact phrases. Examples:</p>
 </div>
 
 <div class="block">
-  <h3>Title</h3>
-  <p>
-    You want a list of all pages with the word "Chopra" in the title.
-  </p>
-  <p>
-    <a href="{% url 'index' %}?search_type=title&q=Chopra">Search "Chopra"</a>
-  </p>
+	<h2>Title</h2>
+	<p>Search page titles.</p>
+	<p class="u-example_text">Examples</p>
+	<ul class="m-list">
+		<li class="m-list_item">
+			You want a list of all pages with the word "Chopra" in the title.
+			<a href="{% url 'index' %}?search_type=title&q=Chopra">
+				Search "Chopra"
+			</a>
+		</li>
+	</ul>
 </div>
 
 <div class="block">
-  <h3>URL</h3>
-  <p>
-    Find all instances of a string in the URL of a published cf.gov page.
-  </p>
-  <p>
-   Your stakeholder wants a list of all the pages in a given site section.
-  </p>
-  <p>
-    <a href="{% url 'index' %}?search_type=links&q={{ '/about-us/the-bureau/bureau-structure/' | urlencode }}">Search "/about-us/the-bureau/bureau-structure/"</a>
-  </p>
+	<h2>URL</h2>
+	<p>Find all instances of a string in the URL of a published cf.gov page.</p>
+	<p class="u-example_text">Examples</p>
+	<ul class="m-list">
+		<li class="m-list_item">
+			Your stakeholder wants a list of all the pages in a given site
+			section.
+			<a
+				href="{% url 'index' %}?search_type=links&q={{ '/about-us/the-bureau/bureau-structure/' | urlencode }}">
+				Search "/about-us/the-bureau/bureau-structure/"
+			</a>
+		</li>
+	</ul>
 </div>
 
 <div class="block">
-  <h3>Components</h3>
-  <p>
-    Search by
-    <a href="{% url 'components' %}">class names</a>
-    of our
-    <a href="https://cfpb.github.io/design-system/">design components</a>.
-    Partial searches also work: searching for "notification" will return pages
-    containing "m-notification", "m-notification__borderless", etc.
-  </p>
-  <p>
-    You're doing an audit of all occurrences of the notification pattern.
-  </p>
-  <p>
-    <a href="{% url 'index' %}?search_type=components&q=m-notification">Search "m-notification"</a>
-  </p>
+	<h2>Components</h2>
+	<p>
+		Search by
+		<a href="{% url 'components' %}">class names</a>
+		of our
+		<a href="https://cfpb.github.io/design-system/">design components</a>
+		. Partial searches also work: searching for "notification" will return
+		pages containing "m-notification", "m-notification__borderless", etc.
+	</p>
+	<p class="u-example_text">Examples</p>
+
+	<ul class="m-list">
+		<li class="m-list_item">
+			You're doing an audit of all occurrences of the notification
+			pattern.
+			<a href="{% url 'index' %}?search_type=components&q=m-notification">
+				Search "m-notification"
+			</a>
+		</li>
+	</ul>
 </div>
 
 <div class="block">
-  <h3>Links</h3>
-  <p>
-    Find all instances of a string in the URLs of links listed on a page,
-    excluding the header and footer.
-  </p>
-  <p>
-    You're looking for all instances of external links to TBD.
-  </p>
-  <p>
-    <a href="{% url 'index' %}?search_type=links&q=TBD">Search "TBD"</a>
-  </p>
-  <p>
-    You want to find and remediate accidental links to the content server.
-  </p>
-  <p>
-    <a href="{% url 'index' %}?search_type=links&q=content.consumerfinance.gov">Search "content.consumerfinance.gov"</a>
-  </p>
-  <p>
-    You want to find published cf.gov pages with broken links.
-  </p>
-  <p>
-    <a href="{% url 'index' %}?search_type=links&q=none">Search "none"</a>
-  </p>
-  <p>
-    You're looking for incorrectly formatted document links.
-  </p>
-  <p>
-    <a href="{% url 'index' %}?search_type=links&q={{ 'www.consumerfinance.gov/documents' | urlencode }}">Search "www.consumerfinance.gov/documents"</a>
-  </p>
+	<h2>Links</h2>
+	<p>
+		Find all instances of a string in the URLs of links listed on a page,
+		excluding the header and footer.
+	</p>
+	<p class="u-example_text">Examples</p>
+
+	<ul class="m-list">
+		<li class="m-list_item">
+			You're looking for all instances of external links to the FTC.
+			<a href="{% url 'index' %}?search_type=links&q=www.ftc.gov">Search "www.ftc.gov"</a>
+		</li>
+		<li class="m-list_item">
+			You want to find and remediate accidental links to the content
+			serve.
+			<a
+				href="{% url 'index' %}?search_type=links&q=content.consumerfinance.gov">
+				Search "content.consumerfinance.gov"
+			</a>
+		</li>
+		<li class="m-list_item">
+			You want to find published cf.gov pages with broken links.
+			<a href="{% url 'index' %}?search_type=links&q=none">
+				Search "none"
+			</a>
+		</li>
+		<li class="m-list_item">
+			You're looking for incorrectly formatted document links.
+			<a
+				href="{% url 'index' %}?search_type=links&q={{ 'www.consumerfinance.gov/documents' | urlencode }}">
+				Search "www.consumerfinance.gov/documents"
+			</a>
+		</li>
+	</ul>
 </div>
 
 <div class="block">
-  <h3>Full text</h3>
-  <p>
-    Find all instances of a term or exact phrase in the full text of the
-    &lt;body&gt; of a page, excluding the header and footer.
-  </p>
-  <p>
-    You're looking for specific phrasing or language that might need to be
-    updated because of a policy change.
-  </p>
-  <p>
-    <a href="{% url 'index' %}?search_type=text&q={{ 'medical debt' | urlencode }}">Search "medical debt"</a>
-  </p>
+	<h2>Full text</h2>
+	<p>
+		Find all instances of a term or exact phrase in the full text of the
+		&lt;body&gt; of a page, excluding the header and footer.
+	</p>
+	<p class="u-example_text">Examples</p>
+
+	<ul class="m-list">
+		<li class="m-list_item">
+			You're looking for specific phrasing or language that might need to
+			be updated because of a policy change.
+			<a
+				href="{% url 'index' %}?search_type=text&q={{ 'medical debt' | urlencode }}">
+				Search "medical debt"
+			</a>
+		</li>
+	</ul>
 </div>
 
 <div class="block">
-  <h3>HTML</h3>
-  <p>
-    You want to find and remediate manually-added line breaks.
-  </p>
-  <p>
-    <a href="{% url 'index' %}?search_type=html&q={{ '<br>' | urlencode }}">Search "&lt;br&gt;"</a>
-  </p>
+	<h2>HTML</h2>
+	<p>Search raw page HTML for a specific string.</p>
+	<p class="u-example_text">Examples</p>
+
+	<ul class="m-list">
+		<li class="m-list_item">
+			You want to find and remediate manually-added line breaks.
+			<a
+				href="{% url 'index' %}?search_type=html&q={{ '<br>' | urlencode }}">
+				Search "&lt;br&gt;"
+			</a>
+		</li>
+
+		<li class="m-list_item">
+			You want to find pages that include a specific image filename.
+			<a href="{% url 'index' %}?search_type=html&q=consumer_tools_hero">
+				Search "consumer_tools_hero"
+			</a>
+		</li>
+	</ul>
 </div>
 {% endblock %}
