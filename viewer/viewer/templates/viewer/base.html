@@ -1,38 +1,36 @@
-{% load humanize %}
-{% load precisedelta %}
-{% load static %}
+{% load humanize %} {% load precisedelta %} {% load static %}
 
 <!DOCTYPE html>
 <html lang="en" class="no-js">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, minimum-scale=1" />
     <title>{% block title %}Consumerfinance.gov crawler{% endblock %}</title>
-    <link rel="stylesheet" href="{% static "main.css" %}">
-    <link rel="stylesheet" href="{% static "crawsqueal.css" %}">
+    <link rel="stylesheet" href="{% static 'main.css' %}" />
+    <link rel="stylesheet" href="{% static crawsqueal.css' %}" />
   </head>
   <body>
     <div class="skip-nav">
-      <a class="skip-nav_link" href="#main"> Skip to main content </a>
+      <a class="skip-nav_link" href="#main">Skip to main content</a>
     </div>
-    <header class="o-header o-header__mega-menu" style="min-height:0">
-      <div class="m-global-eyebrow
-                  m-global-eyebrow__horizontal">
-        <div class="wrapper
-                    wrapper__match-content">
+    <header class="o-header o-header__mega-menu" style="min-height: 0">
+      <div class="m-global-eyebrow m-global-eyebrow__horizontal">
+        <div class="wrapper wrapper__match-content">
           <div class="a-tagline">
             <span class="u-usa-flag"></span>
-            <div class="a-tagline_text"> An official website of the <span class="u-nowrap">United States government</span>
+            <div class="a-tagline_text">
+              An official website of the
+              <span class="u-nowrap">United States government</span>
             </div>
           </div>
-          <div class="m-global-eyebrow-actions" style="text-align: right;">
+          <div class="m-global-eyebrow-actions" style="text-align: right">
             <ul class="m-list m-list__horizontal">
               <li class="m-list_item">
                 Last website crawl:
-                <a href="#last-crawl">
-                  {{ crawl_stats.start | naturaltime }}
-                </a>
+                <a href="#last-crawl">{{ crawl_stats.start | naturaltime }}</a>
               </li>
             </ul>
           </div>
@@ -41,13 +39,22 @@
       <div class="o-header_content">
         <div class="wrapper wrapper__match-content">
           <a class="o-header_logo" href="/">
-            <img alt="Consumer Financial Protection Bureau" class="o-header_logo-img" height="50" sizes="(max-width: 900px) 161px,
-                            237px" src="https://www.consumerfinance.gov/static/img/logo_237x50.png" srcset="https://www.consumerfinance.gov/static/img/logo_161x34.png 161w,
-                             https://www.consumerfinance.gov/static/img/logo_161x34@2x.png 322w,
-                             https://www.consumerfinance.gov/static/img/logo_161x34@3x.png 483w,
-                             https://www.consumerfinance.gov/static/img/logo_161x34@4x.png 644w,
-                             https://www.consumerfinance.gov/static/img/logo_237x50.png 237w,
-                             https://www.consumerfinance.gov/static/img/logo_237x50@2x.png 474w" width="237" />
+            <img
+              alt="Consumer Financial Protection Bureau"
+              class="o-header_logo-img"
+              height="50"
+              sizes="(max-width: 900px) 161px,
+                            237px"
+              src="https://www.consumerfinance.gov/static/img/logo_237x50.png"
+              srcset="
+                https://www.consumerfinance.gov/static/img/logo_161x34.png    161w,
+                https://www.consumerfinance.gov/static/img/logo_161x34@2x.png 322w,
+                https://www.consumerfinance.gov/static/img/logo_161x34@3x.png 483w,
+                https://www.consumerfinance.gov/static/img/logo_161x34@4x.png 644w,
+                https://www.consumerfinance.gov/static/img/logo_237x50.png    237w,
+                https://www.consumerfinance.gov/static/img/logo_237x50@2x.png 474w
+              "
+              width="237" />
           </a>
         </div>
       </div>
@@ -66,35 +73,43 @@
         <div>
           <ul class="o-footer_list m-list">
             <li id="last-crawl" class="m-list_item">
-              Last website crawl:
-              {{ crawl_stats.start }} - {{ crawl_stats.end }}
+              Last website crawl: {{ crawl_stats.start }} - {{ crawl_stats.end}}
               ({{ crawl_stats.duration | precisedelta }})
             </li>
             <li class="m-list_item">
-              <a class="m-list_link a-link a-link__icon"
-                href="{% url "download-database" %}"
-              >
-                <span class="a-link_text">
-                  Download raw SQLite database
-                </span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 19" class="cf-icon-svg"><path d="M11.16 16.153a.477.477 0 0 1-.476.475H1.316a.476.476 0 0 1-.475-.475V3.046a.476.476 0 0 1 .475-.475h6.95l2.893 2.893zm-1.11-9.925H8.059a.575.575 0 0 1-.574-.573V3.679H1.95v11.84h8.102zm-1.234 5.604L6.388 14.26a.554.554 0 0 1-.784 0l-2.428-2.428a.554.554 0 1 1 .783-.784l1.483 1.482V7.41a.554.554 0 1 1 1.108 0v5.12l1.482-1.482a.554.554 0 0 1 .784.783z"></path></svg>
+              <a
+                class="m-list_link a-link a-link__icon"
+                href="{% url 'download-database' %}">
+                <span class="a-link_text">Download raw SQLite database</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 12 19"
+                  class="cf-icon-svg">
+                  <path
+                    d="M11.16 16.153a.477.477 0 0 1-.476.475H1.316a.476.476 0 0 1-.475-.475V3.046a.476.476 0 0 1 .475-.475h6.95l2.893 2.893zm-1.11-9.925H8.059a.575.575 0 0 1-.574-.573V3.679H1.95v11.84h8.102zm-1.234 5.604L6.388 14.26a.554.554 0 0 1-.784 0l-2.428-2.428a.554.554 0 1 1 .783-.784l1.483 1.482V7.41a.554.554 0 1 1 1.108 0v5.12l1.482-1.482a.554.554 0 0 1 .784.783z"></path>
+                </svg>
               </a>
               ({{ crawl_stats.database_size | filesizeformat }}) to
-              <a class="m-list_link"
-                  href="https://github.com/cfpb/crawsqueal#how-to-query-the-crawler-database">
-                  explore the data locally</a>.
+              <a
+                class="m-list_link"
+                href="https://github.com/cfpb/crawsqueal#how-to-query-the-crawler-database">
+                explore the data locally
+              </a>
+              .
             </li>
           </ul>
         </div>
         <div class="o-footer-post">
           <div class="a-tagline a-tagline__large">
             <span class="u-usa-flag"></span>
-            <div class="a-tagline_text"> An official website of the <span class="u-nowrap">United States government</span>
+            <div class="a-tagline_text">
+              An official website of the
+              <span class="u-nowrap">United States government</span>
             </div>
           </div>
         </div>
       </div>
     </footer>
-    <script src="{% static "crawsqueal.js" %}" type="module"></script>
+    <script src="{% static 'crawsqueal.js' %}" type="module"></script>
   </body>
 </html>
