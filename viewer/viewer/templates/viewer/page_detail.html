@@ -10,7 +10,7 @@
           <nav class="breadcrumbs" aria-label="Breadcrumbs">
             {% include './icons/chevron-left.svg' %}
             <a id="breadcrumb_link" class="breadcrumbs_link" href="{% url 'index' %}">
-              Return to search results
+              Consumerfinance.gov crawler
             </a>
           </nav>
           <div class="block block__flush-bottom">
@@ -35,7 +35,7 @@
                 </span>
               </span>
             </button>
-            <div class="o-expandable_content o-expandable_content__onload-open">
+            <div class="o-expandable_content{% if request.query_params.search_type == 'links' %} o-expandable_content__onload-open{% endif %}">
               <ul class="m-list">
                 {% for link in links %}
                   <li class="m-list_item u-truncate">{{ link }}</li>
@@ -59,7 +59,7 @@
                 </span>
               </span>
             </button>
-            <div class="o-expandable_content">
+            <div class="o-expandable_content{% if request.query_params.search_type == 'components' %} o-expandable_content__onload-open{% endif %}">
               <ul class="m-list">
                 {% for component in components %}
                   <li class="m-list_item">{{ component }}</li>
@@ -83,7 +83,7 @@
                 </span>
               </span>
             </button>
-            <div class="o-expandable_content">
+            <div class="o-expandable_content{% if request.query_params.search_type == 'text' %} o-expandable_content__onload-open{% endif %}">
               <pre>{{ text }}</pre>
             </div>
           </div>
@@ -103,7 +103,7 @@
                 </span>
               </span>
             </button>
-            <div class="o-expandable_content">
+            <div class="o-expandable_content{% if request.query_params.search_type == 'html' %} o-expandable_content__onload-open{% endif %}">
               <pre><code class="language-html">{{ html }}</code></pre>
             </div>
           </div>
