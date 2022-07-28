@@ -77,6 +77,7 @@ time wget \
     --wait=0.5 \
     --random-wait \
     --ignore-case \
+    --no-hsts \
     --reject '*.css,*.csv,*.do,*.doc,*.docx,*.epub,*.gif,*.ico,*.jpg,*.js,*.json,*.mp3,*.pdf,*.png,*.pptx,*.py,*.r,*.sas,*.sps,*.svg,*.tmp,*.txt,*.wav,*.webmanifest,*.woff,*.woff2,*.xls,*xlsx,*.xml,*.zip' \
     --reject-regex "CatID=|NavCode=|_gl=|activity_type=|authors=|book=|categories=|chartType=|charttype=|clhx=|dateInterval=|date_received_min=|dateinterval=|entx=|fdx=|filter1_topics=|filter2_topics=|form-id=|gib=|gpl=|grade_level=|has_narrative=|hltx=|hous=|houx=|insi=|insl=|inst=|iped=|issue=|language=|lens=|mta=|oid=|othg=|othr=|othx=|parl=|pelg=|perl=|pid=|ppl=|product=|prvf=|prvi=|prvl=|q=|regs=|retx=|schg=|school_subject=|searchField=|search_field=|searchfield=|size=|sort=|stag=|subl=|tab=|taxx=|title=|topic=|topics=|totl=|tran=|trnx=|tuit=|unsl=|utm_campaign=|utm_medium=|utm_source=|wkst=" \
     --recursive \
