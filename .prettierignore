@@ -93,4 +93,5 @@ bower_components/
 .grunt/
 src/vendor/
 dist/
+viewer/viewer/templates/viewer/page_list.html
 viewer/viewer/templates/viewer/search_form.html
