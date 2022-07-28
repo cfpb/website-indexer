@@ -44,7 +44,7 @@
         </a>
       </h4>
       <div class="u-truncate">{{ page.url }}</div>
-      <a href="{% url 'page' %}?url={{ page.url | urlencode }}">Details</a>
+      <a href="{% url 'page' %}?url={{ page.url | urlencode }}{% if request.query_params.search_type %}&search_type={{ request.query_params.search_type | urlencode }}{% endif %}{% if request.query_params.q %}&q={{ request.query_params.q | urlencode }}{% endif %}">Details</a>
     </li>
     {% endfor %}
   </ul>
