@@ -1,3 +1,7 @@
+from urllib.parse import quote_plus
+
+from django.db.models import Q
+
 from warc.models import Page
 
 
@@ -19,10 +23,15 @@ def search_components(class_name_contains, include_class_names=False):
     return queryset.values(*values)
 
 
-def search_links(href_contains, include_hrefs=False):
-    queryset = Page.objects.prefetch_related("links").filter(
-        links__href__contains=href_contains
-    )
+def search_links(href_contains, include_hrefs=False, or_urlencoded=True):
+    queryset = Page.objects.prefetch_related("links")
+
+    href_filter = Q(links__href__contains=href_contains)
+
+    if or_urlencoded:
+        href_filter |= Q(links__href__contains=quote_plus(href_contains))
+
+    queryset = queryset.filter(href_filter)
 
     values = _page_values
 
