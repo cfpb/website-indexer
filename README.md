@@ -211,6 +211,21 @@ You can fix any problems by running:
 black .
 ```
 
+This project uses [Prettier](https://prettier.io/) as a code formatter
+for JavaScript, CSS, and HTML templates.
+
+To check if your changes to project code match the desired coding style:
+
+```
+yarn prettier
+```
+
+You can fix any problems by running:
+
+```
+yarn fix
+```
+
 ### Sample database file
 
 This repository includes a sample database file ([sample.sqlite3](./sample.sqlite3)).

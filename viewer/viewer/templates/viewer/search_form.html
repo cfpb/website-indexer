@@ -1,56 +1,78 @@
-<div class="search_wrapper u-mt30">
-	<form action="{% url 'index' %}" id="search_form">
-		<div class="o-well">
-			<p class="h4">Search the crawler</p>
-			<div class="o-form__input-w-btn_input-container o-form__input-w-btn-alt">
-				<div class="m-btn-inside-input input-contains-label">
-					<label
-						for="query"
-						class="input-contains-label_before input-contains-label_before__search">
-						{% include './icons/magnifying-glass.svg' %}
-						<span class="u-visually-hidden">Search</span>
-					</label>
-				<input
-					id="query"
-					name="q"
-					type="text"
-					title="Search terms"
-					class="a-text-input"
-					value="{{ request.query_params.q }}"
-					placeholder="Search terms" />
-				</div>
-			</div>
-          <div class="o-radio_buttons">
-            <div class="m-form-field m-form-field__radio reg-radio">
-              <input class="a-radio" type="radio" value="title" id="search_type_title" name="search_type"{% if request.query_params.search_type is None or request.query_params.search_type == 'title' %} checked{% endif %}>
-              <label class="a-label" for="search_type_title">Title <span>Search page titles</span></label>
-            </div>
-            <div class="m-form-field m-form-field__radio reg-radio">
-              <input class="a-radio" type="radio" value="url" id="search_type_url" name="search_type"{% if request.query_params.search_type == 'url' %} checked{% endif %}>
-              <label class="a-label" for="search_type_url">URL <span>Search page URLs</span></label>
-            </div>
-            <div class="m-form-field m-form-field__radio reg-radio">
-              <input class="a-radio" type="radio" value="components" id="search_type_components" name="search_type"{% if request.query_params.search_type == 'components' %} checked{% endif %}>
-              <label class="a-label" for="search_type_components">Components <span>Search by class names of our components</span></label>
-            </div>
-            <div class="m-form-field m-form-field__radio reg-radio">
-              <input class="a-radio" type="radio" value="links" id="search_type_links" name="search_type"{% if request.query_params.search_type == 'links' %} checked{% endif %}>
-              <label class="a-label" for="search_type_links">Links <span>Find links on a page</span></label>
-            </div>
-			<div class="m-form-field m-form-field__radio reg-radio">
-              <input class="a-radio" type="radio" value="text" id="search_type_text" name="search_type"{% if request.query_params.search_type == 'text' %} checked{% endif %}>
-              <label class="a-label" for="search_type_text">Full text <span>Search the content of the page</span></label>
-            </div>
-            <div class="m-form-field m-form-field__radio reg-radio">
-              <input class="a-radio" type="radio" value="html" id="search_type_html" name="search_type"{% if request.query_params.search_type == 'html' %} checked{% endif %}>
-              <label class="a-label" for="search_type_html">HTML <span>Search HTML</span></label>
-            </div>
-		</div>
-			<button
-				class="a-btn a-btn-alt"
-				aria-label="Search consumerfinance.gov content and source code">
-				Search
-			</button>
-		</div>
-	</form>
-</div>
+<form action="{% url 'index' %}" id="search_form">
+  <div class="o-well">
+    <p class="h4">Search the crawler</p>
+    <div class="o-form__input-w-btn_input-container o-form__input-w-btn-alt">
+      <div class="m-btn-inside-input input-contains-label">
+        <label
+          for="query"
+          class="input-contains-label_before input-contains-label_before__search">
+          {% include './icons/magnifying-glass.svg' %}
+          <span class="u-visually-hidden">Search</span>
+        </label>
+        <input
+          id="query"
+          name="q"
+          type="text"
+          title="Search terms"
+          class="a-text-input"
+          value="{{ request.query_params.q }}"
+          placeholder="Search terms" />
+      </div>
+    </div>
+    <div class="o-radio_buttons">
+      <div class="m-form-field m-form-field__radio reg-radio">
+        <!-- prettier-ignore -->
+        <input class="a-radio" type="radio" value="title" id="search_type_title" name="search_type"{% if request.query_params.search_type is None or request.query_params.search_type == 'title' %} checked{% endif %}>
+        <label class="a-label" for="search_type_title">
+          Title
+          <span>Search page titles</span>
+        </label>
+      </div>
+      <div class="m-form-field m-form-field__radio reg-radio">
+        <!-- prettier-ignore -->
+        <input class="a-radio" type="radio" value="url" id="search_type_url" name="search_type"{% if request.query_params.search_type == 'url' %} checked{% endif %}>
+        <label class="a-label" for="search_type_url">
+          URL
+          <span>Search page URLs</span>
+        </label>
+      </div>
+      <div class="m-form-field m-form-field__radio reg-radio">
+        <!-- prettier-ignore -->
+        <input class="a-radio" type="radio" value="components" id="search_type_components" name="search_type"{% if request.query_params.search_type == 'components' %} checked{% endif %}>
+        <label class="a-label" for="search_type_components">
+          Components
+          <span>Search by class names of our components</span>
+        </label>
+      </div>
+      <div class="m-form-field m-form-field__radio reg-radio">
+        <!-- prettier-ignore -->
+        <input class="a-radio" type="radio" value="links" id="search_type_links" name="search_type"{% if request.query_params.search_type == 'links' %} checked{% endif %}>
+        <label class="a-label" for="search_type_links">
+          Links
+          <span>Find links on a page</span>
+        </label>
+      </div>
+      <div class="m-form-field m-form-field__radio reg-radio">
+        <!-- prettier-ignore -->
+        <input class="a-radio" type="radio" value="text" id="search_type_text" name="search_type"{% if request.query_params.search_type == 'text' %} checked{% endif %}>
+        <label class="a-label" for="search_type_text">
+          Full text
+          <span>Search the content of the page</span>
+        </label>
+      </div>
+      <div class="m-form-field m-form-field__radio reg-radio">
+        <!-- prettier-ignore -->
+        <input class="a-radio" type="radio" value="html" id="search_type_html" name="search_type"{% if request.query_params.search_type == 'html' %} checked{% endif %}>
+        <label class="a-label" for="search_type_html">
+          HTML
+          <span>Search HTML</span>
+        </label>
+      </div>
+    </div>
+    <button
+      class="a-btn a-btn-alt"
+      aria-label="Search consumerfinance.gov content and source code">
+      Search
+    </button>
+  </div>
+</form>
