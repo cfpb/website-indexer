@@ -197,6 +197,20 @@ tox
 
 ### Code formatting
 
+This project uses [Black](https://github.com/psf/black) as a Python code formatter.
+
+To check if your changes to project code match the desired coding style:
+
+```
+black . --check
+```
+
+You can fix any problems by running:
+
+```
+black .
+```
+
 This project uses [Prettier](https://prettier.io/) as a code formatter
 for JavaScript, CSS, and HTML templates.
 
