@@ -1,0 +1,22 @@
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+    - uses: actions/cache@v3
+      name: Configure npm caching
+      with:
+        path: ~/.npm
+        key: ${{ runner.OS }}-npm-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.OS }}-npm-
+    - name: Install dependencies
+      run: npm install
+    - name: Run prettier
+      run: |-
+        npm run prettier
