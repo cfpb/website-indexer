@@ -198,7 +198,7 @@ tox
 ### Code formatting
 
 This project uses [Prettier](https://prettier.io/) as a code formatter
-for JavaScript and CSS.
+for JavaScript, CSS, and HTML templates.
 
 To check if your changes to project code match the desired coding style:
 
