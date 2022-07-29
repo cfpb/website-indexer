@@ -195,6 +195,22 @@ To run Python unit tests, use [`tox`](https://tox.wiki/en/latest/):
 tox
 ```
 
+### Code formatting
+
+This project uses [Black](https://github.com/psf/black) as a Python code formatter.
+
+To check if your changes to project code match the desired coding style:
+
+```
+black . --check
+```
+
+You can fix any problems by running:
+
+```
+black .
+```
+
 ### Sample database file
 
 This repository includes a sample database file ([sample.sqlite3](./sample.sqlite3)).
