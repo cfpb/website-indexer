@@ -19,5 +19,18 @@
   },
   "devDependencies": {
     "prettier": "^2.7.1"
+  },
+  "prettier": {
+    "bracketSameLine": true,
+    "htmlWhitespaceSensitivity": "ignore",
+    "tabWidth": 2,
+    "overrides": [
+      {
+        "files": "*.css",
+        "options": {
+          "tabWidth": 4
+        }
+      }
+    ]
   }
 }
