@@ -7,7 +7,8 @@
     "node": ">=16.x"
   },
   "scripts": {
-    "prettier": "prettier --write \"**/*.*\"",
+    "prettier": "prettier --check 'viewer/**/static_src/*.{css,js}'",
+    "fix": "npm run prettier -- --write",
     "fonts": "cp -r viewer/viewer/static_src/fonts viewer/viewer/static/fonts",
     "styles": "curl -o viewer/viewer/static/main.css https://www.consumerfinance.gov/static/css/main.css && curl https://www.consumerfinance.gov/static/apps/regulations3k/css/main.css >> viewer/viewer/static/main.css && cp viewer/viewer/static_src/crawsqueal.css viewer/viewer/static/crawsqueal.css",
     "scripts": "esbuild viewer/viewer/static_src/crawsqueal.js --bundle --outfile=viewer/viewer/static/crawsqueal.js",
