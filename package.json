@@ -23,7 +23,7 @@
   },
   "prettier": {
     "bracketSameLine": true,
-    "htmlWhitespaceSensitivity": "ignore",
+    "htmlWhitespaceSensitivity": "strict",
     "tabWidth": 2,
     "overrides": [
       {
