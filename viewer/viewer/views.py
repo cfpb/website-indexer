@@ -5,6 +5,7 @@ from django.views.generic import View
 
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 
+from viewer.context_processors import crawl_stats
 from viewer.forms import SearchForm
 from viewer.renderers import BetterTemplateHTMLRenderer
 from viewer.serializers import (
@@ -57,11 +58,25 @@ class BetterCSVsMixin:
 
         return context
 
+    def finalize_response(self, *args, **kwargs):
+        response = super().finalize_response(*args, **kwargs)
+
+        if self.is_rendering_csv:
+            crawl_start = crawl_stats()["crawl_stats"]["end"]
+            response["Content-Disposition"] = (
+                "attachment; filename="
+                f"{self.csv_basename}-"
+                f"{crawl_start.strftime('%Y%m%d')}.csv"
+            )
+
+        return response
+
 
 class ComponentListView(AlsoRenderHTMLMixin, BetterCSVsMixin, ListAPIView):
     queryset = Component.objects.all()
     serializer_class = ComponentSerializer
     pagination_class = None
+    csv_basename = "components"
 
     def get_template_names(self):
         return ["viewer/component_list.html"]
@@ -71,16 +86,19 @@ class ErrorListView(BetterCSVsMixin, ListAPIView):
     queryset = Error.objects.all()
     serializer_class = ErrorSerializer
     filterset_fields = ["status_code"]
+    csv_basename = "errors"
 
 
 class RedirectListView(BetterCSVsMixin, ListAPIView):
     queryset = Redirect.objects.all()
     serializer_class = RedirectSerializer
     filterset_fields = ["status_code"]
+    csv_basename = "redirects"
 
 
 class PageMixin(AlsoRenderHTMLMixin, BetterCSVsMixin):
     filterset_fields = ["language"]
+    csv_basename = "pages"
 
     def get_queryset(self):
         form = SearchForm(self.request.query_params)
