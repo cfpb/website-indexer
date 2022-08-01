@@ -41,7 +41,15 @@
         <input class="a-radio" type="radio" value="components" id="search_type_components" name="search_type"{% if request.query_params.search_type == 'components' %} checked{% endif %}>
         <label class="a-label" for="search_type_components">
           Components
-          <span>Search by class names of our components</span>
+          <span>
+            <!-- prettier-ignore -->
+            <p>
+              Search by
+              <a href="{% url 'components' %}">class names</a>
+              of our
+              <a href="https://cfpb.github.io/design-system/">design components</a>
+            </p>
+          </span>
         </label>
       </div>
       <div class="m-form-field m-form-field__radio reg-radio">
