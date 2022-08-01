@@ -66,22 +66,30 @@
 
 {% if previous or next %}
 <div class="results_paginator">
+  <!-- prettier-ignore -->
   <nav class="m-pagination" role="navigation" aria-label="Pagination">
-    {% if previous %}
-    <a class="a-btn m-pagination_btn-prev" href="{{ previous }}"></a>
-    {% else %}
-    <a class="a-btn a-btn__disabled m-pagination_btn-prev">
+    <a
+      {% if previous %}
+      class="a-btn m-pagination_btn-prev"
+      href="{{ previous }}"
+      {% else %}
+      class="a-btn a-btn__disabled m-pagination_btn-prev"
       {% endif %}
+    >
       <span class="a-btn_icon a-btn_icon__on-left">
         {% include './icons/chevron-left.svg' %}
       </span>
       Previous
     </a>
-    {% if next %}
-    <a class="a-btn m-pagination_btn-next" href="{{ next }}"></a>
-    {% else %}
-    <a class="a-btn a-btn__disabled m-pagination_btn-next">
-      {% endif %} Next
+    <a
+      {% if next %}
+      class="a-btn m-pagination_btn-next"
+      href="{{ next }}"
+      {% else %}
+      class="a-btn a-btn__disabled m-pagination_btn-next"
+      {% endif %}
+    >
+      Next
       <span class="a-btn_icon a-btn_icon__on-right">
         {% include './icons/chevron-right.svg' %}
       </span>
