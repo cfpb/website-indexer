@@ -19,7 +19,7 @@
     {% for component in results %}
     <li class="results_item">
       <a
-        href="{% url 'index %}?search_type=components&q={{ component.class_name | escape }}">
+        href="{% url 'index' %}?search_type=components&q={{ component.class_name | escape }}">
         {{ component.class_name }}
       </a>
     </li>
