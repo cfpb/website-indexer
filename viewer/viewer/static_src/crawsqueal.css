@@ -91,3 +91,8 @@ code.language-html {
 .m-list_item {
     max-width: 60em !important;
 }
+
+.o-header_alt {
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
