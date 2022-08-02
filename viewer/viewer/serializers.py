@@ -18,13 +18,22 @@ class PageSerializer(RequestSerializer):
     title = serializers.CharField()
     language = serializers.CharField()
 
+    class Meta:
+        csv_header = ["url", "title", "language"]
+
 
 class PageWithComponentSerializer(PageSerializer):
     class_name = serializers.CharField(source="components__class_name")
 
+    class Meta:
+        csv_header = PageSerializer.Meta.csv_header + ["class_name"]
+
 
 class PageWithLinkSerializer(PageSerializer):
-    href = serializers.CharField(source="links__href")
+    link_url = serializers.CharField(source="links__href")
+
+    class Meta:
+        csv_header = PageSerializer.Meta.csv_header + ["link_url"]
 
 
 class PageDetailSerializer(serializers.ModelSerializer):
@@ -52,9 +61,13 @@ class ErrorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Error
         fields = ["timestamp", "url", "status_code", "referrer"]
+        csv_header = ["url", "status_code", "referrer"]
 
 
 class RedirectSerializer(serializers.ModelSerializer):
+    redirect_url = serializers.CharField(source="location")
+
     class Meta:
         model = Redirect
-        fields = ["timestamp", "url", "status_code", "referrer", "location"]
+        fields = ["timestamp", "url", "status_code", "referrer", "redirect_url"]
+        csv_header = ErrorSerializer.Meta.csv_header + ["redirect_url"]

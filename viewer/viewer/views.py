@@ -54,7 +54,14 @@ class BetterCSVsMixin:
         context = super().get_renderer_context()
 
         if self.is_rendering_csv:
-            context["bom"] = True
+            serializer_cls = self.get_serializer_class()
+
+            context.update(
+                {
+                    "bom": True,
+                    "header": getattr(serializer_cls.Meta, "csv_header", None),
+                }
+            )
 
         return context
 
