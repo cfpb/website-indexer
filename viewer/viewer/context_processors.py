@@ -6,7 +6,7 @@ from django.db.models import Count, Max, Min
 from warc.models import Page
 
 
-def crawl_stats(request):
+def crawl_stats(request=None):
     crawl_stats = Page.objects.values("timestamp").aggregate(
         count=Count("timestamp"),
         start=Min("timestamp"),
