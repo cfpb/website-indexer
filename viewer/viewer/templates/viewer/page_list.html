@@ -1,5 +1,4 @@
-{% extends './base_search.html' %} {% load humanize %} {% load page_display %}
-{% block content_main %}
+{% extends './base_search.html' %} {% load humanize %} {% block content_main %}
 <div class="results_count">
   <!-- prettier-ignore -->
   <h2 class="h3">
@@ -43,7 +42,7 @@
     <li class="results_item">
       <h4>
         <a class="a-link a-link__icon a-link__no-wrap" href="{{ page.url }}">
-          <span class="a-link_text u-truncate">{{ page.title | strip_title_suffix }}</span>
+          <span class="a-link_text u-truncate">{{ page.title }}</span>
           <svg
             class="cf-icon-svg"
             viewBox="0 0 14 19"

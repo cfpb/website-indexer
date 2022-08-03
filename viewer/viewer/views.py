@@ -20,6 +20,7 @@ from viewer.serializers import (
 from warc.models import Component, Error, Page, Redirect
 from warc.search import (
     search_components,
+    search_empty,
     search_html,
     search_links,
     search_text,
@@ -126,7 +127,7 @@ class PageMixin(AlsoRenderHTMLMixin, BetterCSVsMixin):
             elif "url" == search_type:
                 return search_url(q)
 
-        return Page.objects.all()
+        return search_empty()
 
 
 class PageListView(PageMixin, ListAPIView):

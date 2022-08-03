@@ -1,4 +1,4 @@
-{% extends './base.html' %} {% load page_display %} {% block content %}
+{% extends './base.html' %} {% block content %}
 <div class="content_wrapper search_results">
   <div class="block block__flush-top">
     <div class="content__flush-all-on-small content__flush-bottom">
@@ -13,7 +13,7 @@
           </a>
         </nav>
         <div class="block block__flush-bottom">
-          <h2>Page: {{ title | strip_title_suffix }}</h2>
+          <h2>Page: {{ title }}</h2>
         </div>
         <div class="block block__flush-top">
           <a href="{{ url }}">{{ url }}</a>
