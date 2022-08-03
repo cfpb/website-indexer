@@ -14,7 +14,7 @@
   {% if count %}
   <div class="results_csv">
     <a
-      class="a-link a-link__icon"
+      class="a-link a-link__icon a-link__no-wrap"
       href="{% url 'index' %}?format=csv{% if request.query_params.search_type %}&search_type={{ request.query_params.search_type | urlencode }}{% endif %}{% if request.query_params.q %}&q={{ request.query_params.q | urlencode }}{% endif %}">
       <span class="a-link_text">Download CSV file</span>
       <svg
@@ -42,7 +42,7 @@
     <!-- prettier-ignore -->
     <li class="results_item">
       <h4>
-        <a class="a-link a-link__icon" href="{{ page.url }}">
+        <a class="a-link a-link__icon a-link__no-wrap" href="{{ page.url }}">
           <span class="a-link_text u-truncate">{{ page.title | strip_title_suffix }}</span>
           <svg
             class="cf-icon-svg"
