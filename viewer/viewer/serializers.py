@@ -1,3 +1,5 @@
+import re
+
 from rest_framework import serializers
 
 from warc.models import Component, Error, Page, Redirect
@@ -14,12 +16,23 @@ class RequestSerializer(serializers.Serializer):
     url = serializers.CharField()
 
 
+PAGE_TITLE_SUFFIX_RE = re.compile(
+    r" \| ("
+    r"Consumer Financial Protection Bureau|"
+    r"Oficina para la Protección Financiera del Consumidor"
+    r")$"
+)
+
+
 class PageSerializer(RequestSerializer):
-    title = serializers.CharField()
+    title = serializers.SerializerMethodField()
     language = serializers.CharField()
 
     class Meta:
         csv_header = ["url", "title", "language"]
+
+    def get_title(self, obj):
+        return PAGE_TITLE_SUFFIX_RE.sub("", obj["title"])
 
 
 class PageWithComponentSerializer(PageSerializer):

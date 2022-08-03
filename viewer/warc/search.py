@@ -47,6 +47,10 @@ def _search_pages(**filter_kwargs):
     return Page.objects.filter(**filter_kwargs).values(*_page_values)
 
 
+def search_empty():
+    return _search_pages()
+
+
 def search_html(html_contains):
     return _search_pages(html__contains=html_contains)
 
