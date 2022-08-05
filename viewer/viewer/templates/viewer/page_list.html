@@ -121,10 +121,12 @@
     </form>
   </nav>
 </div>
+{% endif %}
+
 <div class="o-well o-well_alt">
   <div class="lead-paragraph">Discover more</div>
   <div class="u-crawl_date">
-    <span class="u-crawl_text u-bold_text">Last crawl: </span>
+    <span id="last-crawl" class="u-crawl_text u-bold_text">Last crawl: </span>
     <p>{{ crawl_stats.start }}</p>
   </div>
   <ul class="m-list">
@@ -198,4 +200,4 @@
     </li>
   </ul>
 </div>
-{% endif %} {% endblock content_main %}
+{% endblock content_main %}
