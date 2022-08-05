@@ -11,7 +11,7 @@
     {% endblock intro %}
     <div class="u-crawl_date">
       <span class="u-crawl_text">Last crawl: </span>
-      <p>{{ crawl_stats.start }}</p>
+      <p>{{ crawl_stats.start | date:"N j, Y" }}</p>
     </div>
     <p><a href="#last-crawl">Discover more about the latest crawl</a></p>
   </div>
