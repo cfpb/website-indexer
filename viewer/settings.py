@@ -75,7 +75,7 @@ WSGI_APPLICATION = "wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-_sample_db_path = str(BASE_DIR.parent / "sample.sqlite3")
+_sample_db_path = str(BASE_DIR / "sample" / "sample.sqlite3")
 _env_db_path = os.getenv("CRAWL_DATABASE")
 
 if _env_db_path and os.path.exists(_env_db_path) and "test" not in sys.argv:

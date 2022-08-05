@@ -226,35 +226,45 @@ You can fix any problems by running:
 yarn fix
 ```
 
-### Sample database file
+### Sample test data
 
-This repository includes a sample database file ([sample.sqlite3](./sample.sqlite3)).
-This file is used by the viewer application when no other crawl database file has been specified.
-It is also used for Python unit testing purposes.
+This repository includes sample web archive and database files for testing
+purposes at `/viewer/sample/crawl.warc.gz` and `/viewer/sample/sample.sqlite3`.
 
-The source website content used to generate this file is included in this repository
-under the [sample](./sample) subdirectory. To regenerate the test database from this content,
-first serve the sample website locally:
+The sample database file is used by the viewer application when no other crawl
+database file has been specified.
+
+The source website content used to generate these files is included in this repository
+under the `/viewer/sample/src` subdirectory.
+To regenerate these files, first serve the sample website locally:
 
 ```
-cd sample
-python -m http.server
+python -m http.server -d ./viewer/sample/src
 ```
 
-Then, in another terminal at the repository root, start a crawl against the locally running site:
+This starts the sample website running at http://localhost:8000.
+
+Then, in another terminal, start a crawl against the locally running site:
 
 ```
 ./wget_crawl.sh http://localhost:8000
 ```
 
 This will create a WARC archive named `crawl.warc.gz` in your working directory.
+
 Next, convert this to a test database file:
 
 ```
-viewer/manage.py warc_to_db --recreate crawl.warc.gz sample.sqlite3
+viewer/manage.py warc_to_db crawl.warc.gz sample.sqlite3
 ```
 
-This will replace the existing sample database file.
+This will create a SQLite database named `sample.sqlite3` in your working directory.
+
+Finally, use these newly created files to replace the existing ones in the `/viewer/sample` subdirectory:
+
+```
+mv crawl.warc.gz sample.sqlite3 ./viewer/sample
+```
 
 ----
 
