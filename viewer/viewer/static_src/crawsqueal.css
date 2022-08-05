@@ -83,7 +83,7 @@ code.language-html {
     color: #0061c1;
 }
 
-.u-example_text {
+.u-bold_text {
     font-weight: bold;
     margin-bottom: 15px;
 }
@@ -108,4 +108,9 @@ code.language-html {
 
 .o-well_alt {
     margin-top: 60px;
+}
+
+.lead-paragraph {
+    margin-top: 0;
+    margin-bottom: 15px;
 }
