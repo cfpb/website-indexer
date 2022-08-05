@@ -5,10 +5,15 @@
     {% block intro %}
     <div class="lead-paragraph">
       The crawler stores a nightly snapshot of webpage data that you can search
-      for all sorts of useful things. Check out
-      <a href="{% url 'help' %}">common searches</a>.
+      for all sorts of useful things.
+      <p>Check out <a href="{% url 'help' %}">common searches</a>. </p>
     </div>
     {% endblock intro %}
+    <div class="u-crawl_date">
+      <span class="u-crawl_text">Last crawl: </span>
+      <p>{{ crawl_stats.start }}</p>
+    </div>
+    <p><a href="#last-crawl">Discover more about the latest crawl</a></p>
   </div>
 </div>
 
