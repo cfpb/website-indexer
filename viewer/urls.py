@@ -1,7 +1,19 @@
-from django.urls import include, path
+from django.urls import path
+from django.views.generic import TemplateView
+
+from viewer import views
 
 
 urlpatterns = [
-    path("", include("viewer.urls")),
-    path("__debug__/", include("debug_toolbar.urls")),
+    path("", views.PageListView.as_view(), name="index"),
+    path("page/", views.PageDetailView.as_view(), name="page"),
+    path("components/", views.ComponentListView.as_view(), name="components"),
+    path("errors/", views.ErrorListView.as_view(), name="errors"),
+    path("redirects/", views.RedirectListView.as_view(), name="redirects"),
+    path(
+        "download-database/",
+        views.DownloadDatabaseView.as_view(),
+        name="download-database",
+    ),
+    path("help/", TemplateView.as_view(template_name="viewer/help.html"), name="help"),
 ]
