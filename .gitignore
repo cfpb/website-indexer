@@ -22,14 +22,20 @@ _site/
 *.tar
 *.zip
 
-# Logs and databases, except for the default database #
-#######################################################
+# Logs and databases, except for the sample database #
+######################################################
 *.log
 *.sql
 !db.sql
 *.sqlite
 *.sqlite3
-!sample.sqlite3
+!viewer/sample/sample.sqlite3
+
+# Crawl files, except for the sample crawl #
+############################################
+*.warc
+*.warc.gz
+!viewer/sample/crawl.warc.gz
 
 # OS generated files #
 ######################
