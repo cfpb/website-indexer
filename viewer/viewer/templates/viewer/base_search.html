@@ -4,16 +4,17 @@
     <h1>Consumerfinance.gov crawler</h1>
     {% block intro %}
     <div class="lead-paragraph">
-      The crawler stores a nightly snapshot of webpage data that you can search
-      for all sorts of useful things.
-      <p>Check out <a href="{% url 'help' %}">common searches</a>. </p>
+      This tool generates and stores a nightly snapshot of CF.gov web page data
+      that you can
+      <p>
+        <a href="{% url 'help' %}">search for all sorts of useful things</a>.
+      </p>
     </div>
     {% endblock intro %}
     <div class="u-crawl_date">
-      <span class="u-crawl_text">Last crawl: </span>
-      <p>{{ crawl_stats.start }}</p>
+      <span class="u-crawl_text">Data last updated: </span>
+      <p><a href="#last-crawl">{{ crawl_stats.start }}</a></p>
     </div>
-    <p><a href="#last-crawl">Discover more about the latest crawl</a></p>
   </div>
 </div>
 
