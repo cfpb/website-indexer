@@ -118,8 +118,6 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-BASE_CRAWL_URL = "https://www.consumerfinance.gov"
-
 ALLOWED_HOSTS = ["*"]
 
 # django-debug-toolbar
