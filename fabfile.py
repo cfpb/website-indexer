@@ -61,7 +61,8 @@ def deploy(conn):
         conn.run("python3.8 -m venv venv")
 
         with conn.prefix("source venv/bin/activate"):
-            conn.run("pip install -r requirements.txt")
+            conn.run("pip install -r requirements/base.txt")
+            conn.run("pip install -r requirements/gunicorn.txt")
 
     # Configure gunicorn to run via systemd.
     print("Configuring gunicorn service")
