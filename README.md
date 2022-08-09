@@ -163,12 +163,12 @@ yarn
 yarn build
 ```
 
-Create a Python virtual environment and install requirements:
+Create a Python virtual environment and install required packages:
 
 ```
 python3.8 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements/base.txt
 ```
 
 Optionally set the `CRAWL_DATABASE` environment variable to point to a local crawl database:
@@ -189,11 +189,20 @@ The viewer application will be available locally at http://localhost:8000.
 
 ### Testing
 
-To run Python unit tests, use [`tox`](https://tox.wiki/en/latest/):
+To run Python unit tests, first install the test dependencies in your virtual environment:
 
 ```
-tox
+pip install -r requirements/test.txt
 ```
+
+To run the tests:
+
+```
+./manage.py test --keepdb
+```
+
+The `--keepdb` parameter is used because tests are run using a fixed,
+pre-existing test database.
 
 ### Code formatting
 
