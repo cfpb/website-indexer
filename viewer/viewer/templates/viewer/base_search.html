@@ -1,14 +1,20 @@
 {% extends './base.html' %} {% block content %}
 <div class="block block__sub">
   <div class="content_wrapper search_form">
-    <h1>Consumerfinance.gov crawler</h1>
+    <h1>Consumerfinance.gov web page index</h1>
     {% block intro %}
     <div class="lead-paragraph">
-      The crawler stores a nightly snapshot of webpage data that you can search
-      for all sorts of useful things. Check out
-      <a href="{% url 'help' %}">common searches</a>.
+      This tool generates and stores a nightly snapshot of CF.gov web page
+      <p>
+        data that you can
+        <a href="{% url 'help' %}">search for all sorts of useful things</a>.
+      </p>
     </div>
     {% endblock intro %}
+    <div class="u-crawl_date">
+      <span class="u-crawl_text">Data last updated: </span>
+      <p><a href="#last-crawl">{{ crawl_stats.start }}</a></p>
+    </div>
   </div>
 </div>
 

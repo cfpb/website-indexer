@@ -83,7 +83,7 @@ code.language-html {
     color: #0061c1;
 }
 
-.u-example_text {
+.u-bold_text {
     font-weight: bold;
     margin-bottom: 15px;
 }
@@ -95,4 +95,27 @@ code.language-html {
 .o-header_alt {
     margin-top: 30px;
     margin-bottom: 15px;
+}
+
+.u-crawl_text {
+    font-weight: bold;
+    padding-right: 5px;
+}
+
+.u-crawl_date {
+    display: flex;
+}
+
+.o-well_alt {
+    margin-top: 60px;
+}
+
+.lead-paragraph {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.u-help_text {
+    margin-top: 15px;
+    margin-bottom: 30px;
 }
