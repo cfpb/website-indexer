@@ -7,11 +7,11 @@
     "node": ">=16.x"
   },
   "scripts": {
-    "prettier": "prettier --check 'viewer/**/static_src/*.{css,js}' 'viewer/**/*.html'",
+    "prettier": "prettier --check 'viewer/static_src/*.{css,js}' 'viewer/**/*.html'",
     "fix": "npm run prettier -- --write",
-    "fonts": "cp -r viewer/viewer/static_src/fonts viewer/viewer/static/fonts",
-    "styles": "curl -o viewer/viewer/static/main.css https://www.consumerfinance.gov/static/css/main.css && curl https://www.consumerfinance.gov/static/apps/regulations3k/css/main.css >> viewer/viewer/static/main.css && cp viewer/viewer/static_src/crawsqueal.css viewer/viewer/static/crawsqueal.css",
-    "scripts": "esbuild viewer/viewer/static_src/crawsqueal.js --bundle --outfile=viewer/viewer/static/crawsqueal.js",
+    "fonts": "cp -r viewer/static_src/fonts viewer/static/fonts",
+    "styles": "curl -o viewer/static/main.css https://www.consumerfinance.gov/static/css/main.css && curl https://www.consumerfinance.gov/static/apps/regulations3k/css/main.css >> viewer/static/main.css && cp viewer/static_src/crawsqueal.css viewer/static/crawsqueal.css",
+    "scripts": "esbuild viewer/static_src/crawsqueal.js --bundle --outfile=viewer/static/crawsqueal.js",
     "build": "yarn fonts && yarn styles && yarn scripts"
   },
   "dependencies": {

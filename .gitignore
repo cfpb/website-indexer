@@ -29,13 +29,13 @@ _site/
 !db.sql
 *.sqlite
 *.sqlite3
-!viewer/sample/sample.sqlite3
+!sample/sample.sqlite3
 
 # Crawl files, except for the sample crawl #
 ############################################
 *.warc
 *.warc.gz
-!viewer/sample/crawl.warc.gz
+!sample/crawl.warc.gz
 
 # OS generated files #
 ######################
@@ -68,7 +68,7 @@ venv
 #################
 *.egg-info
 .installed.cfg
-viewer/viewer/static/**
+viewer/static/**
 
 # Unit test / coverage reports
 #################

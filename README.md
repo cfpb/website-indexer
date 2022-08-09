@@ -55,13 +55,13 @@ This will generate a WARC archive file named `crawl.warc.gz`.
 This file can then be converted to a SQLite database using a command like:
 
 ```sh
-viewer/manage.py warc_to_db crawl.warc.gz crawl.sqlite3
+./manage.py warc_to_db crawl.warc.gz crawl.sqlite3
 ```
 
 Alternatively, to dump a WARC archive file to a set of CSVs:
 
 ```sh
-viewer/manage.py warc_to_csv crawl.warc.gz
+./manage.py warc_to_csv crawl.warc.gz
 ```
 
 ## Searching the crawl database
@@ -168,7 +168,7 @@ Create a Python virtual environment and install requirements:
 ```
 python3.8 -m venv venv
 source venv/bin/activate
-pip install -r viewer/requirements.txt
+pip install -r requirements.txt
 ```
 
 Optionally set the `CRAWL_DATABASE` environment variable to point to a local crawl database:
@@ -180,7 +180,7 @@ export CRAWL_DATABASE=cfgov.sqlite3
 Finally, run the Django webserver:
 
 ```
-viewer/manage.py runserver
+./manage.py runserver
 ```
 
 The viewer application will be available locally at http://localhost:8000.
@@ -229,17 +229,17 @@ yarn fix
 ### Sample test data
 
 This repository includes sample web archive and database files for testing
-purposes at `/viewer/sample/crawl.warc.gz` and `/viewer/sample/sample.sqlite3`.
+purposes at `/sample/crawl.warc.gz` and `/sample/sample.sqlite3`.
 
 The sample database file is used by the viewer application when no other crawl
 database file has been specified.
 
 The source website content used to generate these files is included in this repository
-under the `/viewer/sample/src` subdirectory.
+under the `/sample/src` subdirectory.
 To regenerate these files, first serve the sample website locally:
 
 ```
-python -m http.server -d ./viewer/sample/src
+python -m http.server -d ./sample/src
 ```
 
 This starts the sample website running at http://localhost:8000.
@@ -255,15 +255,15 @@ This will create a WARC archive named `crawl.warc.gz` in your working directory.
 Next, convert this to a test database file:
 
 ```
-viewer/manage.py warc_to_db crawl.warc.gz sample.sqlite3
+./manage.py warc_to_db crawl.warc.gz sample.sqlite3
 ```
 
 This will create a SQLite database named `sample.sqlite3` in your working directory.
 
-Finally, use these newly created files to replace the existing ones in the `/viewer/sample` subdirectory:
+Finally, use these newly created files to replace the existing ones in the `/sample` subdirectory:
 
 ```
-mv crawl.warc.gz sample.sqlite3 ./viewer/sample
+mv crawl.warc.gz sample.sqlite3 ./sample
 ```
 
 ----

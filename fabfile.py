@@ -61,7 +61,7 @@ def deploy(conn):
         conn.run("python3.8 -m venv venv")
 
         with conn.prefix("source venv/bin/activate"):
-            conn.run("pip install -r viewer/requirements.txt")
+            conn.run("pip install -r requirements.txt")
 
     # Configure gunicorn to run via systemd.
     print("Configuring gunicorn service")
@@ -74,7 +74,7 @@ After=network.target
 [Service]
 User={conn.user}
 Group={conn.user}
-WorkingDirectory={SOURCE_ROOT}/viewer
+WorkingDirectory={SOURCE_ROOT}
 ExecStart={SOURCE_ROOT}/venv/bin/gunicorn --bind 0.0.0.0:8000 wsgi
 ExecReload=/bin/kill -s HUP $MAINPID
 Environment=CRAWL_DATABASE={CRAWL_DATABASE}
