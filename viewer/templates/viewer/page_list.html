@@ -1,15 +1,6 @@
-{% extends './base_search.html' %} {% load humanize %} {% block content_main %}
+{% extends './base_search.html' %} {% load humanize %} {% load search_results %} {% block content_main %}
 <div class="results_count">
-  <!-- prettier-ignore -->
-  <h2 class="h3">
-    {% if count == crawl_stats.count %}
-      Showing {{ crawl_stats.count | intcomma}}
-      total page{{ crawl_stats.count | pluralize }}
-    {% else %}
-      Showing {{ count| intcomma }} match{{ count | pluralize:"es" }}
-      out of {{ crawl_stats.count| intcomma }} total pages
-    {% endif %}
-  </h2>
+  <h2 class="h3">{% results_summary %}</h2>
   {% if count %}
   <div class="results_csv">
     <a

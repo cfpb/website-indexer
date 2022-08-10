@@ -1,0 +1,31 @@
+from django import template
+from django.template.defaultfilters import pluralize
+
+
+register = template.Library()
+
+
+@register.simple_tag(takes_context=True)
+def results_summary(context, truncate_q_at=24):
+    request = context["request"]
+    count = context["count"]
+
+    q = request.GET.get("q")
+    search_type = request.GET.get("search_type")
+
+    if not q or not search_type:
+        return f"Showing {count} total page{pluralize(count)}"
+
+    search_name = {
+        "title": "the page title",
+        "url": "the page URL",
+        "components": "components",
+        "links": "link URLs",
+        "text": "full text",
+        "html": "page HTML",
+    }[search_type]
+
+    count_str = str(count) if count else "No"
+    truncated_q = f"{q[:truncate_q_at]}..." if len(q) > truncate_q_at else q
+
+    return f'{count_str} page{pluralize(count)} with "{truncated_q}" in {search_name}'
