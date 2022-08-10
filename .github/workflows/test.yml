@@ -27,4 +27,6 @@ jobs:
     - name: Check formatting
       run: black . --check
     - name: Run Python tests
-      run: ./manage.py test --keepdb
+      run: coverage run ./manage.py test --keepdb
+    - name: Report test coverage
+      run: coverage report --show-missing
