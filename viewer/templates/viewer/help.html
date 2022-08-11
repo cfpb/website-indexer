@@ -157,4 +157,24 @@
     </li>
   </ul>
 </div>
+
+<div class="o-well o-well_alt">
+  <div class="lead-paragraph">About the data</div>
+  <p>This index contains web page data saved from the www.consumerfinance.gov domain.</p>
+  <p>The index is built using an iterative process that "crawls" every page of the website, 
+     starting at the home page. A web crawler starts on that page, then follows every link on that page, 
+     then follows every link on those pages, and so on. If a link leaves the www.consumerfinance.gov domain, 
+     it is ignored. In this way, the crawler covers every page on the website that is linked from any other page.</p>
+  <p>The data <b>excludes</b></p>
+  <ul class="m-list">
+    <!-- prettier-ignore -->
+    <li>
+      Pages on other subdomains, like files.consumerfinance.gov, although it does track links to those pages.
+    </li>
+    <li>
+      Pages with query parameters, with the exception of the ?page= query parameter. So, "/about-us/blog/?page=1"
+      is included, but "/about-us/blog/?title=&topics=financial-education" is not.
+    </li>
+  </ul>
+</div>
 {% endblock %}
