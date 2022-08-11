@@ -15,7 +15,10 @@ def results_summary(context, truncate_q_at=24):
     search_type = request.GET.get("search_type")
 
     if not q or not search_type:
-        return f"Showing {intcomma(count)} total page{pluralize(count)}"
+        if not count:
+            return "There are no indexed pages"
+        else:
+            return f"Showing all {intcomma(count)} indexed page{pluralize(count)}"
 
     search_name = {
         "title": "the page title",
