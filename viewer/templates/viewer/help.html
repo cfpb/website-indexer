@@ -1,4 +1,4 @@
-{% extends './base.html' %} {% block content %}
+{% extends './base.html' %} {% block content %} {% load static %}
 <nav class="breadcrumbs" aria-label="Breadcrumbs">
   {% include './icons/chevron-left.svg' %}
   <a id="breadcrumb_link" class="breadcrumbs_link" href="{% url 'index' %}">
@@ -6,17 +6,32 @@
   </a>
 </nav>
 
-<h2 class="o-header_alt">Common web page index searches</h2>
+<h2 class="o-header_alt">Common Searches</h2>
 
 <p>
-  The web page index stores a nightly snapshot of webpage data that you can
-  search for all sorts of useful things. You can search for single terms or
-  exact phrases.
+  This tool stores a nightly snapshot of consumerfinance.gov web page data that
+  you can search for all sorts of useful things. Common search examples are
+  below. You can also
+  <a href="#data-about">learn more about the data</a>. </p
+><p
+  >View results in the browser, or export them as a CSV. For those less handy
+  with Excel, it may be useful to
+  <!-- prettier-ignore -->
+  <a class="m-list_link a-link a-link__icon" href="{% static 'download-files/query-string-filtering.docx' %}">
+    <span class="a-link_text">learn how to filter our results with query strings</span>
+    <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 12 19"
+    class="cf-icon-svg">
+    <path
+      d="M11.16 16.153a.477.477 0 0 1-.476.475H1.316a.476.476 0 0 1-.475-.475V3.046a.476.476 0 0 1 .475-.475h6.95l2.893 2.893zm-1.11-9.925H8.059a.575.575 0 0 1-.574-.573V3.679H1.95v11.84h8.102zm-1.234 5.604L6.388 14.26a.554.554 0 0 1-.784 0l-2.428-2.428a.554.554 0 1 1 .783-.784l1.483 1.482V7.41a.554.554 0 1 1 1.108 0v5.12l1.482-1.482a.554.554 0 0 1 .784.783z"></path>
+    </svg>.
+  </a>
 </p>
 
 <div class="block">
   <h2>Title</h2>
-  <p>Search page titles.</p>
+  <p>Find all instances of a string in the title of a cf.gov page.</p>
   <p class="u-bold_text">Examples</p>
   <ul class="m-list">
     <li class="m-list_item">
@@ -28,7 +43,7 @@
 
 <div class="block">
   <h2>URL</h2>
-  <p>Find all instances of a string in the URL of a published cf.gov page.</p>
+  <p>Find all instances of a string in the URL of a cf.gov page. </p>
   <p class="u-bold_text">Examples</p>
   <ul class="m-list">
     <li class="m-list_item">
@@ -48,7 +63,8 @@
     <a href="{% url 'components' %}">class names</a>
     of our
     <a class="a-link a-link__icon" href="https://cfpb.github.io/design-system/">
-      <span class="a-link_text">design components</span>
+      <span class="a-link_text">Design System</span>
+      components and patterns
       <svg
         class="cf-icon-svg"
         viewBox="0 0 14 19"
@@ -73,7 +89,7 @@
 <div class="block">
   <h2>Links</h2>
   <p>
-    Find all instances of a string in the URLs of links listed on a page,
+    Find all instances of a string in the URLs of links listed on a cf.gov page,
     excluding the header and footer.
   </p>
   <p class="u-bold_text">Examples</p>
@@ -81,9 +97,7 @@
   <ul class="m-list">
     <li class="m-list_item">
       You're looking for all instances of external links to the FTC.
-      <a href="{% url 'index' %}?search_type=links&q=www.ftc.gov">
-        Search "www.ftc.gov"
-      </a>
+      <a href="{% url 'index' %}?search_type=links&q=FTC">Search "FTC"</a>
     </li>
     <li class="m-list_item">
       You want to find and remediate accidental links to the content server.
@@ -93,7 +107,7 @@
       </a>
     </li>
     <li class="m-list_item">
-      You want to find published cf.gov pages with broken links.
+      You want to find and remediate broken links.
       <a href="{% url 'index' %}?search_type=links&q=none">Search "none"</a>
     </li>
     <li class="m-list_item">
@@ -128,7 +142,10 @@
 
 <div class="block">
   <h2>HTML</h2>
-  <p>Search raw page HTML for a specific string.</p>
+  <p
+    >Find all instances of a string in the HTML of the &lt;body&gt; of a cf.gov
+    page, excluding the header and footer.</p
+  >
   <p class="u-bold_text">Examples</p>
 
   <ul class="m-list">
@@ -138,12 +155,45 @@
         Search "&lt;br&gt;"
       </a>
     </li>
-
     <li class="m-list_item">
       You want to find pages that include a specific image filename.
       <a href="{% url 'index' %}?search_type=html&q=consumer_tools_hero">
         Search "consumer_tools_hero"
       </a>
+    </li>
+    <li class="m-list_item">
+      You want to find pages encoded in Traditional Chinese.
+      <a href="{% url 'index' %}?search_type=html&q=html+lang=%22zh-Hant%22">
+        Search "html lang="zh-Hant""
+      </a>
+    </li>
+  </ul>
+</div>
+
+<div class="o-well o-well_alt">
+  <div id="data-about" class="lead-paragraph">About the data</div>
+  <p
+    >This index contains web page data saved from the www.consumerfinance.gov
+    domain.</p
+  >
+  <p
+    >The index is built using an iterative process that "crawls" every page of
+    the website, starting at the home page. A web crawler starts on that page,
+    then follows every link on that page, then follows every link on those
+    pages, and so on. If a link leaves the www.consumerfinance.gov domain, it is
+    ignored. In this way, the crawler covers every page on the website that is
+    linked from any other page.</p
+  >
+  <p>The data <b>excludes</b>:</p>
+  <ul class="m-list">
+    <li>
+      Pages on other subdomains, like files.consumerfinance.gov, although it
+      does track links to those pages.
+    </li>
+    <li>
+      Pages with query parameters, with the exception of the ?page= query
+      parameter. So, "/about-us/blog/?page=1" is included, but
+      "/about-us/blog/?title=&topics=financial-education" is not.
     </li>
   </ul>
 </div>

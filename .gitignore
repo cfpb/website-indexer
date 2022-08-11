@@ -69,6 +69,8 @@ venv
 *.egg-info
 .installed.cfg
 viewer/static/**
+!viewer/static/download-files
+!viewer/static/download-files/*
 
 # Unit test / coverage reports
 #################
