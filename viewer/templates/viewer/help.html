@@ -12,13 +12,14 @@
   This tool stores a nightly snapshot of consumerfinance.gov web page data that
   you can search for all sorts of useful things. Common search examples are
   below. You can also
-  <a href="#data-about">learn more about the data</a>. 
-  <p>View results in the browser, or export them as a CSV. For those less handy with Excel, it may be useful to
-  <a
-    href="{% static 'download-files/query-string-filtering.docx' %}"
+  <a href="#data-about">learn more about the data</a>. </p
+
+><p
+  >View results in the browser, or export them as a CSV. For those less handy
+  with Excel, it may be useful to
+  <a href="{% static 'download-files/query-string-filtering.docx' %}"
     >learn how to filter our results with query strings</a
-  >
-  </p>
+  >.
 </p>
 
 <div class="block">
@@ -89,7 +90,7 @@
   <ul class="m-list">
     <li class="m-list_item">
       You're looking for all instances of external links to the FTC.
-      <a href="{% url 'index' %}?search_type=links&q=FTC"> Search FTC </a>
+      <a href="{% url 'index' %}?search_type=links&q=FTC">Search "FTC"</a>
     </li>
     <li class="m-list_item">
       You want to find and remediate accidental links to the content server.
@@ -155,8 +156,7 @@
     </li>
     <li class="m-list_item">
       You want to find pages encoded in Traditional Chinese.
-      <a
-        href="{% url 'index' %}?search_type=html&q={{ 'html lang=&quot;zh-Hant&quot;' | urlencode }}">
+      <a href="{% url 'index' %}?search_type=html&q=html+lang=%22zh-Hant%22">
         Search "html lang="zh-Hant""
       </a>
     </li>
@@ -177,7 +177,7 @@
     ignored. In this way, the crawler covers every page on the website that is
     linked from any other page.</p
   >
-  <p>The data <b>excludes</b></p>
+  <p>The data <b>excludes</b>:</p>
   <ul class="m-list">
     <li>
       Pages on other subdomains, like files.consumerfinance.gov, although it
