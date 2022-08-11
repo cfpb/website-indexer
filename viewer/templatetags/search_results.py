@@ -1,4 +1,5 @@
 from django import template
+from django.contrib.humanize.templatetags.humanize import intcomma
 from django.template.defaultfilters import pluralize
 
 
@@ -14,7 +15,7 @@ def results_summary(context, truncate_q_at=24):
     search_type = request.GET.get("search_type")
 
     if not q or not search_type:
-        return f"Showing {count} total page{pluralize(count)}"
+        return f"Showing {intcomma(count)} total page{pluralize(count)}"
 
     search_name = {
         "title": "the page title",
@@ -25,7 +26,7 @@ def results_summary(context, truncate_q_at=24):
         "html": "page HTML",
     }[search_type]
 
-    count_str = str(count) if count else "No"
+    count_str = intcomma(count) if count else "No"
     truncated_q = f"{q[:truncate_q_at]}..." if len(q) > truncate_q_at else q
 
     return f'{count_str} page{pluralize(count)} with "{truncated_q}" in {search_name}'
