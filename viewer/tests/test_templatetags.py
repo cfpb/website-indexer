@@ -4,7 +4,7 @@ from viewer.templatetags.search_results import results_summary
 
 
 class ResultsSummaryTests(SimpleTestCase):
-    def make_context(self, count=100, **kwargs):
+    def make_context(self, count=1000, **kwargs):
         return {
             "request": RequestFactory().get("/", kwargs),
             "count": count,
@@ -12,7 +12,7 @@ class ResultsSummaryTests(SimpleTestCase):
 
     def check_default_response(self, **kwargs):
         context = self.make_context(**kwargs)
-        self.assertEqual(results_summary(context), "Showing 100 total pages")
+        self.assertEqual(results_summary(context), "Showing 1,000 total pages")
 
     def test_no_query_params(self):
         self.check_default_response()
@@ -35,7 +35,7 @@ class ResultsSummaryTests(SimpleTestCase):
     def test_title(self):
         self.check_response(
             {"search_type": "title", "q": "foo"},
-            '100 pages with "foo" in the page title',
+            '1,000 pages with "foo" in the page title',
         )
 
     def test_title_single_result(self):
@@ -47,35 +47,35 @@ class ResultsSummaryTests(SimpleTestCase):
     def test_title_truncates(self):
         self.check_response(
             {"search_type": "title", "q": "abcdefghijklmnopqrstuvwxyz"},
-            '100 pages with "abcdefghijklmnopqrstuvwx..." in the page title',
+            '1,000 pages with "abcdefghijklmnopqrstuvwx..." in the page title',
         )
 
     def test_url(self):
         self.check_response(
             {"search_type": "url", "q": "foo"},
-            '100 pages with "foo" in the page URL',
+            '1,000 pages with "foo" in the page URL',
         )
 
     def test_components(self):
         self.check_response(
             {"search_type": "components", "q": "foo"},
-            '100 pages with "foo" in components',
+            '1,000 pages with "foo" in components',
         )
 
     def test_links(self):
         self.check_response(
             {"search_type": "links", "q": "foo"},
-            '100 pages with "foo" in link URLs',
+            '1,000 pages with "foo" in link URLs',
         )
 
     def test_text(self):
         self.check_response(
             {"search_type": "text", "q": "foo"},
-            '100 pages with "foo" in full text',
+            '1,000 pages with "foo" in full text',
         )
 
     def test_html(self):
         self.check_response(
             {"search_type": "html", "q": "foo"},
-            '100 pages with "foo" in page HTML',
+            '1,000 pages with "foo" in page HTML',
         )
