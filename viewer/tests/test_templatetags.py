@@ -12,7 +12,7 @@ class ResultsSummaryTests(SimpleTestCase):
 
     def check_default_response(self, **kwargs):
         context = self.make_context(**kwargs)
-        self.assertEqual(results_summary(context), "Showing 1,000 total pages")
+        self.assertEqual(results_summary(context), "Showing all 1,000 indexed pages")
 
     def test_no_query_params(self):
         self.check_default_response()
@@ -79,3 +79,6 @@ class ResultsSummaryTests(SimpleTestCase):
             {"search_type": "html", "q": "foo"},
             '1,000 pages with "foo" in page HTML',
         )
+
+    def test_no_results(self):
+        self.check_response({"count": 0}, "There are no indexed pages")
