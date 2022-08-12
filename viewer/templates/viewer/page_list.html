@@ -1,4 +1,5 @@
-{% extends './base_search.html' %} {% load humanize %} {% load search_results %}
+{% extends './base_search.html' %} {% load humanize %} {% load viewer %}
+<!-- prettier-ignore -->
 {% block content_main %}
 <div class="results_count">
   <h2 class="h3">{% results_summary %}</h2>
@@ -120,7 +121,7 @@
     <span id="last-crawl" class="u-crawl_text u-bold_text"
       >Data last updated:
     </span>
-    <p>{{ crawl_stats.start }}</p>
+    <p>{{ crawl_stats.start | format_datetime }}</p>
   </div>
   <ul class="m-list">
     <!-- prettier-ignore -->

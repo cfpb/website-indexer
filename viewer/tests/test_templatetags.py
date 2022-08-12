@@ -1,6 +1,16 @@
+from datetime import datetime, timezone
+
 from django.test import RequestFactory, SimpleTestCase
 
-from viewer.templatetags.search_results import results_summary
+from viewer.templatetags.viewer import format_datetime, results_summary
+
+
+class FormatDatetimeTests(SimpleTestCase):
+    def test_format(self):
+        self.assertEqual(
+            format_datetime(datetime(2022, 8, 11, 16, 54, 29, tzinfo=timezone.utc)),
+            "Aug. 11, 2022, 12:54 p.m. EDT",
+        )
 
 
 class ResultsSummaryTests(SimpleTestCase):
