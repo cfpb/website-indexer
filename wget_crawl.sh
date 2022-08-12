@@ -65,6 +65,16 @@ echo "Working in $tmp_dir."
 
 pushd "$tmp_dir" > /dev/null
 
+# The --reject-regex below rejects two types of URLs:
+#
+# 1. Any files, i.e. URLs that end with /something.something, without having
+#    a trailing slash. That's the first half of the regex: [^:/]/.*\.[^/]*$
+# 2. Any URLs with query string parameters except for ?page, which is the only
+#    query string we allow. Because wget only supports POSIX regular
+#    expressions out of the box, we have to do this in an ugly way, via the
+#    second half of the regex:
+#    ([^\?]*(\?([^p]|$)|\?p([^a]|$)|\?pa([^g]|$)|\?pag([^e]|$)|\?page[^=&$]))
+
 time wget \
     --domains="$domain" \
     --no-verbose \
@@ -78,8 +88,7 @@ time wget \
     --random-wait \
     --ignore-case \
     --no-hsts \
-    --reject '*.css,*.csv,*.do,*.doc,*.docx,*.epub,*.gif,*.ico,*.jpg,*.js,*.json,*.mp3,*.pdf,*.png,*.pptx,*.py,*.r,*.sas,*.sps,*.svg,*.tmp,*.txt,*.wav,*.webmanifest,*.woff,*.woff2,*.xls,*xlsx,*.xml,*.zip' \
-    --reject-regex "CatID=|NavCode=|_gl=|activity_type=|authors=|book=|categories=|chartType=|charttype=|clhx=|dateInterval=|date_received_min=|dateinterval=|entx=|ext_url=|fdx=|filter1_topics=|filter2_topics=|form-id=|gib=|gpl=|grade_level=|has_narrative=|hltx=|hous=|houx=|insi=|insl=|inst=|iped=|issue=|language=|lens=|mta=|oid=|othg=|othr=|othx=|parl=|pelg=|perl=|pid=|ppl=|product=|prvf=|prvi=|prvl=|q=|regs=|retx=|schg=|school_subject=|searchField=|search_field=|searchfield=|signature=|size=|sort=|stag=|subl=|tab=|taxx=|title=|topic=|topics=|totl=|tran=|trnx=|tuit=|unsl=|utm_campaign=|utm_medium=|utm_source=|wkst=" \
+    --reject-regex '[^:/]/.*\.[^/]*$|([^\?]*(\?([^p]|$)|\?p([^a]|$)|\?pa([^g]|$)|\?pag([^e]|$)|\?page[^=&$]))' \
     --recursive \
     --level="$depth" \
     --user-agent="crawsqueal" \
