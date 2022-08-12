@@ -1,9 +1,15 @@
 from django import template
 from django.contrib.humanize.templatetags.humanize import intcomma
-from django.template.defaultfilters import pluralize
+from django.template.defaultfilters import date, pluralize
+from django.templatetags.tz import localtime
 
 
 register = template.Library()
+
+
+@register.filter
+def format_datetime(dt):
+    return date(localtime(dt), "N j, Y, H:i a T")
 
 
 @register.simple_tag(takes_context=True)

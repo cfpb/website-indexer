@@ -1,4 +1,4 @@
-{% extends './base.html' %} {% block content %}
+{% extends './base.html' %} {% load viewer %} {% block content %}
 <div class="block block__sub">
   <div class="content_wrapper search_form">
     <h1>Consumerfinance.gov web page index</h1>
@@ -13,7 +13,7 @@
     {% endblock intro %}
     <div class="u-crawl_date">
       <span class="u-crawl_text">Data last updated: </span>
-      <p><a href="#last-crawl">{{ crawl_stats.start }}</a></p>
+      <p><a href="#last-crawl">{{ crawl_stats.start | format_datetime }}</a></p>
     </div>
   </div>
 </div>
