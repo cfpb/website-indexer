@@ -1,4 +1,4 @@
 [run]
 branch = True
-source = viewer, warc
+source = crawler, viewer
 omit = */tests/*

@@ -84,19 +84,19 @@ The following examples describe some common use cases.
 To list the total number of URLs and crawl timestamps:
 
 ```sql
-sqlite> SELECT COUNT(*), MIN(timestamp), MAX(timestamp) FROM warc_page;
+sqlite> SELECT COUNT(*), MIN(timestamp), MAX(timestamp) FROM crawler_page;
 23049|2022-07-20 02:50:02|2022-07-20 08:35:23
 ```
 
-Note that page data is stored in a table named `warc_page`.
+Note that page data is stored in a table named `crawler_page`.
 
 ### List pages that link to a certain URL
 
 ```sql
 sqlite> SELECT DISTINCT url
-FROM warc_page
-INNER JOIN warc_page_links ON (warc_page.id = warc_page_links.page_id)
-INNER JOIN warc_link ON (warc_page_links.link_id = warc_link.id)
+FROM crawler_page
+INNER JOIN crawler_page_links ON (crawler_page.id = crawler_page_links.page_id)
+INNER JOIN crawler_link ON (crawler_page_links.link_id = crawler_page_link.id)
 WHERE href LIKE "/plain-writing/"
 ORDER BY url ASC;
 ```
@@ -115,9 +115,9 @@ To search with wildcards, use the `%` character:
 
 ```sql
 sqlite> SELECT DISTINCT url
-FROM warc_page
-INNER JOIN warc_page_links ON (warc_page.id = warc_page_links.page_id)
-INNER JOIN warc_link ON (warc_page_links.link_id = warc_link.id)
+FROM crawler_page
+INNER JOIN crawler_page_links ON (crawler_page.id = crawler_page_links.page_id)
+INNER JOIN crawler_link ON (crawler_page_links.link_id = crawler_link.id)
 WHERE href LIKE "/about-us/blog/"
 ORDER BY url ASC;
 ```
@@ -126,10 +126,10 @@ ORDER BY url ASC;
 
 ```sql
 sqlite> SELECT DISTINCT url
-FROM warc_page
-INNER JOIN warc_page_components ON (warc_page.id = warc_page_components.page_id)
-INNER JOIN warc_component ON (warc_page_components.component_id = warc_component.id)
-WHERE warc_component.class_name LIKE "o-featured-content-module"
+FROM crawler_page
+INNER JOIN crawler_page_components ON (crawler_page.id = crawler_page_components.page_id)
+INNER JOIN crawler_component ON (crawler_page_components.component_id = crawler_component.id)
+WHERE crawler_component.class_name LIKE "o-featured-content-module"
 ORDER BY url ASC
 ```
 
@@ -139,19 +139,19 @@ for a list of common components used on CFPB websites.
 ### List pages with titles containing a specific string
 
 ```sql
-SELECT url FROM warc_page WHERE title LIKE "%housing%" ORDER BY url ASC;
+SELECT url FROM crawler_page WHERE title LIKE "%housing%" ORDER BY url ASC;
 ```
 
 ### List pages with body text containing a certain string
 
 ```sql
-sqlite> SELECT url FROM warc_page WHERE text LIKE "%diamond%" ORDER BY URL asc;
+sqlite> SELECT url FROM crawler_page WHERE text LIKE "%diamond%" ORDER BY URL asc;
 ```
 
 ### List pages with HTML containing a certain string
 
 ```sql
-sqlite> SELECT url FROM warc_page WHERE html LIKE "%<br>%" ORDER BY URL asc;
+sqlite> SELECT url FROM crawler_page WHERE html LIKE "%<br>%" ORDER BY URL asc;
 ```
 
 ## Running the viewer application

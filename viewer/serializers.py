@@ -2,7 +2,7 @@ import re
 
 from rest_framework import serializers
 
-from warc.models import Component, Error, Page, Redirect
+from crawler.models import Component, Error, Page, Redirect
 
 
 class ComponentSerializer(serializers.ModelSerializer):

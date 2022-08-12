@@ -5,6 +5,16 @@ from django.views.generic import View
 
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 
+from crawler.models import Component, Error, Page, Redirect
+from crawler.search import (
+    search_components,
+    search_empty,
+    search_html,
+    search_links,
+    search_text,
+    search_title,
+    search_url,
+)
 from viewer.context_processors import crawl_stats
 from viewer.forms import SearchForm
 from viewer.renderers import BetterTemplateHTMLRenderer
@@ -16,16 +26,6 @@ from viewer.serializers import (
     PageWithComponentSerializer,
     PageWithLinkSerializer,
     RedirectSerializer,
-)
-from warc.models import Component, Error, Page, Redirect
-from warc.search import (
-    search_components,
-    search_empty,
-    search_html,
-    search_links,
-    search_text,
-    search_title,
-    search_url,
 )
 
 
