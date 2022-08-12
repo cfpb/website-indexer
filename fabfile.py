@@ -95,9 +95,10 @@ WantedBy=multi-user.target
     conn.sudo(
         f"bash -c 'cat > {CRONTAB_PATH} <<EOF\n"
         f"0 0 * * * {conn.user} "
-        f"rm -f {CRAWL_DATABASE} && "
         f"cd {SOURCE_ROOT} && "
-        f"yarn && yarn start {CRAWL_DATABASE}\n"
+        f"./wget_crawl.sh https://www.consumerfinance.gov/ && "
+        f"PYTHONPATH=. DJANGO_SETTINGS_MODULE=settings ./manage.py warc_to_db ./crawl.warc.gz ./crawl.sqlite3 && "
+        f"mv crawl.* /var/tmp/\n"
         "EOF'"
     )
 
