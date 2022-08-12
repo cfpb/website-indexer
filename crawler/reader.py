@@ -1,5 +1,6 @@
 import os.path
 import re
+from urllib.parse import urlparse, urlunparse
 
 import click
 import lxml.html
@@ -60,10 +61,9 @@ def get_body(tree):
     return body
 
 
-SEEN_URLS = set()
-
-
-def make_instance_from_warc_record(warc_request, warc_response):
+def make_instance_from_warc_record(
+    warc_request, warc_response, seen_urls, limit_domain
+):
     url = warc_response.rec_headers.get_header("WARC-Target-URI")
 
     # Skip non-HTTP responses (e.g. DNS lookups).
@@ -75,13 +75,10 @@ def make_instance_from_warc_record(warc_request, warc_response):
     # or relative links point to the same target URL. We only want to generate
     # records for each URL a single time, so we keep a record of which ones
     # we've already seen.
-    #
-    # TODO: Encapsulate this behavior in a class to avoid the use of a module
-    # top-level SEEN_URLS variable and allow for proper testing.
-    if url in SEEN_URLS:
+    if url in seen_urls:
         return
 
-    SEEN_URLS.add(url)
+    seen_urls.add(url)
 
     status_code = int(warc_response.http_headers.get_statuscode())
     content_type = warc_response.http_headers.get_header("Content-Type")
@@ -116,6 +113,9 @@ def make_instance_from_warc_record(warc_request, warc_response):
         raise ValueError(f"Missing content type for {url}")
 
     if not content_type.startswith("text/html"):
+        return
+
+    if limit_domain and not url.startswith(limit_domain):
         return
 
     html = warc_response.content_stream().read().decode("utf-8")
@@ -158,11 +158,15 @@ def make_instance_from_warc_record(warc_request, warc_response):
     return page
 
 
-def generate_instances(warc, max_pages=None, silent=False):
+def generate_instances(warc, max_pages=None, single_domain_only=True, silent=False):
     page_count = 0
+    seen_urls = set()
+    limit_domain = None
 
     for warc_request, warc_response in read_warc_records(warc, silent=silent):
-        instance = make_instance_from_warc_record(warc_request, warc_response)
+        instance = make_instance_from_warc_record(
+            warc_request, warc_response, seen_urls, limit_domain
+        )
 
         if not instance:
             continue
@@ -174,3 +178,9 @@ def generate_instances(warc, max_pages=None, silent=False):
 
             if max_pages and page_count >= max_pages:
                 break
+
+            if single_domain_only and not limit_domain:
+                parsed = urlparse(instance.url)
+                limit_domain = urlunparse(
+                    (parsed.scheme, parsed.netloc, "/", "", "", "")
+                )

@@ -33,7 +33,14 @@ from crawler.writer import DatabaseWriter
     default=False,
     help="Do not prompt the user for input of any kind.",
 )
-def command(warc, db_filename, max_pages, recreate, noinput):
+@click.option(
+    "--multiple-domains/--no-multiple-domains",
+    is_flag=True,
+    show_default=True,
+    default=False,
+    help="Limit pages to the first domain seen.",
+)
+def command(warc, db_filename, max_pages, recreate, noinput, multiple_domains):
     if os.path.exists(db_filename):
         if not recreate:
             if noinput:
@@ -61,7 +68,9 @@ def command(warc, db_filename, max_pages, recreate, noinput):
     click.echo("Reading WARC content into database tables...")
     writer = DatabaseWriter(db_alias)
 
-    for instance in generate_instances(warc, max_pages=max_pages):
+    for instance in generate_instances(
+        warc, max_pages=max_pages, single_domain_only=not multiple_domains
+    ):
         writer.write(instance)
 
     writer.analyze()
