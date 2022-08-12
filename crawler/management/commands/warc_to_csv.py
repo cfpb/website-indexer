@@ -2,8 +2,8 @@ import csv
 
 import djclick as click
 
-from warc.models import Component, Error, Link, Page, Redirect
-from warc.reader import generate_instances
+from crawler.models import Component, Error, Link, Page, Redirect
+from crawler.reader import generate_instances
 
 
 @click.command()

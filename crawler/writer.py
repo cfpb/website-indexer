@@ -1,6 +1,6 @@
 from django.db import connections
 
-from warc.models import Component, Link, Page
+from crawler.models import Component, Link, Page
 
 
 class DatabaseWriter:

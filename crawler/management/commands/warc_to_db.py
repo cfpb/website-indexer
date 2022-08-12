@@ -9,8 +9,8 @@ from django.test import override_settings
 
 import djclick as click
 
-from warc.reader import generate_instances
-from warc.writer import DatabaseWriter
+from crawler.reader import generate_instances
+from crawler.writer import DatabaseWriter
 
 
 @click.command()
@@ -56,7 +56,7 @@ def command(warc, db_filename, max_pages, recreate, noinput):
     }
 
     click.echo("Creating empty database tables...")
-    call_command("migrate", database=db_alias, app_label="warc", run_syncdb=True)
+    call_command("migrate", database=db_alias, app_label="crawler", run_syncdb=True)
 
     click.echo("Reading WARC content into database tables...")
     writer = DatabaseWriter(db_alias)

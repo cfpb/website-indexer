@@ -2,7 +2,7 @@ from urllib.parse import quote_plus
 
 from django.db.models import Q
 
-from warc.models import Page
+from crawler.models import Page
 
 
 _page_values = ["timestamp", "url", "title", "language"]

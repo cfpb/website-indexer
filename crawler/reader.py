@@ -5,7 +5,7 @@ import click
 import lxml.html
 from warcio.archiveiterator import ArchiveIterator
 
-from warc.models import Component, Error, Link, Page, Redirect
+from crawler.models import Component, Error, Link, Page, Redirect
 
 
 WHITESPACE = re.compile(r"\s+")

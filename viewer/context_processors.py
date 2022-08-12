@@ -3,7 +3,7 @@ import os
 from django.conf import settings
 from django.db.models import Count, Max, Min
 
-from warc.models import Page
+from crawler.models import Page
 
 
 def crawl_stats(request=None):
