@@ -94,11 +94,14 @@ WantedBy=multi-user.target
     print("Configuring nightly cron to run crawler")
     conn.sudo(
         f"bash -c 'cat > {CRONTAB_PATH} <<EOF\n"
+        "PATH=/usr/local/bin:/usr/bin:/bin\n"
+        "SHELL=/bin/bash\n"
         f"0 0 * * * {conn.user} "
         f"cd {SOURCE_ROOT} && "
         f"./wget_crawl.sh https://www.consumerfinance.gov/ && "
-        f"PYTHONPATH=. DJANGO_SETTINGS_MODULE=settings ./manage.py warc_to_db ./crawl.warc.gz ./crawl.sqlite3 && "
-        f"mv crawl.* /var/tmp/\n"
+        f"PYTHONPATH=. DJANGO_SETTINGS_MODULE=settings ./venv/bin/django-admin "
+        "warc_to_db ./crawl.warc.gz ./crawl.sqlite3 && "
+        f"mv crawl.{{cdx,sqlite3,warc.gz}} wget.log /var/tmp/\n"
         "EOF'"
     )
 
