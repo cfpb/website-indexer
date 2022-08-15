@@ -58,7 +58,7 @@ def deploy(conn):
     # Build the viewer app and update any dependencies.
     with conn.cd(SOURCE_ROOT):
         conn.run("yarn && yarn build")
-        conn.run("python3.8 -m venv venv")
+        conn.run("python -m venv venv")
 
         with conn.prefix("source venv/bin/activate"):
             conn.run("pip install -r requirements/base.txt")
