@@ -275,6 +275,44 @@ Finally, use these newly created files to replace the existing ones in the `/sam
 mv crawl.warc.gz sample.sqlite3 ./sample
 ```
 
+## Deployment
+
+This repository includes a [Fabric](https://www.fabfile.org/) script
+that can be used to deploy both the crawler and the viewer application
+to a remote server.
+
+First, install the deployment requirements:
+
+```
+pip install -r requirements/deploy.txt
+```
+
+To run the deployment, you'll need to use some variation of this command:
+
+```
+fab deploy
+```
+
+You'll need to provide some additional connection information depending
+on the specific server you're targeting, for example, hostname and user.
+See [the Fabric documentation](https://docs.fabfile.org/en/latest/cli.html)
+for possible options; for example, to connect using a host configuration
+defined as `crawler` in your `~/.ssh/config`, you might run:
+
+```
+fab deploy -H crawler
+```
+
+The deployment script:
+
+- Pulls down the latest version of the source code from GitHub
+- Installs the latest dependencies
+- Runs the frontend build script
+- Configures the crawler to run nightly
+- Serves the viewer application on port 8000
+
+See [fabfile.py](fabfile.py) for additional detail.
+
 ----
 
 ## Open source licensing info
