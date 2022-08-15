@@ -12,6 +12,12 @@ class FormatDatetimeTests(SimpleTestCase):
             "Aug. 11, 2022, 12:54 p.m. EDT",
         )
 
+    def test_format_am(self):
+        self.assertEqual(
+            format_datetime(datetime(2022, 8, 11, 12, 54, 29, tzinfo=timezone.utc)),
+            "Aug. 11, 2022, 8:54 a.m. EDT",
+        )
+
 
 class ResultsSummaryTests(SimpleTestCase):
     def make_context(self, count=1000, **kwargs):
