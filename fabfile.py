@@ -11,14 +11,33 @@ from io import StringIO
 
 from fabric import task
 
-SOURCE_PARENT = "/opt/cfpb"
+
+DEPLOY_ROOT = "/opt"
+
+# Node 18 doesn't seem to work on RHEL 7.
+# https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V18.md#toolchain-and-compiler-upgrades
+NODE_VERSION = "16"
+
+SQLITE_VERSION = "3390200"
+SQLITE_BASENAME = f"sqlite-autoconf-{SQLITE_VERSION}"
+SQLITE_INSTALL_ROOT = f"{DEPLOY_ROOT}/{SQLITE_BASENAME}"
+
+PYTHON_VERSION = "3.8.13"
+PYTHON_BASENAME = f"Python-{PYTHON_VERSION}"
+PYTHON_INSTALL_ROOT = f"{DEPLOY_ROOT}/{PYTHON_BASENAME}"
+
+SOURCE_PARENT = f"{DEPLOY_ROOT}/cfpb"
 SOURCE_REPO = "https://github.com/cfpb/crawsqueal.git"
 SOURCE_DIRNAME = "crawsqueal"
 SOURCE_ROOT = f"{SOURCE_PARENT}/{SOURCE_DIRNAME}"
 
 CRAWL_DATABASE = "/var/tmp/crawl.sqlite3"
 
-SYSTEMD_DIR = "/etc/systemd/system/"
+LOGROTATE_DIR = "/etc/logrotate.d"
+LOGROTATE_NAME = "crawsqueal"
+LOGROTATE_PATH = f"{LOGROTATE_DIR}/{LOGROTATE_NAME}"
+
+SYSTEMD_DIR = "/etc/systemd/system"
 SYSTEMD_SERVICE = "crawsqueal"
 SYSTEMD_NAME = f"{SYSTEMD_SERVICE}.service"
 SYSTEMD_PATH = f"{SYSTEMD_DIR}/{SYSTEMD_NAME}"
@@ -27,6 +46,8 @@ CRONTAB_NAME = "crawsqueal"
 CRONTAB_DIR = "/etc/cron.d"
 CRONTAB_PATH = f"{CRONTAB_DIR}/{CRONTAB_NAME}"
 
+LOG_DIR = "/var/log/crawsqueal"
+
 
 @task
 def ls(conn):
@@ -34,11 +55,62 @@ def ls(conn):
 
 
 @task
-def clean(conn):
-    conn.sudo(f"rm -rf {SOURCE_PARENT}")
-    conn.sudo(f"rm -f {CRONTAB_PATH}")
-    conn.sudo(f"systemctl stop {SYSTEMD_SERVICE}")
-    conn.sudo(f"rm -f {SYSTEMD_PATH}")
+def configure(conn):
+    # Install Node package repository from Nodesource.
+    # https://github.com/nodesource/distributions/blob/master/README.md
+    conn.run(
+        f"curl -fsSL https://rpm.nodesource.com/setup_{NODE_VERSION}.x | sudo bash -"
+    )
+    conn.sudo("yum install -y nodejs")
+
+    # Install the Yarn package repository.
+    # https://classic.yarnpkg.com/lang/en/docs/install/#centos-stable
+    conn.run(
+        "curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo"
+    )
+    conn.sudo("yum install -y yarn")
+
+    # Install git to be able to clone source code repository.
+    conn.sudo("yum install -y git")
+
+    # Set up deploy root and grant permissions to deploy user.
+    conn.sudo(f"mkdir -p {DEPLOY_ROOT}")
+    conn.sudo(f"chown -R {conn.user}:{conn.user} {DEPLOY_ROOT}")
+
+    # Build and install SQLite (needs to happen before installing Python).
+    conn.sudo("yum install -y gcc sqlite-devel")
+    with conn.cd(DEPLOY_ROOT):
+        conn.run(f"curl -O https://www.sqlite.org/2022/{SQLITE_BASENAME}.tar.gz")
+        conn.run(f"tar xzf {SQLITE_BASENAME}.tar.gz")
+        conn.run(f"rm {SQLITE_BASENAME}.tar.gz")
+
+    with conn.cd(SQLITE_INSTALL_ROOT):
+        conn.run("./configure && make")
+
+    # https://github.com/pyinvoke/invoke/issues/459
+    conn.sudo(f'bash -c "cd {SQLITE_INSTALL_ROOT} && make install"')
+
+    # Build and install Python 3.
+    # This sets /usr/local/bin python and python3 commands to point to Python 3.
+    # This doesn't update /usr/bin/python (used by sudo)
+    conn.sudo("yum install -y openssl-devel bzip2-devel libffi-devel")
+
+    with conn.cd(DEPLOY_ROOT):
+        conn.run(
+            f"curl -O https://www.python.org/ftp/python/{PYTHON_VERSION}/{PYTHON_BASENAME}.tgz"
+        )
+        conn.run(f"tar xzf {PYTHON_BASENAME}.tgz")
+        conn.run(f"rm {PYTHON_BASENAME}.tgz")
+
+    with conn.cd(PYTHON_INSTALL_ROOT):
+        conn.run("LD_RUN_PATH=/usr/local/lib ./configure --enable-optimizations")
+
+    # https://github.com/pyinvoke/invoke/issues/459
+    conn.sudo(
+        f"bash -c "
+        f'"cd {PYTHON_INSTALL_ROOT} && LD_RUN_PATH=/usr/local/lib make install"'
+    )
+    conn.sudo("ln -sf /usr/local/bin/python3 /usr/local/bin/python")
 
 
 @task
@@ -64,6 +136,49 @@ def deploy(conn):
             conn.run("pip install -r requirements/base.txt")
             conn.run("pip install -r requirements/gunicorn.txt")
 
+    # Configure nightly cron to run crawler.
+    print("Configuring nightly cron to run crawler")
+    conn.sudo(
+        f"bash -c 'cat > {CRONTAB_PATH} <<EOF\n"
+        "PATH=/usr/local/bin:/usr/bin:/bin\n"
+        "SHELL=/bin/bash\n"
+        f"0 0 * * * {conn.user} "
+        f"cd {SOURCE_ROOT} && "
+        f"./wget_crawl.sh https://www.consumerfinance.gov/ && "
+        f"PYTHONPATH=. DJANGO_SETTINGS_MODULE=settings ./venv/bin/django-admin "
+        "warc_to_db --recreate ./crawl.warc.gz ./crawl.sqlite3 && "
+        f"mv crawl.{{cdx,sqlite3,warc.gz}} wget.log /var/tmp/\n"
+        "EOF'"
+    )
+
+    # Set up log directory and log rotation.
+    print("Configuring logging")
+    conn.sudo(f"mkdir -p {LOG_DIR}")
+    conn.sudo(f"chown -R {conn.user}:{conn.user} {LOG_DIR}")
+
+    logrotate_config = StringIO(
+        f"""
+{LOG_DIR}/*.log {{
+    dateext
+    daily
+    rotate 90
+    missingok
+    notifempty
+    copytruncate
+    compress
+    create 644 {conn.user} {conn.user}
+    sharedscripts
+    postrotate
+      systemctl reload {SYSTEMD_SERVICE} > /dev/null 2>/dev/null || true
+    endscript
+}}
+    """.strip()
+    )
+    conn.put(logrotate_config, LOGROTATE_NAME)
+    conn.sudo(f"mv {LOGROTATE_NAME} {LOGROTATE_PATH}")
+    conn.sudo(f"chown root:root {LOGROTATE_PATH}")
+    conn.sudo(f"chmod 644 {LOGROTATE_PATH}")
+
     # Configure gunicorn to run via systemd.
     print("Configuring gunicorn service")
     gunicorn_config = StringIO(
@@ -76,7 +191,12 @@ After=network.target
 User={conn.user}
 Group={conn.user}
 WorkingDirectory={SOURCE_ROOT}
-ExecStart={SOURCE_ROOT}/venv/bin/gunicorn --bind 0.0.0.0:8000 wsgi
+ExecStart={SOURCE_ROOT}/venv/bin/gunicorn \
+    --bind 0.0.0.0:8000 \
+    --access-logfile {LOG_DIR}/access.log \
+    --error-logfile {LOG_DIR}/error.log \
+    --capture-output \
+    wsgi
 ExecReload=/bin/kill -s HUP $MAINPID
 Environment=CRAWL_DATABASE={CRAWL_DATABASE}
 
@@ -88,21 +208,7 @@ WantedBy=multi-user.target
     conn.put(gunicorn_config, SYSTEMD_NAME)
     conn.sudo(f"mv {SYSTEMD_NAME} {SYSTEMD_PATH}")
     conn.sudo(f"systemctl daemon-reload")
-    conn.sudo(f"systemctl reload-or-restart {SYSTEMD_SERVICE}")
+    conn.sudo(f"systemctl restart {SYSTEMD_SERVICE}")
 
-    # Configure nightly cron to run crawler.
-    print("Configuring nightly cron to run crawler")
-    conn.sudo(
-        f"bash -c 'cat > {CRONTAB_PATH} <<EOF\n"
-        "PATH=/usr/local/bin:/usr/bin:/bin\n"
-        "SHELL=/bin/bash\n"
-        f"0 0 * * * {conn.user} "
-        f"cd {SOURCE_ROOT} && "
-        f"./wget_crawl.sh https://www.consumerfinance.gov/ && "
-        f"PYTHONPATH=. DJANGO_SETTINGS_MODULE=settings ./venv/bin/django-admin "
-        "warc_to_db ./crawl.warc.gz ./crawl.sqlite3 && "
-        f"mv crawl.{{cdx,sqlite3,warc.gz}} wget.log /var/tmp/\n"
-        "EOF'"
-    )
-
+    conn.sudo(f"systemctl status {SYSTEMD_SERVICE}")
     print("Done!")

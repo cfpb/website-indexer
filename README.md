@@ -277,20 +277,26 @@ mv crawl.warc.gz sample.sqlite3 ./sample
 
 ## Deployment
 
-This repository includes a [Fabric](https://www.fabfile.org/) script
-that can be used to deploy both the crawler and the viewer application
-to a remote server.
+_For information on how this project is deployed at the CFPB,
+employees and contractors should refer to the internal "CFGOV/crawler-deploy" repository._
 
-First, install the deployment requirements:
+This repository includes a [Fabric](https://www.fabfile.org/) script
+that can be used to configure a RHEL7 Linux server to run this project
+and to deploy both the crawler and the viewer application to that server.
+
+To install Fabric in your virtual environment:
 
 ```
 pip install -r requirements/deploy.txt
 ```
 
-To run the deployment, you'll need to use some variation of this command:
+### Configuring a server
+
+To configure a remote RHEL7 server with the appropriate system requirements,
+you'll need to use some variation of this command:
 
 ```
-fab deploy
+fab configure
 ```
 
 You'll need to provide some additional connection information depending
@@ -300,15 +306,30 @@ for possible options; for example, to connect using a host configuration
 defined as `crawler` in your `~/.ssh/config`, you might run:
 
 ```
-fab deploy -H crawler
+fab configure -H crawler
 ```
 
-The deployment script:
+The `configure` command:
+
+- Installs Node, Yarn, and Git
+- Installs a modern version of SQLite
+- Installs Python 3
+
+### Deploying the application
+
+To run the deployment, you'll need to use some variation of this command:
+
+```
+fab deploy
+```
+
+The `deploy` command:
 
 - Pulls down the latest version of the source code from GitHub
 - Installs the latest dependencies
 - Runs the frontend build script
 - Configures the crawler to run nightly
+- Sets up webserver logging and log rotation
 - Serves the viewer application on port 8000
 
 See [fabfile.py](fabfile.py) for additional detail.
