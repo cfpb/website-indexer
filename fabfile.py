@@ -179,6 +179,10 @@ def deploy(conn):
     conn.sudo(f"chown root:root {LOGROTATE_PATH}")
     conn.sudo(f"chmod 644 {LOGROTATE_PATH}")
 
+    # SELinux: Allow logrotate to write to log files.
+    # This gets persisted to /etc/selinux/targeted/contexts/files/file_contexts.local
+    conn.sudo(f"semanage fcontext -a -t var_log_t '{LOG_DIR}(/.*)?'")
+
     # Configure gunicorn to run via systemd.
     print("Configuring gunicorn service")
     gunicorn_config = StringIO(
