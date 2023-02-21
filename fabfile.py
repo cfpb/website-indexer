@@ -195,11 +195,12 @@ After=network.target
 User={conn.user}
 Group={conn.user}
 WorkingDirectory={SOURCE_ROOT}
-ExecStart={SOURCE_ROOT}/venv/bin/gunicorn \
-    --bind 0.0.0.0:8000 \
-    --access-logfile {LOG_DIR}/access.log \
-    --error-logfile {LOG_DIR}/error.log \
-    --capture-output \
+ExecStart={SOURCE_ROOT}/venv/bin/gunicorn \\
+    --bind 0.0.0.0:8000 \\
+    --access-logfile {LOG_DIR}/access.log \\
+    --error-logfile {LOG_DIR}/error.log \\
+    --capture-output \\
+    --timeout 600 \\
     wsgi
 ExecReload=/bin/kill -s HUP $MAINPID
 Environment=CRAWL_DATABASE={CRAWL_DATABASE}
