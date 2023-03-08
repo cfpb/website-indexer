@@ -124,6 +124,9 @@ def make_instance_from_warc_record(
     title = title_tag.text.strip() if title_tag is not None else None
     language = tree.find(".").get("lang")
 
+    if title is None:
+        return
+
     body = get_body(tree)
 
     if body is not None:
