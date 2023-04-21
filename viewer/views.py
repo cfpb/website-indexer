@@ -70,12 +70,13 @@ class BetterCSVsMixin:
         response = super().finalize_response(*args, **kwargs)
 
         if self.is_rendering_csv:
-            crawl_start = crawl_stats()["crawl_stats"]["end"]
-            response["Content-Disposition"] = (
-                "attachment; filename="
-                f"{self.csv_basename}-"
-                f"{crawl_start.strftime('%Y%m%d')}.csv"
-            )
+            filename = self.csv_basename
+
+            crawl_start = crawl_stats()["crawl_stats"]["start"]
+            if crawl_start:
+                filename += f"-{crawl_start.strftime('%Y%m%d')}"
+
+            response["Content-Disposition"] = f"attachment; filename={filename}.csv"
 
         return response
 
