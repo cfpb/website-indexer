@@ -10,11 +10,12 @@
         <a href="{% url 'help' %}">search for all sorts of useful things</a>.
       </p>
     </div>
-    {% endblock intro %}
+    {% endblock intro %} {% if crawl_stats.start %}
     <div class="u-crawl_date">
       <span class="u-crawl_text">Data last updated: </span>
       <p><a href="#last-crawl">{{ crawl_stats.start | format_datetime }}</a></p>
     </div>
+    {% endif %}
   </div>
 </div>
 

@@ -118,10 +118,12 @@
 <div class="o-well o-well_alt">
   <div class="lead-paragraph">Discover more</div>
   <div class="u-crawl_date">
+    {% if crawl_stats.start %}
     <span id="last-crawl" class="u-crawl_text u-bold_text"
       >Data last updated:
     </span>
     <p>{{ crawl_stats.start | format_datetime }}</p>
+    {% endif %}
   </div>
   <ul class="m-list">
     <!-- prettier-ignore -->
