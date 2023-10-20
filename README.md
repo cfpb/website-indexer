@@ -166,7 +166,7 @@ yarn build
 Create a Python virtual environment and install required packages:
 
 ```
-python3.8 -m venv venv
+python3.6 -m venv venv
 source venv/bin/activate
 pip install -r requirements/base.txt
 ```
@@ -248,7 +248,7 @@ under the `/sample/src` subdirectory.
 To regenerate these files, first serve the sample website locally:
 
 ```
-python -m http.server -d ./sample/src
+cd ./sample/src && python -m http.server
 ```
 
 This starts the sample website running at http://localhost:8000.
