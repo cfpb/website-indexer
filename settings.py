@@ -136,3 +136,20 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 25,
     "UNAUTHENTICATED_USER": None,
 }
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "crawler": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+    },
+}

@@ -1,3 +1,4 @@
+beautifulsoup4==4.12.2
 click==8.0.4
 cssselect==1.1.0
 Django==3.2.22
