@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os
 import os.path
@@ -13,7 +14,8 @@ import lxml.html.soupparser
 from wpull.application.builder import Builder
 from wpull.application.hook import Actions
 from wpull.application.options import AppArgumentParser
-from wpull.application.plugin import PluginFunctions, WpullPlugin, event, hook
+from wpull.application.plugin import PluginFunctions, WpullPlugin, hook
+from wpull.network.connection import BaseConnection
 from wpull.pipeline.item import URLProperties
 from wpull.url import URLInfo
 
@@ -27,6 +29,17 @@ logger = logging.getLogger("crawler")
 COMPONENT_SEARCH = re.compile(r"(?:(?:class=\")|\s)((?:o|m|a)-[\w\-]*)")
 EXTERNAL_SITE = re.compile("/external-site/")
 WHITESPACE = re.compile(r"\s+")
+
+SKIP_URLS = list(
+    map(
+        re.compile,
+        [
+            r"^https://www.facebook.com/dialog/share\?.*",
+            r"^https://twitter.com/intent/tweet\?.*",
+            r"^https://www.linkedin.com/shareArticle\?.*",
+        ],
+    )
+)
 
 
 def get_body(tree):
@@ -60,8 +73,8 @@ class DatabaseWritingPlugin(WpullPlugin):
         self.max_pages = int(self.max_pages)
 
         self.init_db()
-        self.crawled_urls = []
-        self.logged_urls = []
+        self.accepted_urls = []
+        self.requested_urls = []
 
     def init_db(self):
         db_alias = "warc_to_db"
@@ -77,7 +90,7 @@ class DatabaseWritingPlugin(WpullPlugin):
 
     @property
     def at_max_pages(self):
-        return self.max_pages and len(self.logged_urls) >= self.max_pages
+        return self.max_pages and len(self.retrieved_urls) >= self.max_pages
 
     @hook(PluginFunctions.accept_url)
     def accept_url(self, item_session, verdict, reasons):
@@ -90,6 +103,14 @@ class DatabaseWritingPlugin(WpullPlugin):
             return False
 
         request = item_session.url_record
+
+        # Don't request pages more than once.
+        if request.url in self.requested_urls:
+            return False
+
+        # Always skip certain URLs.
+        if SKIP_URLS and any(skip_url.match(request.url) for skip_url in SKIP_URLS):
+            return False
 
         # We want to crawl links to different domains to test their validity.
         # But once we've done that, we don't want to keep crawling there.
@@ -140,22 +161,27 @@ class DatabaseWritingPlugin(WpullPlugin):
                 elif list(qs.keys()) != ["page"]:
                     return False
 
-        if request.url not in self.crawled_urls:
+        if request.url not in self.accepted_urls:
             logger.info(f"Crawling {request.url}")
-            self.crawled_urls.append(request.url)
+            self.accepted_urls.append(request.url)
 
         return True
 
     @hook(PluginFunctions.handle_error)
     def handle_error(self, item_session, error):
-        self.db_writer.write(
-            Error(
-                timestamp=timezone.now(),
-                url=item_session.request.url,
-                status_code=0,
-                referrer=item_session.request.fields.get("Referer"),
+        if item_session.request.url in self.requested_urls:
+            logger.debug(f"Already logged error for {item_session.request.url}")
+        else:
+            self.db_writer.write(
+                Error(
+                    timestamp=timezone.now(),
+                    url=item_session.request.url,
+                    status_code=0,
+                    referrer=item_session.request.fields.get("Referer"),
+                )
             )
-        )
+
+            self.requested_urls.append(item_session.request.url)
 
     @hook(PluginFunctions.handle_pre_response)
     def handle_pre_response(self, item_session):
@@ -182,12 +208,12 @@ class DatabaseWritingPlugin(WpullPlugin):
         status_code = response.status_code
         timestamp = timezone.now()
 
-        if request.url in self.logged_urls:
+        if request.url in self.requested_urls:
             logger.debug(f"Already logged {request.url}")
             item_session.skip()
             return Actions.FINISH
         else:
-            self.logged_urls.append(request.url)
+            self.requested_urls.append(request.url)
 
         if status_code >= 300:
             referrer = request.fields.get("Referer")
@@ -227,9 +253,6 @@ class DatabaseWritingPlugin(WpullPlugin):
                 )
 
             return Actions.NORMAL
-
-        if 200 != status_code:
-            raise ValueError(f"Unexpected status code {status_code} for {request.url}")
 
         # If this request was to an external domain and it responded with
         # a normal status code, we don't care about recording it.
@@ -314,6 +337,17 @@ class DatabaseWritingPlugin(WpullPlugin):
         return page
 
 
+def patch_wpull_connection():
+    @asyncio.coroutine
+    def readline(self):
+        data = yield from self.run_network_operation(
+            self.reader.readline(), wait_timeout=self._timeout, name="Readline"
+        )
+        return data
+
+    BaseConnection.readline = readline
+
+
 @click.command()
 @click.argument("start_url")
 @click.argument("db_filename", type=click.Path())
@@ -341,12 +375,16 @@ def command(start_url, db_filename, max_pages, depth, recreate):
     args = arg_parser.parse_args(
         [
             start_url,
+            "--quiet",
             "--recursive",
             "--delete-after",
             "--no-robots",
             "--wait=0.5",
             "--random-wait",
-            "--timeout=30",
+            "--dns-timeout=5",
+            "--connect-timeout=5",
+            "--read-timeout=30",
+            "--session-timeout=30",
             "--span-hosts",
             "--link-extractors=html",
             "--follow-tags=a",
@@ -367,4 +405,5 @@ def command(start_url, db_filename, max_pages, depth, recreate):
     # https://docs.djangoproject.com/en/3.2/topics/async/#async-safety
     os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
+    patch_wpull_connection()
     return app.run_sync()
