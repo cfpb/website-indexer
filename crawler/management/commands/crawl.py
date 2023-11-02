@@ -33,7 +33,8 @@ def command(start_url, db_filename, max_pages, depth, recreate, resume):
                 "or --resume to resume a previous crawl."
             )
 
-        os.remove(db_filename)
+        if recreate:
+            os.remove(db_filename)
 
     wpull_progress_filename = f"{db_filename}.wpull.db"
     click.echo(
