@@ -1,6 +1,11 @@
+import logging
+
 from django.db import connections
 
 from crawler.models import Component, Link, Page
+
+
+logger = logging.getLogger("crawler")
 
 
 class DatabaseWriter:
@@ -12,6 +17,7 @@ class DatabaseWriter:
         if isinstance(instance, Page):
             return self._write_page(instance)
         else:
+            logger.debug(f"Saving {instance}")
             instance.save(using=self.db)
 
     def _write_page(self, page):
@@ -36,6 +42,7 @@ class DatabaseWriter:
             .values()
         )
 
+        logger.debug(f"Saving {page}")
         page.save(using=self.db)
 
     def analyze(self):
