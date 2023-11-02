@@ -27,26 +27,28 @@ PYTHON_BASENAME = f"Python-{PYTHON_VERSION}"
 PYTHON_INSTALL_ROOT = f"{DEPLOY_ROOT}/{PYTHON_BASENAME}"
 
 SOURCE_PARENT = f"{DEPLOY_ROOT}/cfpb"
-SOURCE_REPO = "https://github.com/cfpb/crawsqueal.git"
-SOURCE_DIRNAME = "crawsqueal"
+SOURCE_REPO = "https://github.com/cfpb/website-indexer.git"
+SOURCE_DIRNAME = "website-indexer"
 SOURCE_ROOT = f"{SOURCE_PARENT}/{SOURCE_DIRNAME}"
 
-CRAWL_DATABASE = "/var/tmp/crawl.sqlite3"
+CRAWL_DIR = "/var/tmp"
+CRAWL_DATABASE = f"{CRAWL_DIR}/crawl.sqlite3"
+CRAWL_DATABASE_TMP = f"{CRAWL_DIR}/crawl-new.sqlite3"
 
 LOGROTATE_DIR = "/etc/logrotate.d"
-LOGROTATE_NAME = "crawsqueal"
+LOGROTATE_NAME = "website-indexer"
 LOGROTATE_PATH = f"{LOGROTATE_DIR}/{LOGROTATE_NAME}"
 
 SYSTEMD_DIR = "/etc/systemd/system"
-SYSTEMD_SERVICE = "crawsqueal"
+SYSTEMD_SERVICE = "website-indexer"
 SYSTEMD_NAME = f"{SYSTEMD_SERVICE}.service"
 SYSTEMD_PATH = f"{SYSTEMD_DIR}/{SYSTEMD_NAME}"
 
-CRONTAB_NAME = "crawsqueal"
+CRONTAB_NAME = "website-indexer"
 CRONTAB_DIR = "/etc/cron.d"
 CRONTAB_PATH = f"{CRONTAB_DIR}/{CRONTAB_NAME}"
 
-LOG_DIR = "/var/log/crawsqueal"
+LOG_DIR = "/var/log/website-indexer"
 
 
 @task
@@ -144,10 +146,10 @@ def deploy(conn):
         "SHELL=/bin/bash\n"
         f"0 0 * * * {conn.user} "
         f"cd {SOURCE_ROOT} && "
-        f"./wget_crawl.sh https://www.consumerfinance.gov/ && "
-        f"PYTHONPATH=. DJANGO_SETTINGS_MODULE=settings ./venv/bin/django-admin "
-        "warc_to_db --recreate ./crawl.warc.gz ./crawl.sqlite3 && "
-        f"mv crawl.{{cdx,sqlite3,warc.gz}} wget.log /var/tmp/\n"
+        f"./venv/bin/python manage.py crawl --recreate "
+        f"https://www.consumerfinance.gov {CRAWL_DATABASE_TMP} "
+        f"> {CRAWL_DIR}/crawl.log 2>&1 && "
+        f"mv {CRAWL_DATABASE_TMP} {CRAWL_DATABASE}\n"
         "EOF'"
     )
 

@@ -1,6 +1,6 @@
 {
-  "name": "crawsqueal",
-  "version": "1.0.0",
+  "name": "website-indexer",
+  "version": "1.1.0",
   "license": "CC0-1.0",
   "type": "module",
   "engines": {
@@ -10,8 +10,8 @@
     "prettier": "prettier --check 'viewer/static_src/*.{css,js}' 'viewer/**/*.html'",
     "fix": "npm run prettier -- --write",
     "fonts": "cp -r viewer/static_src/fonts viewer/static/fonts",
-    "styles": "curl -o viewer/static/main.css https://www.consumerfinance.gov/static/css/main.css && curl https://www.consumerfinance.gov/static/apps/regulations3k/css/main.css >> viewer/static/main.css && cp viewer/static_src/crawsqueal.css viewer/static/crawsqueal.css",
-    "scripts": "esbuild viewer/static_src/crawsqueal.js --bundle --outfile=viewer/static/crawsqueal.js",
+    "styles": "curl -o viewer/static/cfgov.css https://www.consumerfinance.gov/static/css/main.css && curl https://www.consumerfinance.gov/static/apps/regulations3k/css/main.css >> viewer/static/cfgov.css && cp viewer/static_src/main.css viewer/static/main.css",
+    "scripts": "esbuild viewer/static_src/main.js --bundle --outfile=viewer/static/main.js",
     "build": "yarn fonts && yarn styles && yarn scripts"
   },
   "dependencies": {
