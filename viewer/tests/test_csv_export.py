@@ -12,5 +12,5 @@ class TestCSVExport(TestCase):
         self.assertEqual(response["Content-Type"], "text/csv; charset=utf-8")
 
         rows = BytesIO(response.getvalue()).readlines()
-        self.assertEqual(len(rows), 3)
+        self.assertEqual(len(rows), 4)
         self.assertEqual(rows[0], codecs.BOM_UTF8 + b"url,title,language\r\n")
