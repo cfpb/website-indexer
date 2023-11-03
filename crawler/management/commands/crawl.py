@@ -42,7 +42,7 @@ def command(start_url, db_filename, max_pages, depth, recreate, resume):
     )
 
     if not resume and os.path.exists(wpull_progress_filename):
-        os.path.remove(wpull_progress_filename)
+        os.remove(wpull_progress_filename)
 
     arg_parser = AppArgumentParser()
     args = arg_parser.parse_args(
@@ -79,6 +79,4 @@ def command(start_url, db_filename, max_pages, depth, recreate, resume):
     # https://docs.djangoproject.com/en/3.2/topics/async/#async-safety
     os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
-    exit_status = app.run_sync()
-    click.echo(f"done, exiting with status {exit_status}")
-    return exit_status
+    app.run_sync()
