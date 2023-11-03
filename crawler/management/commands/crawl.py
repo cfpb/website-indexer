@@ -42,7 +42,7 @@ def command(start_url, db_filename, max_pages, depth, recreate, resume):
     )
 
     if not resume and os.path.exists(wpull_progress_filename):
-        os.path.remove(wpull_progress_filename)
+        os.remove(wpull_progress_filename)
 
     arg_parser = AppArgumentParser()
     args = arg_parser.parse_args(
