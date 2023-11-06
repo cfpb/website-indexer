@@ -2,33 +2,31 @@
 # yarn lockfile v1
 
 
-"@cfpb/cfpb-atomic-component@^0.15.0":
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/@cfpb/cfpb-atomic-component/-/cfpb-atomic-component-0.15.0.tgz#bda5c6d7c46008407cedc3c0170bf39a3999cd99"
-  integrity sha512-eLLibTjf6vapd8QaraNJceJ43Mo3mi4B2P8kWcnj0kFNsvkP4nrFLLFPfl58+aMWrNmxDPEb+aeHZeifh3G+vw==
-  dependencies:
-    ftdomdelegate "^3.0.0"
+"@cfpb/cfpb-atomic-component@^0.32.0":
+  version "0.32.0"
+  resolved "https://registry.yarnpkg.com/@cfpb/cfpb-atomic-component/-/cfpb-atomic-component-0.32.0.tgz#65e020b8b536503b568623e4727e0eac07372a3c"
+  integrity sha512-tiC5anVmgaJCPsKlut0lZS4jlUUe6pyPnxYjcrHga51DgtLdtzCct1kPY3gHSj5lM+d3zDBBcy+e+i32zFErVw==
 
-"@cfpb/cfpb-core@^0.15.0":
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/@cfpb/cfpb-core/-/cfpb-core-0.15.0.tgz#724e5dde57e5784944ed46de1dca6756655ca9b1"
-  integrity sha512-HOjCV34zYB7ZmNWFJ7FlCIxam4OwgrF4ejZgUxa4qdUvDbWCRXts09hhMGJIuM7khIP4z+ugsW5cRMBwK5EjXA==
+"@cfpb/cfpb-core@^0.32.0":
+  version "0.32.0"
+  resolved "https://registry.yarnpkg.com/@cfpb/cfpb-core/-/cfpb-core-0.32.0.tgz#1728cfd37810c899180d174181fd7497fdc21aaa"
+  integrity sha512-cT6LAFxtwkigJ9Rz54fSHjuVJvnfJ+ro/oDAK6AFZl666SbnSDPT3zpmj9RJzaOXV+zHl1t02n8AYLmNk99dcg==
   dependencies:
     normalize-css "^2.0.0"
 
-"@cfpb/cfpb-expandables@^0.15.0":
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/@cfpb/cfpb-expandables/-/cfpb-expandables-0.15.0.tgz#3c26e42236134ced843d923206a800b12902fafa"
-  integrity sha512-S7rqpGOT9fyGIsmEa5Kq1wVBulII1Lf2pzvYgLlt1etRAlhUvH9YBxOXWGU/whJvPZslrdlMghCdQt5jRC0z7A==
+"@cfpb/cfpb-expandables@0.32.0":
+  version "0.32.0"
+  resolved "https://registry.yarnpkg.com/@cfpb/cfpb-expandables/-/cfpb-expandables-0.32.0.tgz#cacc55e3a66de7951bf872e0646e1c584c0cf3c4"
+  integrity sha512-DZz67W3ysSN+i6zs+vpaZa6GahjyTej1RxtuKy1knQv6yUJE9+cMvOHmeRk7lKjSayidesovQbCuSR1EjfweZw==
   dependencies:
-    "@cfpb/cfpb-atomic-component" "^0.15.0"
-    "@cfpb/cfpb-core" "^0.15.0"
-    "@cfpb/cfpb-icons" "^0.15.0"
+    "@cfpb/cfpb-atomic-component" "^0.32.0"
+    "@cfpb/cfpb-core" "^0.32.0"
+    "@cfpb/cfpb-icons" "^0.32.0"
 
-"@cfpb/cfpb-icons@^0.15.0":
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/@cfpb/cfpb-icons/-/cfpb-icons-0.15.0.tgz#fe02585a9c45ccbe017fbb858e275c21e0600f85"
-  integrity sha512-QQte470v9uML4gSVZQioOBEkFjzCGlQSvLE6GZVkAaNFXUMgzXxn8aN2KHLFqfon2jB+LGB12dlaJOmZiSZ1uQ==
+"@cfpb/cfpb-icons@^0.32.0":
+  version "0.32.0"
+  resolved "https://registry.yarnpkg.com/@cfpb/cfpb-icons/-/cfpb-icons-0.32.0.tgz#a5bcb15c643e39663cc4a8f779d0b097b2a24fc4"
+  integrity sha512-drBbfKX8+N5G8cNgCnbpUa+KKNd0wrK6P287/kEPXO7vrQ8LiTvdCwIWJ76pvnFUSW3Wy2kxIck8Ggo5uh1Mjw==
 
 esbuild-android-64@0.14.38:
   version "0.14.38"
@@ -156,20 +154,15 @@ esbuild@^0.14.38:
     esbuild-windows-64 "0.14.38"
     esbuild-windows-arm64 "0.14.38"
 
-ftdomdelegate@^3.0.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/ftdomdelegate/-/ftdomdelegate-3.1.0.tgz#f22a1bb3dba7ed0e239125487923899a16448963"
-  integrity sha512-sEGlE4xTcwl7RxW8ypB2jUbKAWxG4iE7YLmko9AKdGUn2BY1fkg5zeC0Ec9Ac770iDpAqgzXdzO4KrPi3sasug==
-
 insert-css@0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/insert-css/-/insert-css-0.0.0.tgz#2304bfa6f893abecb8ff9ca8d9c7605d94cf2911"
-  integrity sha1-IwS/pviTq+y4/5yo2cdgXZTPKRE=
+  integrity sha512-PwixL1rVtKkM1gz43tEHwZ2sUOYmWB5zk/9YiEmOxERqjfIkkMY4jwrl3v3e9NLzblEdkBuMLiTLm/0sHMx4qA==
 
 normalize-css@^2.0.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/normalize-css/-/normalize-css-2.3.1.tgz#fc03e3b91e3a51aa7a1836bae7b2b6ac6d51e156"
-  integrity sha1-/APjuR46Uap6GDa657K2rG1R4VY=
+  integrity sha512-70Lnkke3P+8ehu56S0M0yoUTgTve/rCrEncjdgPmKER/TLZMRa30rFLW7Yv3iGZldmGV4bGevGW47VOfZJbGyw==
   dependencies:
     insert-css "0.0.0"
 
