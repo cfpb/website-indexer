@@ -15,7 +15,7 @@
     "build": "yarn fonts && yarn styles && yarn scripts"
   },
   "dependencies": {
-    "@cfpb/cfpb-expandables": "^0.15.0",
+    "@cfpb/cfpb-expandables": "0.32.0",
     "esbuild": "^0.14.38"
   },
   "devDependencies": {
