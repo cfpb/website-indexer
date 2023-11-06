@@ -9,6 +9,7 @@ from django.utils import timezone
 
 from wpull.application.hook import Actions
 from wpull.application.plugin import PluginFunctions, WpullPlugin, hook
+from wpull.errors import ExitStatus
 from wpull.network.connection import BaseConnection
 from wpull.pipeline.item import URLProperties
 from wpull.url import URLInfo
@@ -271,3 +272,26 @@ class DatabaseWritingPlugin(WpullPlugin):
 
         html = response.body.content().decode("utf-8")
         return Page.from_html(request.url, html, self.start_url.hostname)
+
+    @hook(PluginFunctions.exit_status)
+    def exit_status(self, app_session, exit_code):
+        # If a non-zero exit code exists because of some kind of network error
+        # (DNS resolution, connection issue, etc.) we want to ignore it and
+        # instead return a zero error code. We expect to encounter some of
+        # these errors when we crawl, but we don't want the overall process to
+        # fail downstream processing.
+        #
+        # See list of wpull exit status codes here:
+        # https://github.com/ArchiveTeam/wpull/blob/v2.0.1/wpull/errors.py#L40-L63
+        return (
+            0
+            if exit_code
+            in (
+                ExitStatus.network_failure,
+                ExitStatus.ssl_verification_error,
+                ExitStatus.authentication_failure,
+                ExitStatus.protocol_error,
+                ExitStatus.server_error,
+            )
+            else exit_code
+        )
