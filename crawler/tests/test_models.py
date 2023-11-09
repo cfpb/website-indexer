@@ -91,12 +91,14 @@ class PageTests(SimpleTestCase):
 
 
 class ErrorTests(SimpleTestCase):
-    def test_error_str(self):
+    def test_str(self):
         self.assertEqual(
             str(Error(url="/not-found/", status_code=404)), "/not-found/ 404 !"
         )
 
-    def test_error_str_with_referrer(self):
+
+class RedirectTests(SimpleTestCase):
+    def test_str(self):
         self.assertEqual(
             str(
                 Redirect(
@@ -107,4 +109,32 @@ class ErrorTests(SimpleTestCase):
                 )
             ),
             "/redirect/ (from /source/) 301 -> /destination/",
+        )
+
+    def test_is_http_to_https(self):
+        self.assertTrue(
+            Redirect(
+                url="http://example.com/", location="https://example.com/"
+            ).is_http_to_https
+        )
+
+        self.assertFalse(
+            Redirect(
+                url="http://example.com/", location="https://example.com"
+            ).is_http_to_https
+        )
+
+        self.assertFalse(
+            Redirect(url="https://example.com/", location="/foo/").is_http_to_https
+        )
+
+    def test_is_append_slash(self):
+        self.assertTrue(
+            Redirect(
+                url="https://example.com", location="https://example.com/"
+            ).is_append_slash
+        )
+
+        self.assertFalse(
+            Redirect(url="https://example.com/", location="/foo/").is_append_slash
         )

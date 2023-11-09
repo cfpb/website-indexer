@@ -169,3 +169,11 @@ class Redirect(ErrorBase):
 
     def __str__(self):
         return super().__str__() + f" -> {self.location}"
+
+    @property
+    def is_http_to_https(self):
+        return self.location == re.sub(r"^http://", "https://", self.url)
+
+    @property
+    def is_append_slash(self):
+        return not self.url.endswith("/") and self.location == self.url + "/"
