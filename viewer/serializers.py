@@ -82,5 +82,13 @@ class RedirectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Redirect
-        fields = ["timestamp", "url", "status_code", "referrer", "redirect_url"]
-        csv_header = ErrorSerializer.Meta.csv_header + ["redirect_url"]
+        fields = ErrorSerializer.Meta.fields + [
+            "redirect_url",
+            "is_http_to_https",
+            "is_append_slash",
+        ]
+        csv_header = ErrorSerializer.Meta.csv_header + [
+            "redirect_url",
+            "is_http_to_https",
+            "is_append_slash",
+        ]
