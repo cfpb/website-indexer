@@ -14,7 +14,7 @@ from fabric import task
 
 DEPLOY_ROOT = "/opt"
 
-NODE_VERSION = "18"
+NODE_VERSION = "20"
 
 SQLITE_VERSION = "3390200"
 SQLITE_BASENAME = f"sqlite-autoconf-{SQLITE_VERSION}"
