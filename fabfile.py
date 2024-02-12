@@ -14,17 +14,11 @@ from fabric import task
 
 DEPLOY_ROOT = "/opt"
 
-# Node 18 doesn't seem to work on RHEL 7.
-# https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V18.md#toolchain-and-compiler-upgrades
-NODE_VERSION = "16"
+NODE_VERSION = "18"
 
 SQLITE_VERSION = "3390200"
 SQLITE_BASENAME = f"sqlite-autoconf-{SQLITE_VERSION}"
 SQLITE_INSTALL_ROOT = f"{DEPLOY_ROOT}/{SQLITE_BASENAME}"
-
-PYTHON_VERSION = "3.6.15"
-PYTHON_BASENAME = f"Python-{PYTHON_VERSION}"
-PYTHON_INSTALL_ROOT = f"{DEPLOY_ROOT}/{PYTHON_BASENAME}"
 
 SOURCE_PARENT = f"{DEPLOY_ROOT}/cfpb"
 SOURCE_REPO = "https://github.com/cfpb/website-indexer.git"
@@ -65,54 +59,12 @@ def configure(conn):
     )
     conn.sudo("yum install -y nodejs")
 
-    # Install the Yarn package repository.
-    # https://classic.yarnpkg.com/lang/en/docs/install/#centos-stable
-    conn.run(
-        "curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo"
-    )
-    conn.sudo("yum install -y yarn")
-
     # Install git to be able to clone source code repository.
     conn.sudo("yum install -y git")
 
     # Set up deploy root and grant permissions to deploy user.
     conn.sudo(f"mkdir -p {DEPLOY_ROOT}")
     conn.sudo(f"chown -R {conn.user}:{conn.user} {DEPLOY_ROOT}")
-
-    # Build and install SQLite (needs to happen before installing Python).
-    conn.sudo("yum install -y gcc sqlite-devel")
-    with conn.cd(DEPLOY_ROOT):
-        conn.run(f"curl -O https://www.sqlite.org/2022/{SQLITE_BASENAME}.tar.gz")
-        conn.run(f"tar xzf {SQLITE_BASENAME}.tar.gz")
-        conn.run(f"rm {SQLITE_BASENAME}.tar.gz")
-
-    with conn.cd(SQLITE_INSTALL_ROOT):
-        conn.run("./configure && make")
-
-    # https://github.com/pyinvoke/invoke/issues/459
-    conn.sudo(f'bash -c "cd {SQLITE_INSTALL_ROOT} && make install"')
-
-    # Build and install Python 3.
-    # This sets /usr/local/bin python and python3 commands to point to Python 3.
-    # This doesn't update /usr/bin/python (used by sudo)
-    conn.sudo("yum install -y openssl-devel bzip2-devel libffi-devel")
-
-    with conn.cd(DEPLOY_ROOT):
-        conn.run(
-            f"curl -O https://www.python.org/ftp/python/{PYTHON_VERSION}/{PYTHON_BASENAME}.tgz"
-        )
-        conn.run(f"tar xzf {PYTHON_BASENAME}.tgz")
-        conn.run(f"rm {PYTHON_BASENAME}.tgz")
-
-    with conn.cd(PYTHON_INSTALL_ROOT):
-        conn.run("LD_RUN_PATH=/usr/local/lib ./configure --enable-optimizations")
-
-    # https://github.com/pyinvoke/invoke/issues/459
-    conn.sudo(
-        f"bash -c "
-        f'"cd {PYTHON_INSTALL_ROOT} && LD_RUN_PATH=/usr/local/lib make install"'
-    )
-    conn.sudo("ln -sf /usr/local/bin/python3 /usr/local/bin/python")
 
 
 @task
@@ -131,8 +83,9 @@ def deploy(conn):
 
     # Build the viewer app and update any dependencies.
     with conn.cd(SOURCE_ROOT):
+        conn.sudo("corepack enable")
         conn.run("yarn && yarn build")
-        conn.run("python -m venv venv")
+        conn.run("python3 -m venv venv")
 
         with conn.prefix("source venv/bin/activate"):
             conn.run("pip install -r requirements/base.txt")
@@ -183,7 +136,7 @@ def deploy(conn):
 
     # SELinux: Allow logrotate to write to log files.
     # This gets persisted to /etc/selinux/targeted/contexts/files/file_contexts.local
-    conn.sudo(f"semanage fcontext -a -t var_log_t '{LOG_DIR}(/.*)?'")
+    conn.sudo(f"semanage fcontext -m -t var_log_t '{LOG_DIR}(/.*)?'")
 
     # Configure gunicorn to run via systemd.
     print("Configuring gunicorn service")
@@ -218,4 +171,9 @@ WantedBy=multi-user.target
     conn.sudo(f"systemctl restart {SYSTEMD_SERVICE}")
 
     conn.sudo(f"systemctl status {SYSTEMD_SERVICE}")
+
+    # Open firewall so gunicorn can run on port 8000.
+    conn.sudo("firewall-cmd --zone=public --permanent --add-port 8000/tcp")
+    conn.sudo("firewall-cmd --reload")
+
     print("Done!")
