@@ -239,7 +239,7 @@ _For information on how this project is deployed at the CFPB,
 employees and contractors should refer to the internal "CFGOV/crawler-deploy" repository._
 
 This repository includes a [Fabric](https://www.fabfile.org/) script
-that can be used to configure a RHEL7 Linux server to run this project
+that can be used to configure a RHEL8 Linux server to run this project
 and to deploy both the crawler and the viewer application to that server.
 
 To install Fabric in your virtual environment:
@@ -250,7 +250,7 @@ pip install -r requirements/deploy.txt
 
 ### Configuring a server
 
-To configure a remote RHEL7 server with the appropriate system requirements,
+To configure a remote RHEL8 server with the appropriate system requirements,
 you'll need to use some variation of this command:
 
 ```
