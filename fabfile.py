@@ -26,7 +26,7 @@ SOURCE_DIRNAME = "website-indexer"
 SOURCE_ROOT = f"{SOURCE_PARENT}/{SOURCE_DIRNAME}"
 
 CRAWL_DIR = "/var/tmp"
-CRAWL_DATABASE = f"{CRAWL_DIR}/crawl.sqlite3"
+CRAWL_DATABASE = f"{SOURCE_ROOT}/crawl.sqlite3"
 CRAWL_DATABASE_TMP = f"{CRAWL_DIR}/crawl-new.sqlite3"
 
 LOGROTATE_DIR = "/etc/logrotate.d"
