@@ -31,12 +31,6 @@ _site/
 *.sqlite3
 !sample/sample.sqlite3
 
-# Crawl files, except for the sample crawl #
-############################################
-*.warc
-*.warc.gz
-!sample/crawl.warc.gz
-
 # OS generated files #
 ######################
 .DS_Store

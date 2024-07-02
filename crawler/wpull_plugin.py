@@ -69,7 +69,7 @@ class DatabaseWritingPlugin(WpullPlugin):
         self.db_writer.analyze()
 
     def init_db(self):
-        db_alias = "warc_to_db"
+        db_alias = "crawler"
 
         connections.databases[db_alias] = {
             "ENGINE": "django.db.backends.sqlite3",
