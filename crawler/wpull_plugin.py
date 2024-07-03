@@ -27,6 +27,7 @@ SKIP_URLS = list(
         [
             r"^https://www.facebook.com/dialog/share\?.*",
             r"^https://twitter.com/intent/tweet\?.*",
+            r"^https://x.com/intent/tweet\?.*",
             r"^https://www.linkedin.com/shareArticle\?.*",
         ],
     )
