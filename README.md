@@ -26,7 +26,7 @@ and export results as CSV or JSON reports.
 Create a Python virtual environment and install required packages:
 
 ```
-python3.6 -m venv venv
+python3.12 -m venv venv
 source venv/bin/activate
 pip install -r requirements/base.txt
 ```
@@ -139,7 +139,7 @@ yarn build
 Create a Python virtual environment and install required packages:
 
 ```
-python3.6 -m venv venv
+python3.12 -m venv venv
 source venv/bin/activate
 pip install -r requirements/base.txt
 ```
@@ -269,9 +269,8 @@ fab configure -H crawler
 
 The `configure` command:
 
-- Installs Node, Yarn, and Git
-- Installs a modern version of SQLite
-- Installs Python 3
+- Installs Node and Git
+- Installs Python 3.12
 
 ### Deploying the application
 
