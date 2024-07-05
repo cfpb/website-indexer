@@ -69,7 +69,6 @@ def configure(conn):
     conn.sudo(f"chown -R {conn.user}:{conn.user} {DEPLOY_ROOT}")
 
 
-
 @task
 def deploy(conn):
     print("Cloning and configuring application source code")
