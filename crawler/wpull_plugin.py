@@ -1,4 +1,3 @@
-import asyncio
 import logging
 import re
 from urllib import parse
@@ -39,9 +38,8 @@ HEAD_URLS = list(map(re.compile, [r"https://files.consumerfinance.gov/.*"]))
 def patch_wpull_connection():
     """Use wait_timeout instead of close_timeout for readline."""
 
-    @asyncio.coroutine
-    def readline(self):
-        data = yield from self.run_network_operation(
+    async def readline(self):
+        data = await self.run_network_operation(
             self.reader.readline(), wait_timeout=self._timeout, name="Readline"
         )
         return data

@@ -16,10 +16,6 @@ DEPLOY_ROOT = "/opt"
 
 NODE_VERSION = "20"
 
-SQLITE_VERSION = "3390200"
-SQLITE_BASENAME = f"sqlite-autoconf-{SQLITE_VERSION}"
-SQLITE_INSTALL_ROOT = f"{DEPLOY_ROOT}/{SQLITE_BASENAME}"
-
 SOURCE_PARENT = f"{DEPLOY_ROOT}/cfpb"
 SOURCE_REPO = "https://github.com/cfpb/website-indexer.git"
 SOURCE_DIRNAME = "website-indexer"
@@ -62,6 +58,12 @@ def configure(conn):
     # Install git to be able to clone source code repository.
     conn.sudo("yum install -y git")
 
+    # Install Python 3.12.
+    conn.sudo("yum install -y python3.12")
+
+    # Install libraries needed to build lxml from source.
+    conn.sudo("yum install -y python3.12-devel libxml2-devel libxslt-devel")
+
     # Set up deploy root and grant permissions to deploy user.
     conn.sudo(f"mkdir -p {DEPLOY_ROOT}")
     conn.sudo(f"chown -R {conn.user}:{conn.user} {DEPLOY_ROOT}")
@@ -85,7 +87,7 @@ def deploy(conn):
     with conn.cd(SOURCE_ROOT):
         conn.sudo("corepack enable")
         conn.run("yarn && yarn build")
-        conn.run("python3 -m venv venv")
+        conn.run(f"python3.12 -m venv venv")
 
         with conn.prefix("source venv/bin/activate"):
             conn.run("pip install -r requirements/base.txt")

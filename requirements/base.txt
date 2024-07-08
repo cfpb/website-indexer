@@ -8,13 +8,8 @@ django-filter==21.1
 django-modelcluster==5.3
 djangorestframework==3.13.1
 djangorestframework-csv==2.1.1
-lxml==4.9.1
 whitenoise==5.3.0
-wpull==2.0.1
 
-# wpull doesn't set upper bounds for some of its requirements,
-# so we need to specify these manually:
-# See https://github.com/ArchiveTeam/wpull/blob/v2.0.1/requirements.txt
-html5lib==0.9999999
-sqlalchemy==1.0.12
-tornado==4.5.3
+# Ensure libxml2 is loaded dynamically; see
+# https://html5-parser.readthedocs.io/en/latest/#unix
+wpull@https://github.com/ArchiveTeam/ludios_wpull/archive/refs/tags/5.0.3.tar.gz --no-binary=lxml
