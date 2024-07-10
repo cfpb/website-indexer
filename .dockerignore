@@ -1,0 +1,21 @@
+# Ignore everything
+**
+
+# ...except for all of this
+!manage.py
+!package.json
+!settings.py
+!urls.py
+!wsgi.py
+
+!crawler/**/*.py
+
+!requirements
+
+!sample/sample.sqlite3
+
+!viewer/**/*.py
+!viewer/static/download-files
+!viewer/static_src
+!viewer/templates
+

@@ -1,0 +1,22 @@
+name: Test Docker build
+
+on: [pull_request]
+
+env:
+  TEST_TAG: cfpb/website-indexer:test
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build a test image
+        uses: docker/build-push-action@v6
+        with:
+          load: true
+          tags: ${{ env.TEST_TAG }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Test the image
+        run: docker run --rm ${{ env.TEST_TAG }} python manage.py check
