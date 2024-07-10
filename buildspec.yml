@@ -1,0 +1,22 @@
+version: 0.2
+
+env:
+  variables:
+    SERVICE_NAME: website-indexer
+
+phases:
+  install:
+    commands:
+      - codebuild-init && source ./env.sh
+  pre_build:
+    commands:
+      # Set envvars dependent on CodeBuild project's own envvars
+      - export IMAGE_NAME="cfpb/${NAMESPACE}/${SERVICE_NAME}"
+      - export IMAGE_TAG=$GIT_REF
+      - export REGISTRY_IMAGE_NAME="${ECR_ACCOUNT_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
+      - env | sort
+  build:
+    commands:
+      - docker build -t $REGISTRY_IMAGE_NAME .
+      - docker push $REGISTRY_IMAGE_NAME
+      - echo "Image ${REGISTRY_IMAGE_NAME} now available for use. Enjoy!"
