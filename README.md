@@ -129,11 +129,18 @@ sqlite> SELECT url FROM crawler_page WHERE html LIKE "%<br>%" ORDER BY URL asc;
 
 ## Running the viewer application
 
-From the repo's root, compile front-end assets:
+From the repo's root, compile frontend assets:
 
 ```
 yarn
 yarn build
+```
+
+Alternatively, to continuously watch the frontend assets and rebuild as necessary:
+
+```
+yarn
+yarn watch
 ```
 
 Create a Python virtual environment and install required packages:
@@ -205,7 +212,7 @@ yarn prettier
 You can fix any problems by running:
 
 ```
-yarn fix
+yarn prettier:fix
 ```
 
 ### Sample test data
