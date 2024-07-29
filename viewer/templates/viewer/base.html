@@ -18,18 +18,18 @@
     <div class="skip-nav">
       <a class="skip-nav__link" href="#main">Skip to main content</a>
     </div>
-    <main class="content" id="main">
-      <div class="wrapper content_wrapper">
-        <div class="content_main content__1-3">
-          <div class="content_main-inner">
-            {% block content %}{% endblock content %}
-          </div>
+    <main class="u-layout-grid" id="main">
+      <div class="u-layout-grid__wrapper">
+        <div class="u-layout-grid__main">
+          {% block content %}{% endblock content %}
         </div>
       </div>
     </main>
     <footer class="o-footer">
-      <div class="wrapper wrapper__match-content">
-        <div class="a-tagline a-tagline__large">
+      <div class="wrapper wrapper--match-content">
+        <div class="a-tagline a-tagline--large"
+          aria-label="An official website of the United States government"
+        >
           <span class="u-usa-flag"></span>
           <div class="a-tagline_text">
             An official website of the
