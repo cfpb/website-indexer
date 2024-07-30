@@ -1,128 +1,49 @@
-{% extends './base.html' %} {% block content %}
-<div class="content_wrapper search_results">
-  <div class="block block__flush-top">
-    <div class="content__flush-all-on-small content__flush-bottom">
-      <section class="content_main-inner">
-        <nav class="breadcrumbs" aria-label="Breadcrumbs">
-          {% include 'left.svg' %}
-          <a
-            id="breadcrumb_link"
-            class="breadcrumbs_link"
-            href="{% url 'index' %}">
-            Consumerfinance.gov web page index
-          </a>
-        </nav>
-        <div class="block block__flush-bottom">
-          <h2>Page: {{ title }}</h2>
-        </div>
-        <div class="block block__flush-top">
-          <a href="{{ url }}">{{ url }}</a>
-          (last crawled {{ timestamp }})
-        </div>
-        <div
-          class="o-expandable o-expandable__padded o-expandable__background o-expandable__border u-mb20">
-          <button
-            class="o-expandable_header o-expandable_target"
-            title="Expand content">
-            <h3 class="h4 o-expandable_header-left o-expandable_label">
-              Links
-            </h3>
-            <span class="o-expandable_header-right o-expandable_link">
-              <span class="o-expandable_cue o-expandable_cue-open">
-                <span class="u-visually-hidden-on-mobile">Show</span>
-                {% include 'plus-round.svg' %}
-              </span>
-              <span class="o-expandable_cue o-expandable_cue-close">
-                <span class="u-visually-hidden-on-mobile">Hide</span>
-                {% include 'minus-round.svg' %}
-              </span>
-            </span>
-          </button>
-          <div
-            class="o-expandable_content{% if request.query_params.search_type == 'links' %} o-expandable_content__onload-open{% endif %}">
-            <ul class="m-list">
-              {% for link in links %}
-              <li class="m-list_item u-truncate">{{ link }}</li>
-              {% endfor %}
-            </ul>
-          </div>
-        </div>
-        <div
-          class="o-expandable o-expandable__padded o-expandable__background o-expandable__border u-mb20">
-          <button
-            class="o-expandable_header o-expandable_target"
-            title="Expand content">
-            <h3 class="h4 o-expandable_header-left o-expandable_label">
-              Components
-            </h3>
-            <span class="o-expandable_header-right o-expandable_link">
-              <span class="o-expandable_cue o-expandable_cue-open">
-                <span class="u-visually-hidden-on-mobile">Show</span>
-                {% include 'plus-round.svg' %}
-              </span>
-              <span class="o-expandable_cue o-expandable_cue-close">
-                <span class="u-visually-hidden-on-mobile">Hide</span>
-                {% include 'minus-round.svg' %}
-              </span>
-            </span>
-          </button>
-          <div
-            class="o-expandable_content{% if request.query_params.search_type == 'components' %} o-expandable_content__onload-open{% endif %}">
-            <ul class="m-list">
-              {% for component in components %}
-              <li class="m-list_item">{{ component }}</li>
-              {% endfor %}
-            </ul>
-          </div>
-        </div>
-        <div
-          class="o-expandable o-expandable__padded o-expandable__background o-expandable__border u-mb20">
-          <button
-            class="o-expandable_header o-expandable_target"
-            title="Expand content">
-            <h3 class="h4 o-expandable_header-left o-expandable_label">Text</h3>
-            <span class="o-expandable_header-right o-expandable_link">
-              <span class="o-expandable_cue o-expandable_cue-open">
-                <span class="u-visually-hidden-on-mobile">Show</span>
-                {% include 'plus-round.svg' %}
-              </span>
-              <span class="o-expandable_cue o-expandable_cue-close">
-                <span class="u-visually-hidden-on-mobile">Hide</span>
-                {% include 'minus-round.svg' %}
-              </span>
-            </span>
-          </button>
-          <div
-            class="o-expandable_content{% if request.query_params.search_type == 'text' %} o-expandable_content__onload-open{% endif %}">
-            <pre>{{ text }}</pre>
-          </div>
-        </div>
-        <div
-          class="o-expandable o-expandable__padded o-expandable__background o-expandable__border u-mb20">
-          <button
-            class="o-expandable_header o-expandable_target"
-            title="Expand content">
-            <h3 class="h4 o-expandable_header-left o-expandable_label">
-              Raw HTML
-            </h3>
-            <span class="o-expandable_header-right o-expandable_link">
-              <span class="o-expandable_cue o-expandable_cue-open">
-                <span class="u-visually-hidden-on-mobile">Show</span>
-                {% include 'plus-round.svg' %}
-              </span>
-              <span class="o-expandable_cue o-expandable_cue-close">
-                <span class="u-visually-hidden-on-mobile">Hide</span>
-                {% include 'minus-round.svg' %}
-              </span>
-            </span>
-          </button>
-          <div
-            class="o-expandable_content{% if request.query_params.search_type == 'html' %} o-expandable_content__onload-open{% endif %}">
-            <pre><code class="language-html">{{ html }}</code></pre>
-          </div>
-        </div>
-      </section>
+{% extends './base.html' %}
+
+{% block breadcrumbs %}
+{% include "viewer/breadcrumbs.html" %}
+{% endblock breadcrumbs %}
+
+{% block content %}
+<section class="content_main-inner">
+  <div class="block block--flush-bottom">
+    <h1>{{ title }}</h1>
+  </div>
+  <div class="block block--flush-top">
+    <p class="u-nowrap"><a href="{{ url }}">{{ url }}</a></p>
+    <p>(last crawled {{ timestamp }})</p>
+  </div>
+
+  <div class="block">
+  <div class="o-expandable-group">
+  <div class="o-expandable
+    {% if request.query_params.search_type == 'links' %}o-expandable--onload-open{% endif %}
+  ">
+    <button
+      class="o-expandable__header"
+      title="Expand content"
+    >
+      <h3 class="h4 o-expandable__label">
+        Links
+      </h3>
+      <span class="o-expandable__cues">
+        <span class="o-expandable__cue-open" role="img" aria-label="Show">
+          {% include "plus-round.svg" %}
+        </span>
+        <span class="o-expandable__cue-close" role="img" aria-label="Hide">
+          {% include "minus-round.svg" %}
+        </span>
+      </span>
+    </button>
+    <div class="o-expandable__content">
+      <ul class="m-list">
+        {% for link in links %}
+        <li class="m-list__item u-truncate">{{ link }}</li>
+        {% endfor %}
+      </ul>
     </div>
   </div>
 </div>
+</div>
+</section>
 {% endblock content %}

@@ -1,46 +1,63 @@
-<form action="{% url 'index' %}" id="search_form">
+<form action="{% url 'index' %}">
   <div class="o-well">
-    <p class="h4">Search the index</p>
-    <div class="o-form__input-w-btn_input-container o-form__input-w-btn-alt">
-      <div class="m-btn-inside-input input-contains-label">
+    <h2 class="h3">Search the index</h2>
+    <div class="o-search-input">
+      <div class="o-search-input__input">
         <label
           for="query"
-          class="input-contains-label_before input-contains-label_before__search">
+          class="o-search-input__input-label"
+          aria-label="Search"
+        >
           {% include "search.svg" %}
-          <span class="u-visually-hidden">Search</span>
         </label>
         <input
+          type="search"
           id="query"
           name="q"
-          type="text"
-          title="Search"
-          class="a-text-input"
           value="{{ request.query_params.q }}"
-          placeholder="Search" />
+          class="a-text-input a-text-input__full"
+          placeholder="Search"
+          title="Search"
+          autocomplete="off"
+          maxlength="75"
+        />
+        <button
+          type="reset"
+          onclick="document.getElementById('query').setAttribute('value', '')"
+          aria-label="Clear search"
+          title="Clear search"
+        >
+          {% include "error.svg" %}
+        </button>
       </div>
-      <p class="u-help_text"
-        >Check out the <a href="{% url 'help' %}">Common searches</a> page for
-        examples
-      </p>
+      <button class="a-btn" type="submit" aria-label="Search">Search</button>
     </div>
+
+    <p class="u-help_text">
+      Check out the <a href="{% url 'help' %}">Common searches</a> page for
+      examples
+    </p>
+
     <div class="o-radio_buttons">
-      <div class="m-form-field m-form-field__radio reg-radio">
-        <!-- prettier-ignore -->
-        <input class="a-radio" type="radio" value="title" id="search_type_title" name="search_type"{% if request.query_params.search_type is None or request.query_params.search_type == 'title' %} checked{% endif %}>
+      <div class="m-form-field m-form-field--radio">
+        <input class="a-radio" type="radio" value="title" id="search_type_title"
+        name="search_type"{% if request.query_params.search_type is None or
+        request.query_params.search_type == 'title' %} checked{% endif %}>
         <label class="a-label" for="search_type_title">
           Title
           <span>Search page titles</span>
         </label>
       </div>
-      <div class="m-form-field m-form-field__radio reg-radio">
-        <!-- prettier-ignore -->
-        <input class="a-radio" type="radio" value="url" id="search_type_url" name="search_type"{% if request.query_params.search_type == 'url' %} checked{% endif %}>
+      <div class="m-form-field m-form-field--radio">
+        <input class="a-radio" type="radio" value="url" id="search_type_url"
+        name="search_type"{% if request.query_params.search_type == 'url' %}
+        checked{% endif %}>
         <label class="a-label" for="search_type_url">
           URL
           <span>Search page URLs</span>
         </label>
       </div>
-      <div class="m-form-field m-form-field__radio reg-radio">
+      <div class="m-form-field m-form-field--radio">
         <!-- prettier-ignore -->
         <input class="a-radio" type="radio" value="text" id="search_type_text" name="search_type"{% if request.query_params.search_type == 'text' %} checked{% endif %}>
         <label class="a-label" for="search_type_text">
@@ -48,40 +65,39 @@
           <span>Search page text</span>
         </label>
       </div>
-      <div class="m-form-field m-form-field__radio reg-radio">
-        <!-- prettier-ignore -->
-        <input class="a-radio" type="radio" value="links" id="search_type_links" name="search_type"{% if request.query_params.search_type == 'links' %} checked{% endif %}>
+      <div class="m-form-field m-form-field--radio">
+        <input class="a-radio" type="radio" value="links" id="search_type_links"
+        name="search_type"{% if request.query_params.search_type == 'links' %}
+        checked{% endif %}>
         <label class="a-label" for="search_type_links">
           Links
           <span>Search link URLs contained on CF.gov pages</span>
         </label>
       </div>
-      <div class="m-form-field m-form-field__radio reg-radio">
-        <!-- prettier-ignore -->
-        <input class="a-radio" type="radio" value="components" id="search_type_components" name="search_type"{% if request.query_params.search_type == 'components' %} checked{% endif %}>
+      <div class="m-form-field m-form-field--radio">
+        <input class="a-radio" type="radio" value="components"
+        id="search_type_components" name="search_type"{% if
+        request.query_params.search_type == 'components' %} checked{% endif %}>
         <label class="a-label" for="search_type_components">
           Components
           <span>
-            <!-- prettier-ignore -->
             <p>
               Search by
               <a href="{% url 'components' %}">class names</a>
               of our
-              <a class="a-link a-link__icon" href="https://cfpb.github.io/design-system/">
-              <span class="a-link_text">Design System</span>
-              <svg
-                  class="cf-icon-svg"
-                  viewBox="0 0 14 19"
-                  xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M13.017 3.622v4.6a.554.554 0 0 1-1.108 0V4.96L9.747 7.122a1.65 1.65 0 0 1 .13.646v5.57A1.664 1.664 0 0 1 8.215 15h-5.57a1.664 1.664 0 0 1-1.662-1.663v-5.57a1.664 1.664 0 0 1 1.662-1.662h5.57A1.654 1.654 0 0 1 9 6.302l2.126-2.126H7.863a.554.554 0 1 1 0-1.108h4.6a.554.554 0 0 1 .554.554zM8.77 8.1l-2.844 2.844a.554.554 0 0 1-.784-.783l2.947-2.948H2.645a.555.555 0 0 0-.554.555v5.57a.555.555 0 0 0 .554.553h5.57a.555.555 0 0 0 .554-.554z"></path>
-                </svg></a>
-                components and patterns
+              <a
+                class="a-link a-link--icon"
+                href="https://cfpb.github.io/design-system/"
+              >
+                <span class="a-link__text">Design System</span>
+                {% include "external-link.svg" %}</a
+              >
+              components and patterns
             </p>
           </span>
         </label>
       </div>
-      <div class="m-form-field m-form-field__radio reg-radio">
+      <div class="m-form-field m-form-field--radio">
         <!-- prettier-ignore -->
         <input class="a-radio" type="radio" value="html" id="search_type_html" name="search_type"{% if request.query_params.search_type == 'html' %} checked{% endif %}>
         <label class="a-label" for="search_type_html">
@@ -92,7 +108,8 @@
     </div>
     <button
       class="a-btn a-btn-alt"
-      aria-label="Search consumerfinance.gov content and source code">
+      aria-label="Search consumerfinance.gov content and source code"
+    >
       Search
     </button>
   </div>

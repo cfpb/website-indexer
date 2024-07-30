@@ -1,4 +1,4 @@
-{% load static %} {% get_static_prefix as STATIC_PREFIX %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en" class="no-js">
@@ -7,7 +7,8 @@
     <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, minimum-scale=1" />
+      content="width=device-width, initial-scale=1, minimum-scale=1"
+    />
     <!-- prettier-ignore -->
     <title>{% block title %}Consumerfinance.gov web page index{% endblock %}</title>
     <!-- prettier-ignore -->
@@ -20,6 +21,7 @@
     </div>
     <main class="u-layout-grid" id="main">
       <div class="u-layout-grid__wrapper">
+        {% block breadcrumbs %}{% endblock breadcrumbs %}
         <div class="u-layout-grid__main">
           {% block content %}{% endblock content %}
         </div>
@@ -27,7 +29,8 @@
     </main>
     <footer class="o-footer">
       <div class="wrapper wrapper--match-content">
-        <div class="a-tagline a-tagline--large"
+        <div
+          class="a-tagline a-tagline--large"
           aria-label="An official website of the United States government"
         >
           <span class="u-usa-flag"></span>
@@ -38,6 +41,6 @@
         </div>
       </div>
     </footer>
-    <script src="{% static 'js/main.js' %}" type="module"></script>
+    <script src="{% static 'js/main.js' %}"></script>
   </body>
 </html>

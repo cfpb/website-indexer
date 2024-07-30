@@ -1,200 +1,180 @@
-{% extends './base_search.html' %} {% load humanize %} {% load viewer %}
-<!-- prettier-ignore -->
-{% block content_main %}
-<div class="results_count">
-  <h2 class="h3">{% results_summary %}</h2>
-  {% if count %}
-  <div class="results_csv">
-    <a
-      class="a-link a-link__icon a-link__no-wrap"
-      href="{% url 'index' %}?format=csv{% if request.query_params.search_type %}&search_type={{ request.query_params.search_type | urlencode }}{% endif %}{% if request.query_params.q %}&q={{ request.query_params.q | urlencode }}{% endif %}">
-      <span class="a-link_text">Download search results</span>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 12 19"
-        class="cf-icon-svg">
-        <path
-          d="M11.16 16.153a.477.477 0 0 1-.476.475H1.316a.476.476 0 0 1-.475-.475V3.046a.476.476 0 0 1 .475-.475h6.95l2.893 2.893zm-1.11-9.925H8.059a.575.575 0 0 1-.574-.573V3.679H1.95v11.84h8.102zm-1.234 5.604L6.388 14.26a.554.554 0 0 1-.784 0l-2.428-2.428a.554.554 0 1 1 .783-.784l1.483 1.482V7.41a.554.554 0 1 1 1.108 0v5.12l1.482-1.482a.554.554 0 0 1 .784.783z"></path>
-      </svg>
-    </a>
-    <!-- prettier-ignore -->
-    <span>
-      {# Use an arbitrary estimate of how big the CSV is likely to be. #}
-      {# Use Django's built-in width ratio tag as a way to multiply. #}
-      {% widthratio count 1 256 as csv_file_size %}
-      (CSV, ~{{ csv_file_size | filesizeformat }})
-    </span>
+{% load humanize %}
+
+{% load viewer %}
+
+<div class="block block--sub block--flush-bottom">
+  <div
+    class="m-notification m-notification--{% if count %}success{% else %}warning{% endif %} m-notification--visible"
+  >
+    {% if count %} {% include "approved-round.svg" %} {% else %} {% include
+    "warning-round.svg" %} {% endif %}
+    <div class="m-notification__content">
+      <div class="m-notification__message">{% results_summary %}</div>
+      {% if count %}
+      <ul class="m-list m-list--links">
+        <li class="m-list__item">
+          <a
+            class="a-link a-link--jump"
+            href="{% url 'index' %}?format=csv{% if request.query_params.search_type %}&search_type={{ request.query_params.search_type | urlencode }}{% endif %}{% if request.query_params.q %}&q={{ request.query_params.q | urlencode }}{% endif %}"
+          >
+            <span class="a-link__text">Download search results</span>
+            {% include "download.svg" %}</a
+          >
+          <span>
+            {# Use an arbitrary estimate of how big the CSV is likely to be. #}
+            {# Use Django's built-in width ratio tag as a way to multiply. #} {%
+            widthratio count 1 256 as csv_file_size %} (CSV, ~{{ csv_file_size |
+            filesizeformat }})
+          </span>
+        </li>
+      </ul>
+      {% endif %}
+    </div>
   </div>
-  {% endif %}
 </div>
 
-<div class="results_list">
-  <ul class="m-list">
-    {% for page in results %}
-    <!-- prettier-ignore -->
-    <li class="results_item">
-      <h4>
-        <a class="a-link a-link__icon a-link__no-wrap" href="{{ page.url }}">
-          <span class="a-link_text u-truncate">{{ page.title }}</span>
-          <svg
-            class="cf-icon-svg"
-            viewBox="0 0 14 19"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M13.017 3.622v4.6a.554.554 0 0 1-1.108 0V4.96L9.747 7.122a1.65 1.65 0 0 1 .13.646v5.57A1.664 1.664 0 0 1 8.215 15h-5.57a1.664 1.664 0 0 1-1.662-1.663v-5.57a1.664 1.664 0 0 1 1.662-1.662h5.57A1.654 1.654 0 0 1 9 6.302l2.126-2.126H7.863a.554.554 0 1 1 0-1.108h4.6a.554.554 0 0 1 .554.554zM8.77 8.1l-2.844 2.844a.554.554 0 0 1-.784-.783l2.947-2.948H2.645a.555.555 0 0 0-.554.555v5.57a.555.555 0 0 0 .554.553h5.57a.555.555 0 0 0 .554-.554z"></path>
-          </svg></a>
-      </h4>
-      <div class="u-truncate">{{ page.url }}</div>
-      <a
-        href="{% url 'page' %}?url={{ page.url | urlencode }}{% if request.query_params.search_type %}&search_type={{ request.query_params.search_type | urlencode }}{% endif %}{% if request.query_params.q %}&q={{ request.query_params.q | urlencode }}{% endif %}">
-        Details
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
+<div class="block block--sub block--flush-top">
+  <div class="results_list">
+    <ul class="m-list">
+      {% for page in results %}
+      <li class="results_item">
+        <h4>
+          <a class="a-link a-link--icon u-nowrap" href="{{ page.url }}">
+            <span class="a-link__text u-truncate">{{ page.title }}</span>
+            {% include "external-link.svg" %}</a
+          >
+        </h4>
+        <div class="u-truncate">{{ page.url }}</div>
+        <a
+          href="{% url 'page' %}?url={{ page.url | urlencode }}{% if request.query_params.search_type %}&search_type={{ request.query_params.search_type | urlencode }}{% endif %}{% if request.query_params.q %}&q={{ request.query_params.q | urlencode }}{% endif %}"
+        >
+          Details
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
 </div>
 
 {% if previous or next %}
-<div class="results_paginator">
-  <!-- prettier-ignore -->
+<div class="block block--sub">
   <nav class="m-pagination" role="navigation" aria-label="Pagination">
     <a
-      {% if previous %}
-      class="a-btn m-pagination_btn-prev"
+      {%
+      if
+      previous
+      %}
+      class="a-btn m-pagination__btn-prev"
       href="{{ previous }}"
-      {% else %}
-      class="a-btn a-btn__disabled m-pagination_btn-prev"
-      {% endif %}
+      {%
+      else
+      %}
+      class="a-btn a-btn--disabled m-pagination__btn-prev"
+      {%
+      endif
+      %}
     >
-      <span class="a-btn_icon a-btn_icon__on-left">
+      <span class="a-btn__icon a-btn__icon--on-left">
         {% include 'left.svg' %}
       </span>
       Previous
     </a>
     <a
-      {% if next %}
-      class="a-btn m-pagination_btn-next"
+      {%
+      if
+      next
+      %}
+      class="a-btn m-pagination__btn-next"
       href="{{ next }}"
-      {% else %}
-      class="a-btn a-btn__disabled m-pagination_btn-next"
-      {% endif %}
+      {%
+      else
+      %}
+      class="a-btn a-btn--disabled m-pagination__btn-next"
+      {%
+      endif
+      %}
     >
       Next
-      <span class="a-btn_icon a-btn_icon__on-right">
+      <span class="a-btn__icon a-btn__icon--on-right">
         {% include 'right.svg' %}
       </span>
     </a>
-    <form class="m-pagination_form" action="{% url 'index' %}">
-      <label for="m-pagination_current-page">
-        <span class="m-pagination_label">Page</span>
-        <span class="u-visually-hidden">
-          {{ page_obj.number }} out of {{ num_pages }} total pages
-        </span>
+    <form class="m-pagination__form" action="{% url 'index' %}">
+      <label class="m-pagination__label" for="m-pagination__current-page">
+        Page
+        <span class="u-visually-hidden"> {{ page_obj.number }} out </span>
+        <input
+          class="m-pagination__current-page"
+          id="m-pagination__current-page-default"
+          name="page"
+          type="number"
+          min="1"
+          max="{{ num_pages }}"
+          pattern="[0-9]*"
+          inputmode="numeric"
+          value="{{ page_number }}"
+        />
+        of {{ num_pages }}
       </label>
-      <input
-        id="m-pagination_current-page"
-        class="m-pagination_current-page"
-        name="page"
-        type="number"
-        min="1"
-        max="{{ num_pages }}"
-        pattern="[0-9]*"
-        inputmode="numeric"
-        value="{{ page_number }}" />
-      <span class="m-pagination_label">of {{ num_pages }}</span>
-      <button class="a-btn a-btn__link m-pagination_btn-submit" type="submit">
+      <button class="a-btn a-btn--link m-pagination__btn-submit" type="submit">
         Go
       </button>
       <input
         type="hidden"
         name="search_type"
-        value="{{ request.query_params.search_type }}" />
+        value="{{ request.query_params.search_type }}"
+      />
       <input type="hidden" name="q" value="{{ request.query_params.q }}" />
     </form>
   </nav>
 </div>
 {% endif %}
 
-<div class="o-well o-well_alt">
-  <div class="lead-paragraph">Discover more</div>
-  <div class="u-crawl_date">
+<div class="block block--sub">
+  <div class="o-well">
+    <div class="h3">Discover more</div>
     {% if crawl_stats.start %}
-    <span id="last-crawl" class="u-crawl_text u-bold_text"
-      >Data last updated:
-    </span>
-    <p>{{ crawl_stats.start | format_datetime }}</p>
+    <div class="u-crawl_date">
+      <span id="last-crawl" class="u-crawl_text">Data last updated:</span>
+      <p>{{ crawl_stats.start | format_datetime }}</p>
+    </div>
     {% endif %}
+    <ul class="m-list">
+      <li>
+        Download
+        <a class="a-link a-link__icon" href="{% url 'errors' %}?format=csv">
+          <span class="a-link__text">website errors (including 404s)</span>
+          {% include "download.svg" %}</a
+        >
+        and
+        <a class="a-link a-link__icon" href="{% url 'redirects' %}?format=csv">
+          <span class="a-link__text">website redirects</span>
+          {% include "download.svg" %}</a
+        >
+        (CSV files)
+      </li>
+      <li>
+        Explore the data via API:
+        <a class="a-link" href="{% url 'index' %}?format=api">pages</a>,
+        <a class="a-link" href="{% url 'components' %}?format=api">components</a
+        >, <a class="a-link" href="{% url 'errors' %}?format=api">errors</a>,
+        and
+        <a class="a-link" href="{% url 'redirects' %}?format=api">redirects</a>
+      </li>
+      <li class="m-list__item">
+        <a class="a-link a-link__icon" href="{% url 'download-database' %}">
+          <span class="a-link__text">Download the raw SQLite database</span>
+          {% include "download.svg" %}</a
+        >
+        ({{ crawl_stats.database_size | filesizeformat }}) to
+        <a
+          class="a-link a-link__icon"
+          href="https://github.com/cfpb/website-indexer#searching-the-crawl-database"
+        >
+          <span class="a-link__text">query the data locally</span>
+          {% include "external-link.svg" %}</a
+        >
+      </li>
+    </ul>
   </div>
-  <ul class="m-list">
-    <!-- prettier-ignore -->
-    <li>
-      Download
-      <a
-        class="m-list_link a-link a-link__icon"
-        href="{% url 'errors' %}?format=csv">
-        <span class="a-link_text">website errors (including 404s)</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 12 19"
-          class="cf-icon-svg">
-          <path
-            d="M11.16 16.153a.477.477 0 0 1-.476.475H1.316a.476.476 0 0 1-.475-.475V3.046a.476.476 0 0 1 .475-.475h6.95l2.893 2.893zm-1.11-9.925H8.059a.575.575 0 0 1-.574-.573V3.679H1.95v11.84h8.102zm-1.234 5.604L6.388 14.26a.554.554 0 0 1-.784 0l-2.428-2.428a.554.554 0 1 1 .783-.784l1.483 1.482V7.41a.554.554 0 1 1 1.108 0v5.12l1.482-1.482a.554.554 0 0 1 .784.783z"></path>
-        </svg>
-      </a>
-      and
-      <a
-        class="m-list_link a-link a-link__icon"
-        href="{% url 'redirects' %}?format=csv">
-        <span class="a-link_text">website redirects</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 12 19"
-          class="cf-icon-svg">
-          <path
-            d="M11.16 16.153a.477.477 0 0 1-.476.475H1.316a.476.476 0 0 1-.475-.475V3.046a.476.476 0 0 1 .475-.475h6.95l2.893 2.893zm-1.11-9.925H8.059a.575.575 0 0 1-.574-.573V3.679H1.95v11.84h8.102zm-1.234 5.604L6.388 14.26a.554.554 0 0 1-.784 0l-2.428-2.428a.554.554 0 1 1 .783-.784l1.483 1.482V7.41a.554.554 0 1 1 1.108 0v5.12l1.482-1.482a.554.554 0 0 1 .784.783z"></path></svg></a
-      > (CSV files)
-    </li>
-    <li>
-      Explore the data via API:
-      <a class="m-list_link a-link" href="{% url 'index' %}?format=api">pages</a
-      >,
-      <a class="m-list_link a-link" href="{% url 'components' %}?format=api"
-        >components</a
-      >,
-      <a class="m-list_link a-link" href="{% url 'errors' %}?format=api"
-        >errors</a
-      >, and
-      <a class="m-list_link a-link" href="{% url 'redirects' %}?format=api"
-        >redirects</a
-      >
-    </li>
-    <li class="m-list_item">
-      <a
-        class="m-list_link a-link a-link__icon"
-        href="{% url 'download-database' %}">
-        <span class="a-link_text">Download the raw SQLite database</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 12 19"
-          class="cf-icon-svg">
-          <path
-            d="M11.16 16.153a.477.477 0 0 1-.476.475H1.316a.476.476 0 0 1-.475-.475V3.046a.476.476 0 0 1 .475-.475h6.95l2.893 2.893zm-1.11-9.925H8.059a.575.575 0 0 1-.574-.573V3.679H1.95v11.84h8.102zm-1.234 5.604L6.388 14.26a.554.554 0 0 1-.784 0l-2.428-2.428a.554.554 0 1 1 .783-.784l1.483 1.482V7.41a.554.554 0 1 1 1.108 0v5.12l1.482-1.482a.554.554 0 0 1 .784.783z"></path>
-        </svg>
-      </a>
-      ({{ crawl_stats.database_size | filesizeformat }}) to
-      <a
-        class="m-list_link a-link a-link__icon"
-        href="https://github.com/cfpb/website-indexer#searching-the-crawl-database">
-        <span class="a-link_text">query the data locally</span>
-        <svg
-          class="cf-icon-svg"
-          viewBox="0 0 14 19"
-          xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M13.017 3.622v4.6a.554.554 0 0 1-1.108 0V4.96L9.747 7.122a1.65 1.65 0 0 1 .13.646v5.57A1.664 1.664 0 0 1 8.215 15h-5.57a1.664 1.664 0 0 1-1.662-1.663v-5.57a1.664 1.664 0 0 1 1.662-1.662h5.57A1.654 1.654 0 0 1 9 6.302l2.126-2.126H7.863a.554.554 0 1 1 0-1.108h4.6a.554.554 0 0 1 .554.554zM8.77 8.1l-2.844 2.844a.554.554 0 0 1-.784-.783l2.947-2.948H2.645a.555.555 0 0 0-.554.555v5.57a.555.555 0 0 0 .554.553h5.57a.555.555 0 0 0 .554-.554z"></path>
-        </svg>
-      </a>
-    </li>
-  </ul>
 </div>
-{% endblock content_main %}

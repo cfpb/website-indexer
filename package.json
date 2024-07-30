@@ -9,7 +9,7 @@
     "build": "node ./esbuild.mjs",
     "clean": "rm -rf ./viewer/static/",
     "prettier": "yarn prettier:cmd --check",
-    "prettier:cmd": "prettier 'viewer/static_src/**/*.{css,js}' 'viewer/**/*.html'",
+    "prettier:cmd": "prettier 'viewer/static_src/**/*.{js,less}' 'viewer/**/*.html'",
     "prettier:fix": "yarn prettier:cmd --write",
     "watch": "yarn build --watch"
   },
@@ -31,18 +31,5 @@
     "postcss": "^8.4.39",
     "postcss-less": "^6.0.0",
     "prettier": "^2.7.1"
-  },
-  "prettier": {
-    "bracketSameLine": true,
-    "htmlWhitespaceSensitivity": "strict",
-    "tabWidth": 2,
-    "overrides": [
-      {
-        "files": "*.css",
-        "options": {
-          "tabWidth": 4
-        }
-      }
-    ]
   }
 }
