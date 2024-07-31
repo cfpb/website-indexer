@@ -12,7 +12,7 @@
     "prettier:fix": "prettier . --write",
     "watch": "yarn build --watch"
   },
-  "devDependencies": {
+  "dependencies": {
     "@cfpb/cfpb-atomic-component": "^2.0.1",
     "@cfpb/cfpb-buttons": "^2.0.0",
     "@cfpb/cfpb-core": "^2.0.0",
@@ -29,7 +29,9 @@
     "esbuild-plugin-copy": "^2.1.1",
     "less": "^4.2.0",
     "postcss": "^8.4.39",
-    "postcss-less": "^6.0.0",
+    "postcss-less": "^6.0.0"
+  },
+  "devDependencies": {
     "prettier": "^2.7.1"
   }
 }
