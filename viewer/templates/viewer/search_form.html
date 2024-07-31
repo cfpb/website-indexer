@@ -40,9 +40,15 @@
 
     <div class="o-radio_buttons">
       <div class="m-form-field m-form-field--radio">
-        <input class="a-radio" type="radio" value="title" id="search_type_title"
-        name="search_type"{% if request.query_params.search_type is None or
-        request.query_params.search_type == 'title' %} checked{% endif %}>
+        <!-- prettier-ignore -->
+        <input
+          class="a-radio"
+          type="radio"
+          value="title"
+          id="search_type_title"
+          name="search_type"
+          {% if request.query_params.search_type is None or request.query_params.search_type == 'title' %} checked{% endif %}
+        >
         <label class="a-label" for="search_type_title">
           Title
           <span>Search page titles</span>
@@ -59,7 +65,14 @@
       </div>
       <div class="m-form-field m-form-field--radio">
         <!-- prettier-ignore -->
-        <input class="a-radio" type="radio" value="text" id="search_type_text" name="search_type"{% if request.query_params.search_type == 'text' %} checked{% endif %}>
+        <input
+          class="a-radio"
+          type="radio"
+          value="text"
+          id="search_type_text"
+          name="search_type"
+          {% if request.query_params.search_type == 'text' %} checked{% endif %}
+        >
         <label class="a-label" for="search_type_text">
           Full text
           <span>Search page text</span>
@@ -75,9 +88,15 @@
         </label>
       </div>
       <div class="m-form-field m-form-field--radio">
-        <input class="a-radio" type="radio" value="components"
-        id="search_type_components" name="search_type"{% if
-        request.query_params.search_type == 'components' %} checked{% endif %}>
+        <!-- prettier-ignore -->
+        <input
+          class="a-radio"
+          type="radio"
+          value="components"
+          id="search_type_components"
+          name="search_type"
+          {% if request.query_params.search_type == 'components' %} checked{% endif %}
+        >
         <label class="a-label" for="search_type_components">
           Components
           <span>
@@ -99,7 +118,14 @@
       </div>
       <div class="m-form-field m-form-field--radio">
         <!-- prettier-ignore -->
-        <input class="a-radio" type="radio" value="html" id="search_type_html" name="search_type"{% if request.query_params.search_type == 'html' %} checked{% endif %}>
+        <input
+          class="a-radio"
+          type="radio"
+          value="html"
+          id="search_type_html"
+          name="search_type"
+          {% if request.query_params.search_type == 'html' %} checked{% endif %}
+        >
         <label class="a-label" for="search_type_html">
           HTML
           <span>Search page HTML</span>

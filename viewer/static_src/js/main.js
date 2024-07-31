@@ -1,4 +1,4 @@
-import { ExpandableGroup } from "@cfpb/cfpb-expandables";
+import { Expandable } from "@cfpb/cfpb-expandables";
 
 const docElement = document.documentElement;
 docElement.className = docElement.className.replace(
@@ -6,4 +6,4 @@ docElement.className = docElement.className.replace(
   "$1$2"
 );
 
-ExpandableGroup.init();
+Expandable.init();

@@ -1,13 +1,15 @@
-{% load humanize %}
-
-{% load viewer %}
+{% load humanize %} {% load viewer %}
 
 <div class="block block--sub block--flush-bottom">
   <div
     class="m-notification m-notification--{% if count %}success{% else %}warning{% endif %} m-notification--visible"
   >
-    {% if count %} {% include "approved-round.svg" %} {% else %} {% include
-    "warning-round.svg" %} {% endif %}
+    <!-- prettier-ignore -->
+    {% if count %}
+      {% include "approved-round.svg" %}
+    {% else %}
+      {% include "warning-round.svg" %}
+    {% endif %}
     <div class="m-notification__content">
       <div class="m-notification__message">{% results_summary %}</div>
       {% if count %}
@@ -21,10 +23,11 @@
             {% include "download.svg" %}</a
           >
           <span>
+            <!-- prettier-ignore -->
             {# Use an arbitrary estimate of how big the CSV is likely to be. #}
-            {# Use Django's built-in width ratio tag as a way to multiply. #} {%
-            widthratio count 1 256 as csv_file_size %} (CSV, ~{{ csv_file_size |
-            filesizeformat }})
+            {# Use Django's built-in width ratio tag as a way to multiply. #}
+            {% widthratio count 1 256 as csv_file_size %}
+            (CSV, ~{{ csv_file_size | filesizeformat }})
           </span>
         </li>
       </ul>

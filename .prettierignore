@@ -1,0 +1,7 @@
+.github
+.tox
+
+htmlcov
+sample
+venv
+viewer/static

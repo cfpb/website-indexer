@@ -8,10 +8,7 @@
       "args": ["runserver"],
       "django": true,
       "autoStartBrowser": false,
-      "program": "${workspaceFolder}/manage.py",
-      "env": {
-        "CRAWL_DATABASE": "${workspaceFolder}/crawl.sqlite3"
-      }
+      "program": "${workspaceFolder}/manage.py"
     }
   ]
 }

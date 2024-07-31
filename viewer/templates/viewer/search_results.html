@@ -1,12 +1,7 @@
-{% extends 'viewer/base.html' %}
-
-{% load viewer %}
-
-{% block content %}
+{% extends 'viewer/base.html' %} {% load viewer %} {% block content %}
 <div class="block block--sub">
   <div class="wrapper">
     <h1>Consumerfinance.gov web page index</h1>
-    {% block intro %}
     <div class="lead-paragraph">
       This tool generates and stores a nightly snapshot of CF.gov web page
       <p>
@@ -14,7 +9,7 @@
         <a href="{% url 'help' %}">search for all sorts of useful things</a>.
       </p>
     </div>
-    {% endblock intro %} {% if crawl_stats.start %}
+    {% if crawl_stats.start %}
     <div class="u-crawl_date">
       <span class="u-crawl_text">Data last updated: </span>
       <p><a href="#last-crawl">{{ crawl_stats.start | format_datetime }}</a></p>
@@ -26,4 +21,9 @@
 <div class="block block--sub">{% include 'viewer/search_form.html' %}</div>
 
 <div class="block block--sub">{% include 'viewer/page_list.html' %}</div>
-{% block content_main %}{% endblock content_main %} {% endblock content %}
+
+<!-- prettier-ignore -->
+{% block content_main %}
+{% endblock content_main %}
+
+{% endblock content %}

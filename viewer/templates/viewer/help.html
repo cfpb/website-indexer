@@ -1,12 +1,12 @@
-{% extends './base.html' %}
-{% load static %}
+{% extends './base.html' %} {% load static %}
 
+<!-- prettier-ignore -->
 {% block breadcrumbs %}
 {% include "viewer/breadcrumbs.html" %}
 {% endblock breadcrumbs %}
 
 {% block content %}
-<div class="block">
+<div class="block block--flush-top">
   <h1>Common searches</h1>
 
   <p>
@@ -172,8 +172,8 @@
         <span class="a-link__text">named icons</span>
         {% include "external-link.svg" %}</a
       >.
-      <a href="{% url 'index' %}?search_type=html&q=cf-icon-svg__college">
-        Search "cf-icon-svg__college"
+      <a href="{% url 'index' %}?search_type=html&q=cf-icon-svg--college">
+        Search "cf-icon-svg--college"
       </a>
     </li>
   </ul>
@@ -196,11 +196,11 @@
     </p>
     <p>The data <strong>excludes</strong>:</p>
     <ul class="m-list">
-      <li>
+      <li class="m-list__item">
         Pages on other subdomains, like files.consumerfinance.gov, although it
         does track links to those pages.
       </li>
-      <li>
+      <li class="m-list__item">
         Pages with query parameters, with the exception of the ?page= query
         parameter. So, "/about-us/blog/?page=1" is included, but
         "/about-us/blog/?title=&topics=financial-education" is not.
