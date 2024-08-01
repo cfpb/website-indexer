@@ -137,8 +137,8 @@
   <div class="o-well">
     <div class="h3">Discover more</div>
     {% if crawl_stats.start %}
-    <div class="u-crawl_date">
-      <span id="last-crawl" class="u-crawl_text">Data last updated:</span>
+    <div class="crawl-date">
+      <span id="last-crawl" class="crawl-date__text">Data last updated:</span>
       <p>{{ crawl_stats.start | format_datetime }}</p>
     </div>
     {% endif %}
