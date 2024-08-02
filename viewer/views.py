@@ -133,7 +133,7 @@ class PageMixin(AlsoRenderHTMLMixin, BetterCSVsMixin):
 
 class PageListView(PageMixin, ListAPIView):
     def get_template_names(self):
-        return ["viewer/page_list.html"]
+        return ["viewer/search_results.html"]
 
     def get_serializer_class(self):
         if self.is_rendering_csv:

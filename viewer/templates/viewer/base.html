@@ -7,30 +7,35 @@
     <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, minimum-scale=1" />
-    <!-- prettier-ignore -->
-    <title>{% block title %}Consumerfinance.gov web page index{% endblock %}</title>
-    <!-- prettier-ignore -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪱</text></svg>" />
-    <link rel="stylesheet" href="{% static 'cfgov.css' %}" />
-    <link rel="stylesheet" href="{% static 'main.css' %}" />
+      content="width=device-width, initial-scale=1, minimum-scale=1"
+    />
+    <title>
+      {% block title %}Consumerfinance.gov web page index{% endblock %}
+    </title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪱</text></svg>"
+    />
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
   </head>
   <body>
     <div class="skip-nav">
-      <a class="skip-nav_link" href="#main">Skip to main content</a>
+      <a class="skip-nav__link" href="#main">Skip to main content</a>
     </div>
-    <main class="content" id="main">
-      <div class="wrapper content_wrapper">
-        <div class="content_main content__1-3">
-          <div class="content_main-inner">
-            {% block content %}{% endblock content %}
-          </div>
+    <main class="u-layout-grid" id="main">
+      <div class="u-layout-grid__wrapper">
+        {% block breadcrumbs %}{% endblock breadcrumbs %}
+        <div class="u-layout-grid__main">
+          {% block content %}{% endblock content %}
         </div>
       </div>
     </main>
     <footer class="o-footer">
-      <div class="wrapper wrapper__match-content">
-        <div class="a-tagline a-tagline__large">
+      <div class="wrapper wrapper--match-content">
+        <div
+          class="a-tagline a-tagline--large"
+          aria-label="An official website of the United States government"
+        >
           <span class="u-usa-flag"></span>
           <div class="a-tagline_text">
             An official website of the
@@ -39,6 +44,6 @@
         </div>
       </div>
     </footer>
-    <script src="{% static 'main.js' %}" type="module"></script>
+    <script src="{% static 'js/main.js' %}"></script>
   </body>
 </html>

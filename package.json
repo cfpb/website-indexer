@@ -2,36 +2,36 @@
   "name": "website-indexer",
   "version": "1.1.0",
   "license": "CC0-1.0",
-  "type": "module",
   "engines": {
     "node": ">=16.x"
   },
   "scripts": {
-    "prettier": "prettier --check 'viewer/static_src/*.{css,js}' 'viewer/**/*.html'",
-    "fix": "npm run prettier -- --write",
-    "fonts": "cp -r viewer/static_src/fonts viewer/static/fonts",
-    "styles": "curl -o viewer/static/cfgov.css https://www.consumerfinance.gov/static/css/main.css && curl https://www.consumerfinance.gov/static/apps/regulations3k/css/main.css >> viewer/static/cfgov.css && cp viewer/static_src/main.css viewer/static/main.css",
-    "scripts": "esbuild viewer/static_src/main.js --bundle --outfile=viewer/static/main.js",
-    "build": "yarn fonts && yarn styles && yarn scripts"
+    "build": "node ./esbuild.mjs",
+    "clean": "rm -rf ./viewer/static/",
+    "prettier": "prettier . --check",
+    "prettier:fix": "prettier . --write",
+    "watch": "yarn build --watch"
   },
   "dependencies": {
-    "@cfpb/cfpb-expandables": "0.32.0",
-    "esbuild": "^0.14.38"
+    "@cfpb/cfpb-atomic-component": "^2.0.1",
+    "@cfpb/cfpb-buttons": "^2.0.0",
+    "@cfpb/cfpb-core": "^2.0.0",
+    "@cfpb/cfpb-expandables": "^2.0.1",
+    "@cfpb/cfpb-forms": "^2.0.0",
+    "@cfpb/cfpb-grid": "^2.0.0",
+    "@cfpb/cfpb-icons": "^2.0.0",
+    "@cfpb/cfpb-layout": "^2.0.0",
+    "@cfpb/cfpb-notifications": "^2.0.1",
+    "@cfpb/cfpb-pagination": "^2.0.0",
+    "@cfpb/cfpb-typography": "^2.0.1",
+    "autoprefixer": "^10.4.19",
+    "esbuild": "^0.23.0",
+    "esbuild-plugin-copy": "^2.1.1",
+    "less": "^4.2.0",
+    "postcss": "^8.4.39",
+    "postcss-less": "^6.0.0"
   },
   "devDependencies": {
     "prettier": "^2.7.1"
-  },
-  "prettier": {
-    "bracketSameLine": true,
-    "htmlWhitespaceSensitivity": "strict",
-    "tabWidth": 2,
-    "overrides": [
-      {
-        "files": "*.css",
-        "options": {
-          "tabWidth": 4
-        }
-      }
-    ]
   }
 }
