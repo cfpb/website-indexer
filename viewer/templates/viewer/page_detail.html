@@ -1,109 +1,108 @@
 {% extends './base.html' %}
 
-<!-- prettier-ignore -->
 {% block breadcrumbs %}
-{% include "viewer/breadcrumbs.html" %}
+  {% include "viewer/breadcrumbs.html" %}
 {% endblock breadcrumbs %}
 
 {% block content %}
-<div class="block block--flush-top block--flush-bottom">
-  <h1>{{ title }}</h1>
-</div>
+  <div class="block block--flush-top block--flush-bottom">
+    <h1>{{ title }}</h1>
+  </div>
 
-<div class="block block--flush-top">
-  <p class="u-nowrap"><a href="{{ url }}">{{ url }}</a></p>
-  <p>(last crawled {{ timestamp }})</p>
-</div>
+  <div class="block block--flush-top">
+    <p class="u-nowrap"><a href="{{ url }}">{{ url }}</a></p>
+    <p>(last crawled {{ timestamp }})</p>
+  </div>
 
-<div class="block block--sub">
-  <div
-    class="o-expandable o-expandable--background o-expandable--border {% if request.query_params.search_type == 'links' %}o-expandable--onload-open{% endif %}"
-  >
-    <button class="o-expandable__header" title="Expand content">
-      <h3 class="h4 o-expandable__label">Links</h3>
-      <span class="o-expandable__cues">
-        <span class="o-expandable__cue-open" role="img" aria-label="Show">
-          {% include "plus-round.svg" %}
+  <div class="block block--sub">
+    <div
+      class="o-expandable o-expandable--background o-expandable--border {% if request.query_params.search_type == 'links' %}o-expandable--onload-open{% endif %}"
+    >
+      <button class="o-expandable__header" title="Expand content">
+        <h3 class="h4 o-expandable__label">Links</h3>
+        <span class="o-expandable__cues">
+          <span class="o-expandable__cue-open" role="img" aria-label="Show">
+            {% include "plus-round.svg" %}
+          </span>
+          <span class="o-expandable__cue-close" role="img" aria-label="Hide">
+            {% include "minus-round.svg" %}
+          </span>
         </span>
-        <span class="o-expandable__cue-close" role="img" aria-label="Hide">
-          {% include "minus-round.svg" %}
-        </span>
-      </span>
-    </button>
-    <div class="o-expandable__content">
-      <ul class="m-list">
-        {% for link in links %}
-        <li class="m-list__item u-truncate">{{ link }}</li>
-        {% endfor %}
-      </ul>
+      </button>
+      <div class="o-expandable__content">
+        <ul class="m-list">
+          {% for link in links %}
+            <li class="m-list__item u-truncate">{{ link }}</li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="block block--sub">
-  <div
-    class="o-expandable o-expandable--background o-expandable--border {% if request.query_params.search_type == 'components' %}o-expandable--onload-open{% endif %}"
-  >
-    <button class="o-expandable__header" title="Expand content">
-      <h3 class="h4 o-expandable__label">Components</h3>
-      <span class="o-expandable__cues">
-        <span class="o-expandable__cue-open" role="img" aria-label="Show">
-          {% include "plus-round.svg" %}
+  <div class="block block--sub">
+    <div
+      class="o-expandable o-expandable--background o-expandable--border {% if request.query_params.search_type == 'components' %}o-expandable--onload-open{% endif %}"
+    >
+      <button class="o-expandable__header" title="Expand content">
+        <h3 class="h4 o-expandable__label">Components</h3>
+        <span class="o-expandable__cues">
+          <span class="o-expandable__cue-open" role="img" aria-label="Show">
+            {% include "plus-round.svg" %}
+          </span>
+          <span class="o-expandable__cue-close" role="img" aria-label="Hide">
+            {% include "minus-round.svg" %}
+          </span>
         </span>
-        <span class="o-expandable__cue-close" role="img" aria-label="Hide">
-          {% include "minus-round.svg" %}
-        </span>
-      </span>
-    </button>
-    <div class="o-expandable__content">
-      <ul class="m-list">
-        {% for component in components %}
-        <li class="m-list__item">{{ component }}</li>
-        {% endfor %}
-      </ul>
+      </button>
+      <div class="o-expandable__content">
+        <ul class="m-list">
+          {% for component in components %}
+            <li class="m-list__item">{{ component }}</li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="block block--sub">
-  <div
-    class="o-expandable o-expandable--background o-expandable--border {% if request.query_params.search_type == 'text' %}o-expandable--onload-open{% endif %}"
-  >
-    <button class="o-expandable__header" title="Expand content">
-      <h3 class="h4 o-expandable__label">Text</h3>
-      <span class="o-expandable__cues">
-        <span class="o-expandable__cue-open" role="img" aria-label="Show">
-          {% include "plus-round.svg" %}
+  <div class="block block--sub">
+    <div
+      class="o-expandable o-expandable--background o-expandable--border {% if request.query_params.search_type == 'text' %}o-expandable--onload-open{% endif %}"
+    >
+      <button class="o-expandable__header" title="Expand content">
+        <h3 class="h4 o-expandable__label">Text</h3>
+        <span class="o-expandable__cues">
+          <span class="o-expandable__cue-open" role="img" aria-label="Show">
+            {% include "plus-round.svg" %}
+          </span>
+          <span class="o-expandable__cue-close" role="img" aria-label="Hide">
+            {% include "minus-round.svg" %}
+          </span>
         </span>
-        <span class="o-expandable__cue-close" role="img" aria-label="Hide">
-          {% include "minus-round.svg" %}
-        </span>
-      </span>
-    </button>
-    <div class="o-expandable__content">
-      <pre>{{ text }}</pre>
+      </button>
+      <div class="o-expandable__content">
+        <pre>{{ text }}</pre>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="block block--sub">
-  <div
-    class="o-expandable o-expandable--background o-expandable--border {% if request.query_params.search_type == 'html' %}o-expandable--onload-open{% endif %}"
-  >
-    <button class="o-expandable__header" title="Expand content">
-      <h3 class="h4 o-expandable__label">Raw HTML</h3>
-      <span class="o-expandable__cues">
-        <span class="o-expandable__cue-open" role="img" aria-label="Show">
-          {% include "plus-round.svg" %}
+  <div class="block block--sub">
+    <div
+      class="o-expandable o-expandable--background o-expandable--border {% if request.query_params.search_type == 'html' %}o-expandable--onload-open{% endif %}"
+    >
+      <button class="o-expandable__header" title="Expand content">
+        <h3 class="h4 o-expandable__label">Raw HTML</h3>
+        <span class="o-expandable__cues">
+          <span class="o-expandable__cue-open" role="img" aria-label="Show">
+            {% include "plus-round.svg" %}
+          </span>
+          <span class="o-expandable__cue-close" role="img" aria-label="Hide">
+            {% include "minus-round.svg" %}
+          </span>
         </span>
-        <span class="o-expandable__cue-close" role="img" aria-label="Hide">
-          {% include "minus-round.svg" %}
-        </span>
-      </span>
-    </button>
-    <div class="o-expandable__content">
-      <pre><code class="language-html">{{ html }}</code></pre>
+      </button>
+      <div class="o-expandable__content">
+        <pre><code class="language-html">{{ html }}</code></pre>
+      </div>
     </div>
   </div>
-</div>
 {% endblock content %}
