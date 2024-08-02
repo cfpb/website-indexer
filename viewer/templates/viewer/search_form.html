@@ -1,5 +1,5 @@
-<form action="{% url 'index' %}">
-  <div class="o-well">
+<div class="o-well">
+  <form class="o-form" action="{% url 'index' %}">
     <h2 class="h3">Search the index</h2>
     <div class="o-search-input">
       <div class="o-search-input__input">
@@ -38,7 +38,7 @@
       examples
     </p>
 
-    <div class="o-radio_buttons">
+    <div class="o-form__group search-options">
       <div class="m-form-field m-form-field--radio">
         <!-- prettier-ignore -->
         <input
@@ -138,5 +138,5 @@
     >
       Search
     </button>
-  </div>
-</form>
+  </form>
+</div>
