@@ -71,7 +71,7 @@ const postCSSPlugin = ({ plugins = [], lessOptions = {} }) => ({
           math: "always",
           paths: [
             ...readdirSync(`${modules}/@cfpb`).map(
-              (v) => `${modules}/@cfpb/${v}/src`
+              (v) => `${modules}/@cfpb/${v}/src`,
             ),
             `${modules}`,
           ],
