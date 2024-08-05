@@ -6,12 +6,11 @@ ENV LANG en_US.UTF-8
 # Disable pip cache dir.
 ENV PIP_NO_CACHE_DIR 1
 
+# Allow pip install as root.
+ENV PIP_ROOT_USER_ACTION ignore
+
 # Stops Python default buffering to stdout, improving logging to the console.
 ENV PYTHONUNBUFFERED 1
-
-# Define app home and workdir.
-ENV APP_HOME /usr/src/app
-WORKDIR $APP_HOME
 
 # Create a non-root user for the container.
 ARG USERNAME=app
@@ -24,8 +23,11 @@ RUN addgroup \
     --uid $USER_UID \
     --ingroup $USERNAME \
     --disabled-password \
-    --no-create-home \
     $USERNAME
+
+# Define app home and workdir.
+ENV APP_HOME /home/$USERNAME
+WORKDIR $APP_HOME
 
 # Copy the whole project except for what is in .dockerignore.
 COPY --chown=$USERNAME:$USERNAME . .
@@ -53,6 +55,11 @@ RUN set -eux; \
         ; \
         pip install -U pip; \
         pip install --no-cache-dir -r requirements/base.txt; \
+        # Remove keys that aren't needed by the application but would be
+        # flagged as a vulnerability by our Docker image scanner.
+        rm /usr/local/lib/python3.12/site-packages/tornado/test/test.key; \
+        rm /usr/local/lib/python3.12/site-packages/wpull/proxy/proxy.key; \
+        rm /usr/local/lib/python3.12/site-packages/wpull/testing/test.pem; \
         apk del .backend-deps
 
 # Build the frontend.
@@ -70,7 +77,6 @@ RUN set -eux; \
         # We don't need node_modules once we've built our frontend.
         rm -rf ./node_modules; \
         apk del .frontend-deps
-
 
 # Run the application with the user we created.
 USER $USERNAME
