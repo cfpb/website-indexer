@@ -1,0 +1,34 @@
+version: 0.2
+
+env:
+  variables:
+    SERVICE_NAME: website-indexer
+    CONTACTS_SECRET: cfpb/team/cfgov/contact-info
+    IMAGE_SCANNER_SECRET: cfpb/team/cfgov/image-scanner-creds
+    SMTP_CREDS_SECRET: cfpb/team/cfgov/smtp-ses-creds
+  secrets-manager:
+    EMAIL_TO: "${CONTACTS_SECRET}:developers"
+    IMAGE_SCANNER_URL: "${IMAGE_SCANNER_SECRET}:url"
+    IMAGE_SCANNER_USERNAME: "${IMAGE_SCANNER_SECRET}:username"
+    IMAGE_SCANNER_PASSWORD: "${IMAGE_SCANNER_SECRET}:password"
+    SMTP_HOST: "${SMTP_CREDS_SECRET}:smtp_server"
+    SMTP_PORT: "${SMTP_CREDS_SECRET}:smtp_port"
+    SMTP_USERNAME: "${SMTP_CREDS_SECRET}:username"
+    SMTP_PASSWORD: "${SMTP_CREDS_SECRET}:password"
+
+phases:
+  install:
+    commands:
+      - codebuild-init && source ./env.sh
+  pre_build:
+    commands:
+      - export IMAGE_NAME="cfpb/${NAMESPACE}/${SERVICE_NAME}"
+      - export IMAGE_TAG=$GIT_REF
+      - export REGISTRY_IMAGE_NAME="${ECR_ACCOUNT_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
+      - env | sort
+  build:
+    commands:
+      - docker build -t $REGISTRY_IMAGE_NAME .
+      - scan-image $REGISTRY_IMAGE_NAME $EMAIL_TO
+      - docker push $REGISTRY_IMAGE_NAME
+      - echo "Image ${REGISTRY_IMAGE_NAME} now available for use. Enjoy!"
