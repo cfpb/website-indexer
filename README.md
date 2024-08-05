@@ -23,6 +23,8 @@ and export results as CSV or JSON reports.
 
 ## Crawling a website
 
+### Using a Python virtual environment
+
 Create a Python virtual environment and install required packages:
 
 ```
@@ -35,6 +37,23 @@ Crawl a website:
 
 ```sh
 ./manage.py crawl https://www.consumerfinance.gov crawl.sqlite3
+```
+
+### Using Docker
+
+To build the Docker image:
+
+```
+docker build -t website-indexer:main .
+```
+
+Crawl a website:
+
+```
+docker run -it \
+    -p 8000:8000 \
+    -v `pwd`:/data website-indexer:main \
+    python manage.py crawl https://www.consumerfinance.gov /data/crawl.sqlite3
 ```
 
 ## Searching the crawl database
@@ -129,6 +148,8 @@ sqlite> SELECT url FROM crawler_page WHERE html LIKE "%<br>%" ORDER BY URL asc;
 
 ## Running the viewer application
 
+### Using a Python virtual environment
+
 From the repo's root, compile frontend assets:
 
 ```
@@ -164,6 +185,31 @@ Finally, run the Django webserver:
 ```
 
 The viewer application will be available locally at http://localhost:8000.
+
+### Using Docker
+
+To build the Docker image:
+
+```
+docker build -t website-indexer:main .
+```
+
+To run the image using sample data:
+
+```
+docker run -it -p 8000:8000 website-indexer:main
+```
+
+To run the image using a local database dump:
+
+```
+docker run \
+    -it \
+    -p 8000:8000 \
+    -v /path/to/local/dump:/data \
+    -e CRAWL_DATABASE=/data/crawl.sqlite3 \
+    website-indexer:main
+```
 
 ## Development
 
