@@ -70,9 +70,19 @@ class DatabaseWritingPlugin(WpullPlugin):
     def init_db(self):
         db_alias = "crawler"
 
+        # Django doesn't easily support dynamically adding an additional
+        # database once settings have been initialized. We have to manually
+        # define certain database options that are typically initialized
+        # with defaults by Django:
+        # https://github.com/django/django/blob/4d32ebcd57340aa8de2d6d31613f1646dc6391f6/django/db/utils.py#L159
         connections.databases[db_alias] = {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": self.db_filename,
+            "AUTOCOMMIT": True,
+            "CONN_HEALTH_CHECKS": False,
+            "CONN_MAX_AGE": 0,
+            "OPTIONS": {},
+            "TIME_ZONE": None,
         }
 
         call_command("migrate", database=db_alias, app_label="crawler", run_syncdb=True)
