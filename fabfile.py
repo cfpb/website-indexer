@@ -160,7 +160,7 @@ ExecStart={SOURCE_ROOT}/venv/bin/gunicorn \\
     --timeout 600 \\
     wsgi
 ExecReload=/bin/kill -s HUP $MAINPID
-Environment=CRAWL_DATABASE=sqlite:///{CRAWL_DATABASE}
+Environment=DATABASE_URL=sqlite:///{CRAWL_DATABASE}
 
 [Install]
 WantedBy=multi-user.target
