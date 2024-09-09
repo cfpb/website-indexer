@@ -1,16 +1,9 @@
-"""
-Django settings for viewer project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/3.2/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/3.2/ref/settings/
-"""
-
 import os
 import sys
 from pathlib import Path
+
+import dj_database_url
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent
@@ -72,28 +65,20 @@ TEMPLATES = [
 WSGI_APPLICATION = "wsgi.application"
 
 
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-_sample_db_path = str(BASE_DIR / "sample" / "sample.sqlite3")
-_env_db_path = os.getenv("CRAWL_DATABASE")
-
-if _env_db_path and os.path.exists(_env_db_path) and "test" not in sys.argv:
-    CRAWL_DATABASE = _env_db_path
-else:
-    CRAWL_DATABASE = _sample_db_path
-
-_sqlite_db_path = f"file:{CRAWL_DATABASE}?mode=ro"
+# The default database is configured to use a sample SQLite file.
+# Override this by setting DATABASE_URL in the environment.
+# See https://github.com/jazzband/dj-database-url for URL formatting.
+_sample_db_path = f"{BASE_DIR}/sample/sample.sqlite3"
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": _sqlite_db_path,
-        "TEST": {
-            "NAME": _sqlite_db_path,
+    "default": dj_database_url.config(
+        default=f"sqlite:///{_sample_db_path}",
+        # Python tests also use the same sample SQLite file.
+        test_options={
+            "NAME": _sample_db_path,
             "MIGRATE": False,
         },
-    },
+    ),
 }
 
 # Internationalization

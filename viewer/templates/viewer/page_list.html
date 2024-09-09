@@ -149,20 +149,6 @@
         and
         <a class="a-link" href="{% url 'redirects' %}?format=api">redirects</a>
       </li>
-      <li class="m-list__item">
-        <a class="a-link a-link__icon" href="{% url 'download-database' %}">
-          <span class="a-link__text">Download the raw SQLite database</span>
-          {% include "download.svg" %}</a
-        >
-        ({{ crawl_stats.database_size | filesizeformat }}) to
-        <a
-          class="a-link a-link__icon"
-          href="https://github.com/cfpb/website-indexer#searching-the-crawl-database"
-        >
-          <span class="a-link__text">query the data locally</span>
-          {% include "external-link.svg" %}</a
-        >
-      </li>
     </ul>
   </div>
 </div>
