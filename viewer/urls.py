@@ -10,10 +10,5 @@ urlpatterns = [
     path("components/", views.ComponentListView.as_view(), name="components"),
     path("errors/", views.ErrorListView.as_view(), name="errors"),
     path("redirects/", views.RedirectListView.as_view(), name="redirects"),
-    path(
-        "download-database/",
-        views.DownloadDatabaseView.as_view(),
-        name="download-database",
-    ),
     path("help/", TemplateView.as_view(template_name="viewer/help.html"), name="help"),
 ]

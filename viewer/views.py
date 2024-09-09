@@ -29,11 +29,6 @@ from viewer.serializers import (
 )
 
 
-class DownloadDatabaseView(View):
-    def get(self, request, *args, **kwargs):
-        return FileResponse(open(settings.CRAWL_DATABASE, "rb"))
-
-
 class AlsoRenderHTMLMixin:
     @property
     def renderer_classes(self):

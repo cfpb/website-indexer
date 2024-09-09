@@ -1,27 +1,69 @@
 # website-indexer 🪱
 
-This repository crawls a website and stores its content in a SQLite database file.
+Crawl a website and search its content.
 
-Use the SQLite command-line interface to
-[make basic queries](#searching-the-crawl-database)
-about website content including:
+This project consists of two components:
+a **crawler** application to crawl the contents of a website and store its content in a database; and a **viewer** web application that allows for searching of that crawled content.
 
-- URLs
-- Page titles
-- Full text search
-- HTML search
-- Link URLs
-- Design components (CSS class names)
-- Crawler errors (404s and more)
-- Redirects
+Both components require
+[Python 3.12](https://www.python.org/)
+to run and are built using the
+[Django](https://www.djangoproject.com/)
+web application framework.
+The crawler piece is built on top of the Archive Team's
+[ludios_wpull](https://github.com/ArchiveTeam/ludios_wpull)
+web crawler.
 
-This repository also contains a Django-based
-[web application](#running-the-viewer-application)
-to explore crawled website content in your browser.
-Make queries through an easy-to-use web form, review page details,
-and export results as CSV or JSON reports.
+## Getting started
 
-## Crawling a website
+This project can be run
+[using Docker](#using-docker)
+or a local
+[Python virtual environment](#using-a-python-virtual-environment).
+
+### Using Docker
+
+To build the Docker image:
+
+```
+docker build -t website-indexer:main .
+```
+
+#### Viewing a sample crawl using Docker
+
+To then run the viewer application using sample data:
+
+```
+docker run -it \
+    -p 8000:8000 \
+    website-indexer:main
+```
+
+The web application using sample data will be accessible at http://localhost:8000/.
+
+#### Crawling a website and viewing the crawl results using Docker
+
+To crawl a website using the Docker image,
+storing the result in a local SQLite database named `crawl.sqlite3`:
+
+```
+docker run -it \
+    -v `pwd`:/data \
+    website-indexer:main \
+    python manage.py crawl https://www.consumerfinance.gov /data/crawl.sqlite3
+```
+
+To then run the viewer web application to view that crawler database:
+
+```
+docker run -it \
+    -p 8000:8000 \
+    -v `pwd`:/data \
+    -e DATABASE_URL=sqlite:////data/crawl.sqlite3 \
+    website-indexer:main
+```
+
+The web application with the crawl results will be accessible at http://localhost:8000/.
 
 ### Using a Python virtual environment
 
@@ -32,123 +74,6 @@ python3.12 -m venv venv
 source venv/bin/activate
 pip install -r requirements/base.txt
 ```
-
-Crawl a website:
-
-```sh
-./manage.py crawl https://www.consumerfinance.gov crawl.sqlite3
-```
-
-### Using Docker
-
-To build the Docker image:
-
-```
-docker build -t website-indexer:main .
-```
-
-Crawl a website:
-
-```
-docker run -it \
-    -p 8000:8000 \
-    -v `pwd`:/data website-indexer:main \
-    python manage.py crawl https://www.consumerfinance.gov /data/crawl.sqlite3
-```
-
-## Searching the crawl database
-
-You can use the
-[SQLite command-line client](https://www.sqlite.org/cli.html)
-to make queries against the crawl database,
-or a graphical client such as [DB4S](https://github.com/sqlitebrowser/sqlitebrowser) if you prefer.
-
-To run the command-line client:
-
-```
-sqlite3 crawl.sqlite3
-```
-
-The following examples describe some common use cases.
-
-### Dump database statistics
-
-To list the total number of URLs and crawl timestamps:
-
-```sql
-sqlite> SELECT COUNT(*), MIN(timestamp), MAX(timestamp) FROM crawler_page;
-23049|2022-07-20 02:50:02|2022-07-20 08:35:23
-```
-
-Note that page data is stored in a table named `crawler_page`.
-
-### List pages that link to a certain URL
-
-```sql
-sqlite> SELECT DISTINCT url
-FROM crawler_page
-INNER JOIN crawler_page_links ON (crawler_page.id = crawler_page_links.page_id)
-INNER JOIN crawler_link ON (crawler_page_links.link_id = crawler_page_link.id)
-WHERE href LIKE "/plain-writing/"
-ORDER BY url ASC;
-```
-
-To dump results to a CSV instead of the terminal:
-
-```sql
-sqlite> .mode csv
-sqlite> .output filename.csv
-sqlite> ... run your query here
-sqlite> .output stdout
-sqlite> .mode list
-```
-
-To search with wildcards, use the `%` character:
-
-```sql
-sqlite> SELECT DISTINCT url
-FROM crawler_page
-INNER JOIN crawler_page_links ON (crawler_page.id = crawler_page_links.page_id)
-INNER JOIN crawler_link ON (crawler_page_links.link_id = crawler_link.id)
-WHERE href LIKE "/about-us/blog/"
-ORDER BY url ASC;
-```
-
-### List pages that contain a specific design component
-
-```sql
-sqlite> SELECT DISTINCT url
-FROM crawler_page
-INNER JOIN crawler_page_components ON (crawler_page.id = crawler_page_components.page_id)
-INNER JOIN crawler_component ON (crawler_page_components.component_id = crawler_component.id)
-WHERE crawler_component.class_name LIKE "o-featured-content-module"
-ORDER BY url ASC
-```
-
-See the [CFPB Design System](https://cfpb.github.io/design-system/)
-for a list of common components used on CFPB websites.
-
-### List pages with titles containing a specific string
-
-```sql
-SELECT url FROM crawler_page WHERE title LIKE "%housing%" ORDER BY url ASC;
-```
-
-### List pages with body text containing a certain string
-
-```sql
-sqlite> SELECT url FROM crawler_page WHERE text LIKE "%diamond%" ORDER BY URL asc;
-```
-
-### List pages with HTML containing a certain string
-
-```sql
-sqlite> SELECT url FROM crawler_page WHERE html LIKE "%<br>%" ORDER BY URL asc;
-```
-
-## Running the viewer application
-
-### Using a Python virtual environment
 
 From the repo's root, compile frontend assets:
 
@@ -164,52 +89,60 @@ yarn
 yarn watch
 ```
 
-Create a Python virtual environment and install required packages:
+#### Viewing a sample crawl using a Python virtual environment
 
-```
-python3.12 -m venv venv
-source venv/bin/activate
-pip install -r requirements/base.txt
-```
-
-Optionally set the `CRAWL_DATABASE` environment variable to point to a local crawl database:
-
-```
-export CRAWL_DATABASE=crawl.sqlite3
-```
-
-Finally, run the Django webserver:
+Run the viewer application using sample data:
 
 ```
 ./manage.py runserver
 ```
 
-The viewer application will be available locally at http://localhost:8000.
+The web application using sample data will be accessible at http://localhost:8000/.
 
-### Using Docker
+#### Crawling a website and viewing the crawl results using a Python virtual environment
 
-To build the Docker image:
+To crawl a website and store the result in a local SQLite database named `crawl.sqlite3`:
 
-```
-docker build -t website-indexer:main .
-```
-
-To run the image using sample data:
-
-```
-docker run -it -p 8000:8000 website-indexer:main
+```sh
+./manage.py crawl https://www.consumerfinance.gov crawl.sqlite3
 ```
 
-To run the image using a local database dump:
+To then run the viewer web application to view that crawler database:
 
 ```
-docker run \
-    -it \
-    -p 8000:8000 \
-    -v /path/to/local/dump:/data \
-    -e CRAWL_DATABASE=/data/crawl.sqlite3 \
-    website-indexer:main
+DATABASE_URL=sqlite:///crawl.sqlite3 ./manage.py runserver
 ```
+
+The web application with the crawl results will be accessible at http://localhost:8000/
+
+## Configuration
+
+### Database configuration
+
+The `DATABASE_URL` environment variable can be used to specify the database
+used for crawl results by the viewer application.
+This project makes use of the
+[dj-database-url](https://github.com/jazzband/dj-database-url)
+project to convert that variable into a Django database specification.
+
+For example, to use a SQLite file at `/path/to/db.sqlite`:
+
+```
+export DATABASE_URL=sqlite:////path/to/db.sqlite
+```
+
+(Note use of four slashes when referring to an absolute path;
+only three are needed when referring to a relative path.)
+
+To point to a PostgreSQL database instead:
+
+```
+export DATABASE_URL=postgres://username:password@localhost/dbname
+```
+
+Please see
+[the dj-database-url documentation](https://github.com/jazzband/dj-database-url)
+for additional examples.
 
 ## Development
 
@@ -227,8 +160,8 @@ To run the tests:
 ./manage.py test --keepdb
 ```
 
-The `--keepdb` parameter is used because tests are run using a fixed,
-pre-existing test database.
+The `--keepdb` parameter is used because tests are run using
+[a fixed, pre-existing test database](#sample-test-data).
 
 ### Code formatting
 
@@ -284,12 +217,18 @@ Then, in another terminal, start a crawl against the locally running site:
 ./manage.py crawl http://localhost:8000/ --recreate ./sample/src/sample.sqlite3
 ```
 
-This will overwrite the test database with a fresh crawl.
+(This uses a local Python virtual environment; see
+[above](#crawling-a-website-and-viewing-the-crawl-results-using-docker)
+for instructions on using Docker instead.)
+
+This command will overwrite the sample database with a fresh crawl.
 
 ## Deployment
 
 _For information on how this project is deployed at the CFPB,
-employees and contractors should refer to the internal "CFGOV/crawler-deploy" repository._
+employees and contractors should refer to the internal
+[CFGOV/crawler-deploy](https://github.local/CFGOV/crawler-deploy/) 🔒
+repository._
 
 This repository includes a [Fabric](https://www.fabfile.org/) script
 that can be used to configure a RHEL8 Linux server to run this project

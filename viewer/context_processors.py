@@ -1,6 +1,3 @@
-import os
-
-from django.conf import settings
 from django.db.models import Count, Max, Min
 
 from crawler.models import Page
@@ -24,7 +21,6 @@ def crawl_stats(request=None):
     crawl_stats.update(
         {
             "duration": duration,
-            "database_size": os.path.getsize(settings.CRAWL_DATABASE),
         }
     )
 
