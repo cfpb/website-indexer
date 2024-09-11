@@ -1,0 +1,157 @@
+[
+{
+    "model": "crawler.crawl",
+    "pk": 1,
+    "fields": {
+        "started": "2024-09-11T16:41:20.036Z",
+        "status": "Finished",
+        "config": {
+            "start_url": "http://localhost:8000",
+            "max_pages": 0,
+            "depth": 0
+        },
+        "failure_message": null
+    }
+},
+{
+    "model": "crawler.component",
+    "pk": 1,
+    "fields": {
+        "class_name": "o-sample"
+    }
+},
+{
+    "model": "crawler.link",
+    "pk": 1,
+    "fields": {
+        "href": "./file.xlsx"
+    }
+},
+{
+    "model": "crawler.link",
+    "pk": 2,
+    "fields": {
+        "href": "/child/"
+    }
+},
+{
+    "model": "crawler.link",
+    "pk": 3,
+    "fields": {
+        "href": "/child/?foo=bar"
+    }
+},
+{
+    "model": "crawler.link",
+    "pk": 4,
+    "fields": {
+        "href": "/child/?page=2"
+    }
+},
+{
+    "model": "crawler.link",
+    "pk": 5,
+    "fields": {
+        "href": "/child/?page=2&foo=bar"
+    }
+},
+{
+    "model": "crawler.link",
+    "pk": 6,
+    "fields": {
+        "href": "https://example.com/"
+    }
+},
+{
+    "model": "crawler.link",
+    "pk": 7,
+    "fields": {
+        "href": "https://example.com/file.xlsx"
+    }
+},
+{
+    "model": "crawler.link",
+    "pk": 8,
+    "fields": {
+        "href": "https://example.org/"
+    }
+},
+{
+    "model": "crawler.link",
+    "pk": 9,
+    "fields": {
+        "href": "/"
+    }
+},
+{
+    "model": "crawler.page",
+    "pk": 1,
+    "fields": {
+        "crawl": 1,
+        "timestamp": "2024-09-11T16:41:20.227Z",
+        "url": "http://localhost:8000/",
+        "title": "Sample homepage",
+        "language": "en",
+        "html": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <title>Sample homepage</title>\n    <meta charset=\"utf-8\" />\n    <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  </head>\n  <body>\n    <h1>Sample homepage</h1>\n    <p>This is sample content.</p>\n    <div class=\"o-sample\">This is a sample component.</div>\n    <p><a href=\"/child/\">This is a link to a child page.</a></p>\n    <p><a href=\"https://example.com/\">This is a link somewhere else.</a></p>\n    <p><a href=\"/external-site/?ext_url=https%3A%2F%2Fexample.org%2F\" data-pretty-href=\"https://example.org/\">This is an obfuscated link somewhere else.</a></p>\n    <p><a href=\"/external-site/?ext_url=https%3A%2F%2Fexample.org%2F\" data-pretty-href=\"https://example.org/\">This is another obfuscated link some\n    where else.</a></p>\n    <p><a href=\"./file.xlsx\">This links to a file.</a></p>\n    <p><a href=\"https://example.com/file.xlsx\">This links to a file somewhere else.</a></p>\n    <p><a href=\"/child/?page=2\">This link has a page query string parameter.</a></p>  <p><a href=\"/child/?foo=bar\">This link has a non-page query string parameter.</a></p>\n    <p><a href=\"/child/?page=2&foo=bar\">This link has multiple query string parameters.</a></p>\n  </body>\n</html>\n",
+        "text": "Sample homepage This is sample content. This is a sample component. This is a link to a child page. This is a link somewhere else. This is an obfuscated link somewhere else. This is another obfuscated link some where else. This links to a file. This links to a file somewhere else. This link has a page query string parameter. This link has a non-page query string parameter. This link has multiple query string parameters.",
+        "components": [
+            1
+        ],
+        "links": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+        ]
+    }
+},
+{
+    "model": "crawler.page",
+    "pk": 2,
+    "fields": {
+        "crawl": 1,
+        "timestamp": "2024-09-11T16:41:20.679Z",
+        "url": "http://localhost:8000/child/?page=2",
+        "title": "Sample child page",
+        "language": "en",
+        "html": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <title>Sample child page</title>\n    <meta charset=\"utf-8\" />\n    <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  </head>\n  <body>\n    <h1>Sample child page</h1>\n    <p>This is sample content.</p>\n    <p><a href=\"/\">This is a link to the homepage.</a></p>\n  </body>\n</html>\n",
+        "text": "Sample child page This is sample content. This is a link to the homepage.",
+        "components": [],
+        "links": [
+            9
+        ]
+    }
+},
+{
+    "model": "crawler.page",
+    "pk": 3,
+    "fields": {
+        "crawl": 1,
+        "timestamp": "2024-09-11T16:41:23.003Z",
+        "url": "http://localhost:8000/child/",
+        "title": "Sample child page",
+        "language": "en",
+        "html": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <title>Sample child page</title>\n    <meta charset=\"utf-8\" />\n    <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n  </head>\n  <body>\n    <h1>Sample child page</h1>\n    <p>This is sample content.</p>\n    <p><a href=\"/\">This is a link to the homepage.</a></p>\n  </body>\n</html>\n",
+        "text": "Sample child page This is sample content. This is a link to the homepage.",
+        "components": [],
+        "links": [
+            9
+        ]
+    }
+},
+{
+    "model": "crawler.error",
+    "pk": 1,
+    "fields": {
+        "crawl": 1,
+        "timestamp": "2024-09-11T16:41:22.353Z",
+        "url": "https://example.com/file.xlsx",
+        "status_code": 404,
+        "referrer": "http://localhost:8000/"
+    }
+}
+]

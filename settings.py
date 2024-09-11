@@ -73,11 +73,6 @@ _sample_db_path = f"{BASE_DIR}/sample/sample.sqlite3"
 DATABASES = {
     "default": dj_database_url.config(
         default=f"sqlite:///{_sample_db_path}",
-        # Python tests also use the same sample SQLite file.
-        test_options={
-            "NAME": _sample_db_path,
-            "MIGRATE": False,
-        },
     ),
 }
 

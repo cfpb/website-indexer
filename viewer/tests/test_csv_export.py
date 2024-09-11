@@ -6,6 +6,8 @@ from django.urls import reverse
 
 
 class TestCSVExport(TestCase):
+    fixtures = ["sample.json"]
+
     def test_csv_generation(self):
         response = self.client.get(reverse("index") + "?format=csv")
         self.assertEqual(response.status_code, 200)

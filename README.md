@@ -144,7 +144,61 @@ Please see
 [the dj-database-url documentation](https://github.com/jazzband/dj-database-url)
 for additional examples.
 
+If the `DATABASE_URL` environment variable is left unset, the
+[sample SQLite database file](#sample-test-data)
+will be used.
+
 ## Development
+
+### Sample test data
+
+This repository includes a sample database file for testing purposes at `sample/sample.sqlite3`.
+
+The sample database file is used by the viewer application when no other crawl
+database file has been specified.
+
+The source website content used to generate this file is included in this repository
+under the `sample/src` subdirectory.
+
+To regenerate the same database file, first delete it:
+
+```
+rm ./sample/sample.sqlite3
+```
+
+Then, start a Python webserver to serve the sample website locally:
+
+```
+cd ./sample/src && python -m http.server
+```
+
+This starts the sample website running at http://localhost:8000.
+
+Then, in another terminal, recreate the database file:
+
+```
+./manage.py migrate
+```
+
+Finally, perform the crawl against the locally running site:
+
+```
+./manage.py crawl http://localhost:8000/
+```
+
+These commands assume use of a local Python virtual environment;
+alternatively consider
+[using Docker](#crawling-a-website-and-viewing-the-crawl-results-using-docker).
+
+This command will receate the sample database file
+`sample/sample.sqlite3`
+with a fresh crawl.
+To write to a different database, use
+[the `DATABASE_URL` environment variable](#database-configuration).
+
+For consistency, the
+[Python test fixture](#testing)
+should be updated at the same time as the sample database.
 
 ### Testing
 
@@ -158,6 +212,15 @@ To run the tests:
 
 ```
 pytest
+```
+
+The Python tests make use of a test fixture generated from
+[the sample database](#sample-test-data).
+
+To recreate this test fixture:
+
+```
+./manage.py dumpdata --indent=4 crawler > crawler/fixtures/sample.json
 ```
 
 ### Code formatting
@@ -190,35 +253,6 @@ You can fix any problems by running:
 ```
 yarn prettier:fix
 ```
-
-### Sample test data
-
-This repository includes a sample database file for testing purposes at `/sample/sample.sqlite3`.
-
-The sample database file is used by the viewer application when no other crawl
-database file has been specified.
-
-The source website content used to generate this file is included in this repository
-under the `/sample/src` subdirectory.
-To regenerate these files, first serve the sample website locally:
-
-```
-cd ./sample/src && python -m http.server
-```
-
-This starts the sample website running at http://localhost:8000.
-
-Then, in another terminal, start a crawl against the locally running site:
-
-```
-./manage.py crawl http://localhost:8000/ --recreate ./sample/src/sample.sqlite3
-```
-
-(This uses a local Python virtual environment; see
-[above](#crawling-a-website-and-viewing-the-crawl-results-using-docker)
-for instructions on using Docker instead.)
-
-This command will overwrite the sample database with a fresh crawl.
 
 ## Deployment
 
