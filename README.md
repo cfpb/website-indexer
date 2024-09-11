@@ -157,11 +157,8 @@ pip install -r requirements/test.txt
 To run the tests:
 
 ```
-./manage.py test --keepdb
+pytest
 ```
-
-The `--keepdb` parameter is used because tests are run using
-[a fixed, pre-existing test database](#sample-test-data).
 
 ### Code formatting
 

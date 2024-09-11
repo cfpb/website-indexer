@@ -1,0 +1,13 @@
+[tool.pytest.ini_options]
+addopts = [
+  "--cov=crawler",
+  "--cov=viewer",
+  "--cov-fail-under=100",
+  "--cov-report=html",
+  "--cov-report=term-missing",
+  "--strict-markers",
+  "-rfE",
+]
+env = [
+  "DJANGO_SETTINGS_MODULE=settings",
+]
