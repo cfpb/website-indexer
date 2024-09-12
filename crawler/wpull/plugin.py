@@ -2,8 +2,6 @@ import logging
 import re
 from urllib import parse
 
-from django.core.management import call_command
-from django.db import connections
 from django.utils import timezone
 
 from wpull.application.hook import Actions
@@ -13,7 +11,7 @@ from wpull.network.connection import BaseConnection
 from wpull.pipeline.item import URLProperties
 from wpull.url import URLInfo
 
-from crawler.models import Error, Page, Redirect
+from crawler.models import Crawl, Error, Page, Redirect
 from crawler.writer import DatabaseWriter
 
 
@@ -54,40 +52,19 @@ class DatabaseWritingPlugin(WpullPlugin):
         patch_wpull_connection()
 
         self.start_url = URLInfo.parse(self.app_session.args.urls[0])
-        self.db_filename, self.max_pages = self.app_session.args.plugin_args.rsplit(
-            ",", maxsplit=1
-        )
-        self.max_pages = int(self.max_pages)
 
-        self.db_writer = self.init_db()
+        crawl_record_id = int(self.app_session.args.plugin_args)
+        crawl_record = Crawl.objects.get(pk=crawl_record_id)
+
+        self.db_writer = DatabaseWriter(crawl_record)
+        self.max_pages = crawl_record.config["max_pages"]
+
         self.accepted_urls = []
         self.requested_urls = []
 
     def deactivate(self):
         super().deactivate()
         self.db_writer.analyze()
-
-    def init_db(self):
-        db_alias = "crawler"
-
-        # Django doesn't easily support dynamically adding an additional
-        # database once settings have been initialized. We have to manually
-        # define certain database options that are typically initialized
-        # with defaults by Django:
-        # https://github.com/django/django/blob/4d32ebcd57340aa8de2d6d31613f1646dc6391f6/django/db/utils.py#L159
-        connections.databases[db_alias] = {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": self.db_filename,
-            "AUTOCOMMIT": True,
-            "CONN_HEALTH_CHECKS": False,
-            "CONN_MAX_AGE": 0,
-            "OPTIONS": {},
-            "TIME_ZONE": None,
-        }
-
-        call_command("migrate", database=db_alias, app_label="crawler", run_syncdb=True)
-
-        return DatabaseWriter(db_alias)
 
     @property
     def at_max_pages(self):

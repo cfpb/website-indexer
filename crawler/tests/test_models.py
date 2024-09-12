@@ -1,11 +1,31 @@
-from operator import attrgetter
 from unittest.mock import patch
 
 import lxml.etree
 
-from django.test import SimpleTestCase
+from django.test import SimpleTestCase, TestCase
 
-from crawler.models import Error, Page, Redirect
+from crawler.models import Crawl, CrawlConfig, Error, Page, Redirect
+
+
+class CrawlTests(TestCase):
+    def test_lifecycle(self):
+        self.assertFalse(Crawl.objects.exists())
+
+        config = CrawlConfig(start_url="https://example.com")
+        crawl = Crawl.start(config)
+        self.assertEqual(
+            crawl.config,
+            {"start_url": "https://example.com", "max_pages": 0, "depth": 0},
+        )
+        self.assertEqual(crawl.status, Crawl.Status.STARTED)
+
+        crawl.finish()
+        self.assertEqual(crawl.status, Crawl.Status.FINISHED)
+        self.assertIsNone(crawl.failure_message)
+
+        crawl.fail("Testing crawl failure")
+        self.assertEqual(crawl.status, Crawl.Status.FAILED)
+        self.assertEqual(crawl.failure_message, "Testing crawl failure")
 
 
 class PageTests(SimpleTestCase):
@@ -88,6 +108,18 @@ class PageTests(SimpleTestCase):
         self.assertEqual(page.language, "en")
         self.assertEqual(page.html, html)
         self.assertIsNone(page.text)
+
+
+class PageQuerySetTestsNoPages(TestCase):
+    def test_no_crawls_no_pages(self):
+        self.assertFalse(Page.objects.exists())
+
+
+class PageQuerySetTests(TestCase):
+    fixtures = ["sample.json"]
+
+    def test_crawl_has_pages(self):
+        self.assertTrue(Page.objects.exists())
 
 
 class ErrorTests(SimpleTestCase):

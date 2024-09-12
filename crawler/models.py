@@ -1,3 +1,4 @@
+import dataclasses
 import lxml.etree
 import lxml.html.soupparser
 import re
@@ -10,36 +11,98 @@ from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalManyToManyField
 
 
+@dataclasses.dataclass
+class CrawlConfig:
+    start_url: str
+    max_pages: int = 0
+    depth: int = 0
+
+
+class Crawl(models.Model):
+    class Status(models.TextChoices):
+        STARTED = "Started"
+        FINISHED = "Finished"
+        FAILED = "Failed"
+
+    started = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=64, default=Status.STARTED)
+    config = models.JSONField()
+    failure_message = models.TextField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["started"]
+
+    @classmethod
+    def start(cls, config: CrawlConfig):
+        return cls.objects.create(config=dataclasses.asdict(config))
+
+    def finish(self):
+        self.status = self.Status.FINISHED
+        self.save()
+
+    def fail(self, failure_message):
+        self.status = self.Status.FAILED
+        self.failure_message = failure_message
+        self.save()
+
+
+class LatestCrawlManager(models.Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+
+        latest_crawl = Crawl.objects.filter(status=Crawl.Status.FINISHED).last()
+
+        if latest_crawl is None:
+            return qs.none()
+
+        return qs.filter(crawl=latest_crawl)
+
+
 class Request(models.Model):
+    crawl = models.ForeignKey(
+        Crawl, on_delete=models.CASCADE, related_name="%(class)ss"
+    )
     timestamp = models.DateTimeField(db_index=True)
-    url = models.TextField(unique=True, db_index=True)
+    url = models.TextField(db_index=True)
 
     class Meta:
         abstract = True
         ordering = ["url"]
+        constraints = [
+            models.UniqueConstraint("crawl", "url", name="%(class)s_crawl_url_key")
+        ]
+
+    objects = LatestCrawlManager()
 
 
 class Component(models.Model):
-    class_name = models.TextField(unique=True, db_index=True)
+    class_name = models.TextField(unique=True)
 
     class Meta:
         ordering = ["class_name"]
 
 
 class Link(models.Model):
-    href = models.TextField(unique=True, db_index=True)
+    href = models.TextField(unique=True)
 
     class Meta:
         ordering = ["href"]
 
 
 class Page(Request, ClusterableModel):
-    title = models.TextField(db_index=True)
-    language = models.TextField(db_index=True, null=True, blank=True)
+    title = models.TextField()
+    language = models.TextField(null=True, blank=True)
     html = models.TextField()
     text = models.TextField()
     components = ParentalManyToManyField(Component, related_name="pages")
     links = ParentalManyToManyField(Link, related_name="links")
+
+    class Meta(Request.Meta):
+        ordering = Request.Meta.ordering
+        indexes = [
+            models.Index("crawl", "title", name="page_crawl_title_idx"),
+            models.Index("crawl", "language", name="page_crawl_language_idx"),
+        ]
 
     def __str__(self):
         return self.url
@@ -142,8 +205,8 @@ class Page(Request, ClusterableModel):
 
 
 class ErrorBase(Request):
-    status_code = models.PositiveIntegerField(db_index=True)
-    referrer = models.TextField(db_index=True, null=True, blank=True)
+    status_code = models.PositiveIntegerField()
+    referrer = models.TextField(null=True, blank=True)
 
     class Meta(Request.Meta):
         abstract = True
@@ -165,7 +228,7 @@ class Error(ErrorBase):
 
 
 class Redirect(ErrorBase):
-    location = models.TextField(db_index=True)
+    location = models.TextField()
 
     def __str__(self):
         return super().__str__() + f" -> {self.location}"

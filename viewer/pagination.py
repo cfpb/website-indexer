@@ -14,19 +14,3 @@ class BetterPageNumberPagination(pagination.PageNumberPagination):
             }
         )
         return response
-
-    def get_paginated_response_schema(self, schema):
-        schema = super().get_paginated_response_schema(schema)
-        schema["properties"].update(
-            {
-                "num_pages": {
-                    "type": "integer",
-                    "example": 10,
-                },
-                "page_number": {
-                    "type": "integer",
-                    "example": 5,
-                },
-            }
-        )
-        return schema
