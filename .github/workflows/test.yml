@@ -29,7 +29,7 @@ jobs:
     - name: Check formatting
       run: black . --check
     - name: The test fixture should be kept in sync with the sample database
-      run: ./manage.py dumpdata --indent=2 crawler | diff crawler/fixtures/sample.json -
+      run: ./manage.py dumpdata --indent=4 crawler | diff crawler/fixtures/sample.json -
     - name: Run Python tests
       run: pytest
 

@@ -220,7 +220,7 @@ The Python tests make use of a test fixture generated from
 To recreate this test fixture:
 
 ```
-./manage.py dumpdata --indent=2 crawler > crawler/fixtures/sample.json
+./manage.py dumpdata --indent=4 crawler > crawler/fixtures/sample.json
 ```
 
 ### Code formatting

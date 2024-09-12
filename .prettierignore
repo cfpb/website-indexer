@@ -5,3 +5,5 @@ htmlcov
 sample
 venv
 viewer/static
+
+crawler/fixtures/sample.json
