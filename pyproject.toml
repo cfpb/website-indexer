@@ -1,0 +1,23 @@
+[tool.pytest.ini_options]
+addopts = [
+  "--cov=crawler",
+  "--cov=viewer",
+  "--cov-branch",
+  "--cov-fail-under=100",
+  "--cov-report=html",
+  "--cov-report=term-missing",
+  "--strict-markers",
+  "-rfE",
+]
+env = [
+  "DJANGO_SETTINGS_MODULE=settings",
+]
+
+[tool.coverage.run]
+omit = [
+  "*/tests/*",
+
+  # We can't easily write Python tests that invoke the wpull crawler,
+  # so we can't easily test our wpull plugin code.
+  "crawler/wpull/plugin.py",
+]

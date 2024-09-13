@@ -23,7 +23,6 @@ SOURCE_ROOT = f"{SOURCE_PARENT}/{SOURCE_DIRNAME}"
 
 CRAWL_DIR = "/var/tmp"
 CRAWL_DATABASE = f"{SOURCE_ROOT}/crawl.sqlite3"
-CRAWL_DATABASE_TMP = f"{CRAWL_DIR}/crawl-new.sqlite3"
 
 LOGROTATE_DIR = "/etc/logrotate.d"
 LOGROTATE_NAME = "website-indexer"
@@ -92,6 +91,7 @@ def deploy(conn):
         with conn.prefix("source venv/bin/activate"):
             conn.run("pip install -r requirements/base.txt")
             conn.run("pip install -r requirements/gunicorn.txt")
+            conn.run("python manage.py migrate")
 
     # Configure nightly cron to run crawler.
     print("Configuring nightly cron to run crawler")
@@ -101,10 +101,9 @@ def deploy(conn):
         "SHELL=/bin/bash\n"
         f"0 0 * * * {conn.user} "
         f"cd {SOURCE_ROOT} && "
-        f"./venv/bin/python manage.py crawl --recreate "
-        f"https://www.consumerfinance.gov {CRAWL_DATABASE_TMP} "
-        f"> {CRAWL_DIR}/crawl.log 2>&1 && "
-        f"mv {CRAWL_DATABASE_TMP} {CRAWL_DATABASE}\n"
+        f"./venv/bin/python manage.py crawl "
+        f"https://www.consumerfinance.gov "
+        f"> {CRAWL_DIR}/crawl.log 2>&1\n"
         "EOF'"
     )
 

@@ -77,27 +77,33 @@ class BetterCSVsMixin:
 
 
 class ComponentListView(AlsoRenderHTMLMixin, BetterCSVsMixin, ListAPIView):
-    queryset = Component.objects.all()
     serializer_class = ComponentSerializer
     pagination_class = None
     csv_basename = "components"
+
+    def get_queryset(self):
+        return Component.objects.all()
 
     def get_template_names(self):
         return ["viewer/component_list.html"]
 
 
 class ErrorListView(BetterCSVsMixin, ListAPIView):
-    queryset = Error.objects.all()
     serializer_class = ErrorSerializer
     filterset_fields = ["status_code"]
     csv_basename = "errors"
 
+    def get_queryset(self):
+        return Error.objects.all()
+
 
 class RedirectListView(BetterCSVsMixin, ListAPIView):
-    queryset = Redirect.objects.all()
     serializer_class = RedirectSerializer
     filterset_fields = ["status_code"]
     csv_basename = "redirects"
+
+    def get_queryset(self):
+        return Redirect.objects.all()
 
 
 class PageMixin(AlsoRenderHTMLMixin, BetterCSVsMixin):
@@ -120,7 +126,7 @@ class PageMixin(AlsoRenderHTMLMixin, BetterCSVsMixin):
                 return search_text(q)
             elif "title" == search_type:
                 return search_title(q)
-            elif "url" == search_type:
+            elif "url" == search_type:  # pragma: no branch
                 return search_url(q)
 
         return search_empty()

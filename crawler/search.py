@@ -28,7 +28,7 @@ def search_links(href_contains, include_hrefs=False, or_urlencoded=True):
 
     href_filter = Q(links__href__contains=href_contains)
 
-    if or_urlencoded:
+    if or_urlencoded:  # pragma: no branch
         href_filter |= Q(links__href__contains=quote_plus(href_contains))
 
     queryset = queryset.filter(href_filter)
