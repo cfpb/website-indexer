@@ -127,6 +127,50 @@ DATABASE_URL=sqlite:///crawl.sqlite3 ./manage.py runserver
 
 The web application with the crawl results will be accessible at http://localhost:8000/
 
+### Managing crawls in the database
+
+The `./manage.py manage_crawls` command can be used to list, delete, and cleanup old crawls (assuming `DATABASE_URL` is set appropriately).
+
+Crawls in the database have a `status` field which can be one of `Started`, `Finished`, or `Failed`.
+
+#### Listing crawls
+
+To list crawls in the database:
+
+```sh
+./manage.py manage_crawls list
+```
+
+This will list crawls in the database, including each crawl's unique ID.
+
+#### Deleting crawls
+
+To delete an existing crawl, for example one with ID `123`:
+
+```sh
+./manage.py manage_crawls delete 123
+```
+
+`--dry-run` can be added to the `delete` command to preview its output
+without modifying the database.
+
+#### Cleaning crawls
+
+To clean old crawls, leaving behind one crawl of each status:
+
+```sh
+./manage.py manage_crawls clean
+```
+
+To modify the number of crawls left behind, for example leaving behind two of each status:
+
+```sh
+./manage.py manage_crawls clean --keep=2
+```
+
+`--dry-run` can also be added to the `clean` command to preview its output
+without modifying the database.
+
 ## Configuration
 
 ### Database configuration

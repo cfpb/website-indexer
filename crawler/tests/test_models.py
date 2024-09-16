@@ -3,6 +3,7 @@ from unittest.mock import patch
 import lxml.etree
 
 from django.test import SimpleTestCase, TestCase
+from django.utils import timezone
 
 from crawler.models import Crawl, CrawlConfig, Error, Page, Redirect
 
@@ -26,6 +27,29 @@ class CrawlTests(TestCase):
         crawl.fail("Testing crawl failure")
         self.assertEqual(crawl.status, Crawl.Status.FAILED)
         self.assertEqual(crawl.failure_message, "Testing crawl failure")
+
+    def test_repr(self):
+        now = timezone.now()
+
+        self.assertEqual(
+            str(
+                Crawl(pk=123, started=now, config={"start_url": "https://example.com"})
+            ),
+            f"Crawl 123 (Started) started {now}, config {{'start_url': 'https://example.com'}}",
+        )
+
+        self.assertEqual(
+            str(
+                Crawl(
+                    pk=123,
+                    started=now,
+                    status=Crawl.Status.FAILED,
+                    config={"start_url": "https://example.com"},
+                    failure_message="It broke!",
+                )
+            ),
+            f"Crawl 123 (Failed) started {now}, config {{'start_url': 'https://example.com'}}, failure message: It broke!",
+        )
 
 
 class PageTests(SimpleTestCase):
