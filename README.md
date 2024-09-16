@@ -25,7 +25,7 @@ or a local
 
 To build the Docker image:
 
-```
+```sh
 docker build -t website-indexer:main .
 ```
 
@@ -33,7 +33,7 @@ docker build -t website-indexer:main .
 
 To then run the viewer application using sample data:
 
-```
+```sh
 docker run -it \
     -p 8000:8000 \
     website-indexer:main
@@ -44,18 +44,30 @@ The web application using sample data will be accessible at http://localhost:800
 #### Crawling a website and viewing the crawl results using Docker
 
 To crawl a website using the Docker image,
-storing the result in a local SQLite database named `crawl.sqlite3`:
+storing the result in a local SQLite database named `crawl.sqlite3`,
+first create the database file:
 
-```
+```sh
 docker run -it \
     -v `pwd`:/data \
+    -e DATABASE_URL=sqlite:////data/crawl.sqlite3 \
     website-indexer:main \
-    python manage.py crawl https://www.consumerfinance.gov /data/crawl.sqlite3
+    python manage.py migrate
+```
+
+and then run the crawl, storing results into that database file:
+
+```sh
+docker run -it \
+    -v `pwd`:/data \
+    -e DATABASE_URL=sqlite:////data/crawl.sqlite3 \
+    website-indexer:main \
+    python manage.py crawl https://www.consumerfinance.gov
 ```
 
 To then run the viewer web application to view that crawler database:
 
-```
+```sh
 docker run -it \
     -p 8000:8000 \
     -v `pwd`:/data \
@@ -69,7 +81,7 @@ The web application with the crawl results will be accessible at http://localhos
 
 Create a Python virtual environment and install required packages:
 
-```
+```sh
 python3.12 -m venv venv
 source venv/bin/activate
 pip install -r requirements/base.txt
@@ -77,7 +89,7 @@ pip install -r requirements/base.txt
 
 From the repo's root, compile frontend assets:
 
-```
+```sh
 yarn
 yarn build
 ```
@@ -93,7 +105,7 @@ yarn watch
 
 Run the viewer application using sample data:
 
-```
+```sh
 ./manage.py runserver
 ```
 
@@ -104,16 +116,60 @@ The web application using sample data will be accessible at http://localhost:800
 To crawl a website and store the result in a local SQLite database named `crawl.sqlite3`:
 
 ```sh
-./manage.py crawl https://www.consumerfinance.gov crawl.sqlite3
+DATABASE_URL=sqlite:///crawl.sqlite3 /manage.py crawl https://www.consumerfinance.gov
 ```
 
 To then run the viewer web application to view that crawler database:
 
-```
+```sh
 DATABASE_URL=sqlite:///crawl.sqlite3 ./manage.py runserver
 ```
 
 The web application with the crawl results will be accessible at http://localhost:8000/
+
+### Managing crawls in the database
+
+The `./manage.py manage_crawls` command can be used to list, delete, and cleanup old crawls (assuming `DATABASE_URL` is set appropriately).
+
+Crawls in the database have a `status` field which can be one of `Started`, `Finished`, or `Failed`.
+
+#### Listing crawls
+
+To list crawls in the database:
+
+```sh
+./manage.py manage_crawls list
+```
+
+This will list crawls in the database, including each crawl's unique ID.
+
+#### Deleting crawls
+
+To delete an existing crawl, for example one with ID `123`:
+
+```sh
+./manage.py manage_crawls delete 123
+```
+
+`--dry-run` can be added to the `delete` command to preview its output
+without modifying the database.
+
+#### Cleaning crawls
+
+To clean old crawls, leaving behind one crawl of each status:
+
+```sh
+./manage.py manage_crawls clean
+```
+
+To modify the number of crawls left behind, for example leaving behind two of each status:
+
+```sh
+./manage.py manage_crawls clean --keep=2
+```
+
+`--dry-run` can also be added to the `clean` command to preview its output
+without modifying the database.
 
 ## Configuration
 
@@ -127,7 +183,7 @@ project to convert that variable into a Django database specification.
 
 For example, to use a SQLite file at `/path/to/db.sqlite`:
 
-```
+```sh
 export DATABASE_URL=sqlite:////path/to/db.sqlite
 ```
 
@@ -136,7 +192,7 @@ only three are needed when referring to a relative path.)
 
 To point to a PostgreSQL database instead:
 
-```
+```sh
 export DATABASE_URL=postgres://username:password@localhost/dbname
 ```
 
@@ -162,13 +218,13 @@ under the `sample/src` subdirectory.
 
 To regenerate the same database file, first delete it:
 
-```
+```sh
 rm ./sample/sample.sqlite3
 ```
 
 Then, start a Python webserver to serve the sample website locally:
 
-```
+```sh
 cd ./sample/src && python -m http.server
 ```
 
@@ -176,13 +232,13 @@ This starts the sample website running at http://localhost:8000.
 
 Then, in another terminal, recreate the database file:
 
-```
+```sh
 ./manage.py migrate
 ```
 
 Finally, perform the crawl against the locally running site:
 
-```
+```sh
 ./manage.py crawl http://localhost:8000/
 ```
 
@@ -204,13 +260,13 @@ should be updated at the same time as the sample database.
 
 To run Python unit tests, first install the test dependencies in your virtual environment:
 
-```
+```sh
 pip install -r requirements/test.txt
 ```
 
 To run the tests:
 
-```
+```sh
 pytest
 ```
 
@@ -219,7 +275,7 @@ The Python tests make use of a test fixture generated from
 
 To recreate this test fixture:
 
-```
+```sh
 ./manage.py dumpdata --indent=4 crawler > crawler/fixtures/sample.json
 ```
 
@@ -229,13 +285,13 @@ This project uses [Black](https://github.com/psf/black) as a Python code formatt
 
 To check if your changes to project code match the desired coding style:
 
-```
+```sh
 black . --check
 ```
 
 You can fix any problems by running:
 
-```
+```sh
 black .
 ```
 
@@ -244,13 +300,13 @@ for JavaScript, CSS, and HTML templates.
 
 To check if your changes to project code match the desired coding style:
 
-```
+```sh
 yarn prettier
 ```
 
 You can fix any problems by running:
 
-```
+```sh
 yarn prettier:fix
 ```
 
@@ -267,7 +323,7 @@ and to deploy both the crawler and the viewer application to that server.
 
 To install Fabric in your virtual environment:
 
-```
+```sh
 pip install -r requirements/deploy.txt
 ```
 
@@ -276,7 +332,7 @@ pip install -r requirements/deploy.txt
 To configure a remote RHEL8 server with the appropriate system requirements,
 you'll need to use some variation of this command:
 
-```
+```sh
 fab configure
 ```
 
@@ -286,7 +342,7 @@ See [the Fabric documentation](https://docs.fabfile.org/en/latest/cli.html)
 for possible options; for example, to connect using a host configuration
 defined as `crawler` in your `~/.ssh/config`, you might run:
 
-```
+```sh
 fab configure -H crawler
 ```
 
@@ -299,7 +355,7 @@ The `configure` command:
 
 To run the deployment, you'll need to use some variation of this command:
 
-```
+```sh
 fab deploy
 ```
 

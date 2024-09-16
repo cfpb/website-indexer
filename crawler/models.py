@@ -30,7 +30,15 @@ class Crawl(models.Model):
     failure_message = models.TextField(null=True, blank=True)
 
     class Meta:
-        ordering = ["started"]
+        ordering = ["-started"]
+
+    def __str__(self):
+        s = f"Crawl {self.pk} ({self.status}) started {self.started}, config {self.config}"
+
+        if self.failure_message:
+            s += f", failure message: {self.failure_message}"
+
+        return s
 
     @classmethod
     def start(cls, config: CrawlConfig):
