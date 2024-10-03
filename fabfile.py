@@ -80,7 +80,7 @@ def deploy(conn):
     with conn.cd(SOURCE_PARENT):
         conn.run(
             f"(test -d {SOURCE_DIRNAME} && cd {SOURCE_DIRNAME} && git pull)"
-            f"|| (git clone {SOURCE_REPO} {SOURCE_DIRNAME}); "
+            f"|| (git clone -b ec2 --single-branch {SOURCE_REPO} {SOURCE_DIRNAME} ); "
         )
 
     # Build the viewer app and update any dependencies.
