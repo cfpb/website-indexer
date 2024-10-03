@@ -312,65 +312,10 @@ yarn prettier:fix
 
 ## Deployment
 
-_For information on how this project is deployed at the CFPB,
+For information on how this project is deployed at the CFPB,
 employees and contractors should refer to the internal
 [CFGOV/crawler-deploy](https://github.local/CFGOV/crawler-deploy/) 🔒
-repository._
-
-This repository includes a [Fabric](https://www.fabfile.org/) script
-that can be used to configure a RHEL8 Linux server to run this project
-and to deploy both the crawler and the viewer application to that server.
-
-To install Fabric in your virtual environment:
-
-```sh
-pip install -r requirements/deploy.txt
-```
-
-### Configuring a server
-
-To configure a remote RHEL8 server with the appropriate system requirements,
-you'll need to use some variation of this command:
-
-```sh
-fab configure
-```
-
-You'll need to provide some additional connection information depending
-on the specific server you're targeting, for example, hostname and user.
-See [the Fabric documentation](https://docs.fabfile.org/en/latest/cli.html)
-for possible options; for example, to connect using a host configuration
-defined as `crawler` in your `~/.ssh/config`, you might run:
-
-```sh
-fab configure -H crawler
-```
-
-The `configure` command:
-
-- Installs Node and Git
-- Installs Python 3.12
-
-### Deploying the application
-
-To run the deployment, you'll need to use some variation of this command:
-
-```sh
-fab deploy
-```
-
-The `deploy` command:
-
-- Pulls down the latest version of the source code from GitHub
-- Installs the latest dependencies
-- Runs the frontend build script
-- Configures the crawler to run nightly
-- Sets up webserver logging and log rotation
-- Serves the viewer application on port 8000
-
-See [fabfile.py](fabfile.py) for additional detail.
-
----
+repository.
 
 ## Open source licensing info
 
