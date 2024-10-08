@@ -58,7 +58,7 @@ class LatestCrawlManager(models.Manager):
     def get_queryset(self):
         qs = super().get_queryset()
 
-        latest_crawl = Crawl.objects.filter(status=Crawl.Status.FINISHED).last()
+        latest_crawl = Crawl.objects.filter(status=Crawl.Status.FINISHED).first()
 
         if latest_crawl is None:
             return qs.none()

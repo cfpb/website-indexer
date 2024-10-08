@@ -138,6 +138,22 @@ class PageQuerySetTestsNoPages(TestCase):
     def test_no_crawls_no_pages(self):
         self.assertFalse(Page.objects.exists())
 
+    def test_default_queryset_uses_latest_crawl(self):
+        Crawl.objects.create(status=Crawl.Status.FINISHED, config={})
+        second_crawl = Crawl.objects.create(status=Crawl.Status.FINISHED, config={})
+
+        page = Page.objects.create(
+            crawl=second_crawl,
+            timestamp=timezone.now(),
+            url="https://example.com",
+            title="test",
+            html="<html>",
+            text="text",
+        )
+
+        self.assertEqual(Page.objects.all().count(), 1)
+        self.assertEqual(Page.objects.first(), page)
+
 
 class PageQuerySetTests(TestCase):
     fixtures = ["sample.json"]
