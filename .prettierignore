@@ -5,3 +5,4 @@ htmlcov
 sample
 venv
 viewer/static
+viewer/templates/viewer/gtm

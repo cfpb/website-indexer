@@ -144,6 +144,11 @@ Please see
 [the dj-database-url documentation](https://github.com/jazzband/dj-database-url)
 for additional examples.
 
+### Google Tag Manager
+
+To enable Google Tag Manager on all pages on the viewer application,
+define the `GOOGLE_TAG_ID` environment variable.
+
 ## Development
 
 ### Testing

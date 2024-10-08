@@ -148,6 +148,8 @@ LOGGING = {
     },
 }
 
+GOOGLE_TAG_ID = os.getenv("GOOGLE_TAG_ID")
+
 # Monkey patch hashlib.md5 for FIPS mode compliance on RHEL8.
 # http://blog.serindu.com/2019/11/12/django-in-fips-mode/
 import hashlib
