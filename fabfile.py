@@ -40,6 +40,8 @@ CRONTAB_PATH = f"{CRONTAB_DIR}/{CRONTAB_NAME}"
 
 LOG_DIR = "/var/log/website-indexer"
 
+GOOGLE_TAG_ID = "GTM-MLPGQ6J7"
+
 
 @task
 def ls(conn):
@@ -161,6 +163,7 @@ ExecStart={SOURCE_ROOT}/venv/bin/gunicorn \\
     wsgi
 ExecReload=/bin/kill -s HUP $MAINPID
 Environment=DATABASE_URL=sqlite:///{CRAWL_DATABASE}
+Environment=GOOGLE_TAG_ID={GOOGLE_TAG_ID}
 
 [Install]
 WantedBy=multi-user.target
