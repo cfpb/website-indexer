@@ -40,6 +40,7 @@ RUN set -eux; \
         \
         # Needed at runtime.
         apk add --no-cache \
+            libpq \
             libxslt \
             libxml2 \
         ; \
