@@ -151,3 +151,5 @@ LOGGING = {
         },
     },
 }
+
+GOOGLE_TAG_ID = os.getenv("GOOGLE_TAG_ID")

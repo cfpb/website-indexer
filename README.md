@@ -204,6 +204,11 @@ If the `DATABASE_URL` environment variable is left unset, the
 [sample SQLite database file](#sample-test-data)
 will be used.
 
+### Google Tag Manager
+
+To enable Google Tag Manager on all pages on the viewer application,
+define the `GOOGLE_TAG_ID` environment variable.
+
 ## Development
 
 ### Sample test data
