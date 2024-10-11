@@ -56,10 +56,16 @@ class ViewTests(CSVTestMixin, TestCase):
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0]["title"], "Sample homepage")
 
-    def test_search_by_text(self):
-        results = self.get_pages_api(search_type="text", q="Sample child page")
+    def check_search_by_text(self, q):
+        results = self.get_pages_api(search_type="text", q=q)
         self.assertEqual(len(results), 2)
         self.assertEqual(results[0]["title"], "Sample child page")
+
+    def test_search_by_text(self):
+        self.check_search_by_text("Sample child page")
+
+    def test_search_by_text_case_insensitive(self):
+        self.check_search_by_text("SAMPLE CHILD PAGE")
 
     def test_search_by_title(self):
         results = self.get_pages_api(search_type="title", q="Sample child page")

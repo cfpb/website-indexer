@@ -10,7 +10,7 @@ _page_values = ["timestamp", "url", "title", "language"]
 
 def search_components(class_name_contains, include_class_names=False):
     queryset = Page.objects.prefetch_related("components").filter(
-        components__class_name__contains=class_name_contains
+        components__class_name__icontains=class_name_contains
     )
 
     values = _page_values
@@ -26,10 +26,10 @@ def search_components(class_name_contains, include_class_names=False):
 def search_links(href_contains, include_hrefs=False, or_urlencoded=True):
     queryset = Page.objects.prefetch_related("links")
 
-    href_filter = Q(links__href__contains=href_contains)
+    href_filter = Q(links__href__icontains=href_contains)
 
     if or_urlencoded:  # pragma: no branch
-        href_filter |= Q(links__href__contains=quote_plus(href_contains))
+        href_filter |= Q(links__href__icontains=quote_plus(href_contains))
 
     queryset = queryset.filter(href_filter)
 
@@ -52,16 +52,16 @@ def search_empty():
 
 
 def search_html(html_contains):
-    return _search_pages(html__contains=html_contains)
+    return _search_pages(html__icontains=html_contains)
 
 
 def search_text(text_contains):
-    return _search_pages(text__contains=text_contains)
+    return _search_pages(text__icontains=text_contains)
 
 
 def search_title(title_contains):
-    return _search_pages(title__contains=title_contains)
+    return _search_pages(title__icontains=title_contains)
 
 
 def search_url(url_contains):
-    return _search_pages(url__contains=url_contains)
+    return _search_pages(url__icontains=url_contains)
