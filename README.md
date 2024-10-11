@@ -209,6 +209,19 @@ will be used.
 To enable Google Tag Manager on all pages on the viewer application,
 define the `GOOGLE_TAG_ID` environment variable.
 
+### Using files as an alternative to environment variables
+
+As alternative to configuration via environment variable,
+values may be provided in files instead.
+
+Set the `PATCH_ENVIRON_PATH` environment variable to the location of a directory
+containing files named for environment variables to set,
+each containing the desired value for that variable.
+
+When configured this way,
+the application environment will be populated with those file-based values.
+Values that already exist in the environment will not be overwritten.
+
 ## Development
 
 ### Sample test data

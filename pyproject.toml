@@ -1,6 +1,7 @@
 [tool.pytest.ini_options]
 addopts = [
   "--cov=crawler",
+  "--cov=patch_environ",
   "--cov=viewer",
   "--cov-branch",
   "--cov-fail-under=100",
