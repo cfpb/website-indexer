@@ -1,8 +1,12 @@
 import os
-import sys
 from pathlib import Path
 
 import dj_database_url
+
+from patch_environ import patch_environ
+
+# Optionally patch the environment with file-based variables.
+patch_environ(os.getenv("PATCH_ENVIRON_PATH"))
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

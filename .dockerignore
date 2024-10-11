@@ -11,6 +11,8 @@
 
 !crawler/**/*.py
 
+!patch_environ/**/*.py
+
 !requirements
 
 !sample/sample.sqlite3
