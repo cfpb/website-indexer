@@ -110,6 +110,10 @@
       <li class="m-list__item">
         You want to find and remediate broken links.
         <a href="{% url 'index' %}?search_type=links&q=none">Search "none"</a>
+        or
+        <a href="{% url 'index' %}?search_type=html&q={{ '<a>' | urlencode }}">
+          search "&lt;a&gt;"
+        </a>
       </li>
       <li class="m-list__item">
         You're looking for incorrectly formatted document links.
