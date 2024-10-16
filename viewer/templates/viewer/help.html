@@ -108,7 +108,7 @@
         </a>
       </li>
       <li class="m-list__item">
-        You want to find and remediate broken links.
+        You want to find and remediate links to trashed Wagtail pages.
         <a href="{% url 'index' %}?search_type=links&q=none">Search "none"</a>
       </li>
       <li class="m-list__item">
@@ -179,6 +179,12 @@
         >.
         <a href="{% url 'index' %}?search_type=html&q=cf-icon-svg--college">
           Search "cf-icon-svg--college"
+        </a>
+      </li>
+      <li class="m-list__item">
+        You want to find and remediate links to deleted Wagtail pages.
+        <a href="{% url 'index' %}?search_type=html&q={{ '<a>' | urlencode }}">
+          Search "&lt;a&gt;"
         </a>
       </li>
     </ul>
