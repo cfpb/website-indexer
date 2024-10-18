@@ -98,8 +98,25 @@ class ManageCrawlsCommandTests(TestCase):
         c6 = Crawl.objects.create(config={}, status=Crawl.Status.FAILED)
 
         stdout = self.invoke("clean")
-        self.assertEqual(stdout, f"Deleting 3 crawls\n{c5}\n{c3}\n{c1}\n")
+        self.assertEqual(stdout, f"Deleting 4 crawls\n{c5}\n{c3}\n{c2}\n{c1}\n")
+        self.assertEqual(Crawl.objects.count(), 2)
+        self.assertEqual(
+            list(Crawl.objects.values_list("pk", flat=True)), [c6.pk, c4.pk]
+        )
+
+    def test_clean_crawl_in_progress(self):
+        c1 = Crawl.objects.create(config={}, status=Crawl.Status.STARTED)
+        c2 = Crawl.objects.create(config={}, status=Crawl.Status.FINISHED)
+        c3 = Crawl.objects.create(config={}, status=Crawl.Status.FINISHED)
+        c4 = Crawl.objects.create(config={}, status=Crawl.Status.FAILED)
+        c5 = Crawl.objects.create(config={}, status=Crawl.Status.STARTED)
+
+        stdout = self.invoke("clean")
+        self.assertEqual(stdout, f"Deleting 2 crawls\n{c2}\n{c1}\n")
         self.assertEqual(Crawl.objects.count(), 3)
+        self.assertEqual(
+            list(Crawl.objects.values_list("pk", flat=True)), [c5.pk, c4.pk, c3.pk]
+        )
 
     def test_clean_dry_run(self):
         c1 = Crawl.objects.create(config={}, status=Crawl.Status.STARTED)
@@ -111,6 +128,7 @@ class ManageCrawlsCommandTests(TestCase):
 
         stdout = self.invoke("clean", "--dry-run")
         self.assertEqual(
-            stdout, f"Deleting 3 crawls\n{c5}\n{c3}\n{c1}\nDry run, skipping deletion\n"
+            stdout,
+            f"Deleting 4 crawls\n{c5}\n{c3}\n{c2}\n{c1}\nDry run, skipping deletion\n",
         )
         self.assertEqual(Crawl.objects.count(), 6)
