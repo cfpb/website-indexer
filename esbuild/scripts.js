@@ -1,10 +1,10 @@
-import { pluginPostCssSass } from './plugins/plugin-postcss-sass.js';
+import { pluginPostCssSass } from "./plugins/plugin-postcss-sass.js";
 import { copy } from "esbuild-plugin-copy";
-import autoprefixer from 'autoprefixer';
+import autoprefixer from "autoprefixer";
 
 const jsPaths = [];
 
-const entryFileList = ['./viewer/static_src/js/main.js'];
+const entryFileList = ["./viewer/static_src/js/main.js"];
 entryFileList.forEach((file) => {
   jsPaths.push(file);
 });
@@ -17,7 +17,7 @@ function scripts(baseConfig) {
   return {
     ...baseConfig,
     entryPoints: jsPaths,
-    target: 'es6',
+    target: "es6",
     plugins: baseConfig.plugins.concat([
       copy({
         assets: [
@@ -26,7 +26,9 @@ function scripts(baseConfig) {
             to: ["."],
           },
           {
-            from: ["./node_modules/@cfpb/cfpb-design-system/src/components/cfp-icons/icons/*"],
+            from: [
+              "./node_modules/@cfpb/cfpb-design-system/src/components/cfp-icons/icons/*",
+            ],
             to: ["./icons"],
           },
         ],
@@ -43,9 +45,9 @@ function scripts(baseConfig) {
           {
             from: ["./viewer/static/js/main.css.map"],
             to: ["./css/main.css.map"],
-          }
+          },
         ],
-      })
+      }),
     ]),
   };
 }

@@ -1,15 +1,15 @@
-import esbuild from 'esbuild';
+import esbuild from "esbuild";
 
-import { scripts } from './scripts.js';
+import { scripts } from "./scripts.js";
 
 const baseConfig = {
-  logLevel: 'info',
+  logLevel: "info",
   bundle: true,
   minify: true,
   sourcemap: true,
-  external: ['*.png', '*.woff2', '*.gif'],
+  external: ["*.png", "*.woff2", "*.gif"],
   loader: {
-    '.svg': 'text',
+    ".svg": "text",
   },
   outdir: "./viewer/static",
   outbase: "./viewer/static_src",
@@ -22,7 +22,7 @@ const arg = process.argv.slice(2)[0];
   const scriptsConfig = scripts(baseConfig);
   const ctx = await esbuild.context(scriptsConfig);
 
-  if (arg === 'watch') {
+  if (arg === "watch") {
     const ctx = await esbuild.context(scriptsConfig);
     await ctx.watch();
     // Not disposing context here as the user will ctrl+c to end watching.
@@ -31,5 +31,4 @@ const arg = process.argv.slice(2)[0];
     await ctx.rebuild();
     await ctx.dispose();
   }
-
 })();
