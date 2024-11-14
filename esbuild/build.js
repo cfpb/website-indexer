@@ -20,7 +20,6 @@ const arg = process.argv.slice(2)[0];
 
 (async function () {
   const scriptsConfig = scripts(baseConfig);
-  const ctx = await esbuild.context(scriptsConfig);
 
   if (arg === "watch") {
     const ctx = await esbuild.context(scriptsConfig);
