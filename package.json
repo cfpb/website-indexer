@@ -3,37 +3,28 @@
   "version": "1.1.0",
   "license": "CC0-1.0",
   "engines": {
-    "node": ">=16.x"
+    "node": ">=20.x"
   },
   "scripts": {
-    "build": "node ./esbuild.mjs",
+    "build": "node ./esbuild/build.js",
     "clean": "rm -rf ./viewer/static/",
     "prettier": "prettier . --check",
     "prettier:fix": "prettier . --write",
     "watch": "yarn build --watch"
   },
   "dependencies": {
-    "@cfpb/cfpb-atomic-component": "^2.0.1",
-    "@cfpb/cfpb-buttons": "^2.0.0",
-    "@cfpb/cfpb-core": "^2.0.0",
-    "@cfpb/cfpb-expandables": "^2.0.1",
-    "@cfpb/cfpb-forms": "^2.0.0",
-    "@cfpb/cfpb-grid": "^2.0.0",
-    "@cfpb/cfpb-icons": "^2.0.0",
-    "@cfpb/cfpb-layout": "^2.0.0",
-    "@cfpb/cfpb-notifications": "^2.0.1",
-    "@cfpb/cfpb-pagination": "^2.0.0",
-    "@cfpb/cfpb-typography": "^2.0.1",
-    "autoprefixer": "^10.4.19",
-    "esbuild": "^0.23.0",
+    "@cfpb/cfpb-design-system": "^3.4.9",
+    "@csstools/postcss-sass": "5.1.1",
+    "@csstools/sass-import-resolve": "1.0.0",
+    "autoprefixer": "^10.4.20",
+    "esbuild": "^0.24.0",
     "esbuild-plugin-copy": "^2.1.1",
-    "less": "^4.2.0",
-    "postcss": "^8.4.39",
-    "postcss-less": "^6.0.0"
+    "postcss": "^8.4.49",
+    "postcss-scss": "4.0.9"
   },
   "devDependencies": {
     "prettier": "^3.3.3",
-    "prettier-plugin-jinja-template": "^1.4.1"
+    "prettier-plugin-jinja-template": "^2.0.0"
   },
   "prettier": {
     "plugins": [
@@ -49,5 +40,6 @@
         }
       }
     ]
-  }
+  },
+  "type": "module"
 }
