@@ -94,6 +94,13 @@ yarn
 yarn build
 ```
 
+Alternatively, to continuously watch the frontend assets and rebuild as necessary:
+
+```
+yarn
+yarn watch
+```
+
 #### Viewing a sample crawl using a Python virtual environment
 
 Run the viewer application using sample data:

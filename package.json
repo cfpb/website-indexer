@@ -10,7 +10,7 @@
     "clean": "rm -rf ./viewer/static/",
     "prettier": "prettier . --check",
     "prettier:fix": "prettier . --write",
-    "watch": "yarn build --watch"
+    "watch": "yarn build watch"
   },
   "dependencies": {
     "@cfpb/cfpb-design-system": "^3.4.9",
