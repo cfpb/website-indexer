@@ -2,7 +2,7 @@
 {% block content %}
   <div class="lead-paragraph">
     {{ results | length | intcomma }} total
-    <a class="a-link a-link__icon" href="https://cfpb.github.io/design-system">
+    <a class="a-link" href="https://cfpb.github.io/design-system">
       <span class="a-link__text">CFPB Design System</span>
       {% include "external-link.svg" %}</a
     >
@@ -12,7 +12,7 @@
   <div class="block block--flush-top">
     <ul class="m-list">
       {% for component in results %}
-        <li class="results_item">
+        <li class="results__item">
           <a
             href="{% url 'index' %}?search_type=components&q={{ component.class_name | escape }}"
           >

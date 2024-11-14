@@ -1,0 +1,18 @@
+// CFPB Design System
+@use "@cfpb/cfpb-design-system/src/abstracts" as *;
+@use "@cfpb/cfpb-design-system/src/base" as *;
+
+// Inspired by consumerfinance.gov
+@use "breadcrumbs" as *;
+@use "footer" as *;
+@use "skip-nav" as *;
+@use "layout" as *;
+
+// Crawler-specific
+@use "crawler" as *;
+
+@include define-custom-props;
+
+:root {
+  --font-stack: Arial, sans-serif;
+}

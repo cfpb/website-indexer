@@ -2,7 +2,8 @@
 **
 
 # ...except for all of this
-!esbuild.mjs
+!esbuild/**/*.js
+
 !manage.py
 !package.json
 !settings.py

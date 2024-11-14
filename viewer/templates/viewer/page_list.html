@@ -40,7 +40,7 @@
       {% for page in results %}
         <li class="results-list__item">
           <h4>
-            <a class="a-link a-link--icon" href="{{ page.url }}">
+            <a class="a-link" href="{{ page.url }}">
               <span class="a-link__text">{{ page.title }}</span>
               {% include "external-link.svg" %}</a
             >
@@ -67,10 +67,8 @@
           class="a-btn a-btn--disabled m-pagination__btn-prev"
         {% endif %}
       >
-        <span class="a-btn__icon a-btn__icon--on-left">
-          {% include 'left.svg' %}
-        </span>
-        Previous
+        {% include 'left.svg' %}
+        <span>Previous</span>
       </a>
       <a
         {% if next %}
@@ -79,10 +77,8 @@
           class="a-btn a-btn--disabled m-pagination__btn-next"
         {% endif %}
       >
-        Next
-        <span class="a-btn__icon a-btn__icon--on-right">
-          {% include 'right.svg' %}
-        </span>
+        <span>Next</span>
+        {% include 'right.svg' %}
       </a>
       <form class="m-pagination__form" action="{% url 'index' %}">
         <label class="m-pagination__label" for="m-pagination__current-page">
@@ -130,12 +126,12 @@
     <ul class="m-list">
       <li>
         Download
-        <a class="a-link a-link__icon" href="{% url 'errors' %}?format=csv">
+        <a class="a-link" href="{% url 'errors' %}?format=csv">
           <span class="a-link__text">website errors (including 404s)</span>
           {% include "download.svg" %}</a
         >
         and
-        <a class="a-link a-link__icon" href="{% url 'redirects' %}?format=csv">
+        <a class="a-link" href="{% url 'redirects' %}?format=csv">
           <span class="a-link__text">website redirects</span>
           {% include "download.svg" %}</a
         >

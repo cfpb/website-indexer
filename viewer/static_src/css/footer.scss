@@ -1,3 +1,6 @@
+@use "sass:math";
+@use "@cfpb/cfpb-design-system/src/abstracts" as *;
+
 // Copied from https://github.com/cfpb/consumerfinance.gov/blob/9fd820092b80fe7272454e6a93cef2c81f351877/cfgov/unprocessed/css/organisms/footer.less
 .u-upper-hover-line {
   position: absolute;
@@ -13,10 +16,10 @@
   font-weight: 500;
   // Adding an extra 5px to the top to account for the absolute positioned
   // social media icons.
-  padding-top: unit(50px / @base-font-size-px, em);
+  padding-top: math.div(50px, $base-font-size-px) + rem;
   // There is a 10px margin-bottom on the  last .o-footer__list li's, plus the
   // 50px bottom padding = 60px of total padding at the bottom of the footer.
-  padding-bottom: unit(50px / @base-font-size-px, em);
+  padding-bottom: math.div(50px, $base-font-size-px) + rem;
   border-top: 5px solid var(--green);
   background: var(--gray-5);
 }
