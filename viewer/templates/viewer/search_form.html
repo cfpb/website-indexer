@@ -30,15 +30,21 @@
           {% include "error.svg" %}
         </button>
       </div>
-      <button class="a-btn" type="submit" aria-label="Search">Search</button>
+      <button
+        class="a-btn"
+        type="submit"
+        aria-label="Search consumerfinance.gov content and source code"
+      >
+        Search
+      </button>
     </div>
 
     <p class="help-text">
       Check out the <a href="{% url 'help' %}">Common searches</a> page for
-      examples
+      examples.
     </p>
 
-    <div class="o-form__group search-options">
+    <div class="search-options">
       <div class="m-form-field m-form-field--radio">
         <input
           class="a-radio"
@@ -139,11 +145,5 @@
         </label>
       </div>
     </div>
-    <button
-      class="a-btn a-btn-alt"
-      aria-label="Search consumerfinance.gov content and source code"
-    >
-      Search
-    </button>
   </form>
 </div>
