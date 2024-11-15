@@ -27,7 +27,7 @@ function scripts(baseConfig) {
           },
           {
             from: [
-              "./node_modules/@cfpb/cfpb-design-system/src/components/cfp-icons/icons/*",
+              "./node_modules/@cfpb/cfpb-design-system/src/components/cfpb-icons/icons/*",
             ],
             to: ["./icons"],
           },
