@@ -13,7 +13,7 @@
     "watch": "yarn build watch"
   },
   "dependencies": {
-    "@cfpb/cfpb-design-system": "^3.4.9",
+    "@cfpb/cfpb-design-system": "^3.5.0",
     "@csstools/postcss-sass": "5.1.1",
     "@csstools/sass-import-resolve": "1.0.0",
     "autoprefixer": "^10.4.20",
@@ -23,7 +23,7 @@
     "postcss-scss": "4.0.9"
   },
   "devDependencies": {
-    "prettier": "^3.3.3",
+    "prettier": "^3.4.1",
     "prettier-plugin-jinja-template": "^2.0.0"
   },
   "prettier": {
@@ -41,5 +41,6 @@
       }
     ]
   },
-  "type": "module"
+  "type": "module",
+  "packageManager": "yarn@4.5.3"
 }
