@@ -89,6 +89,11 @@ class ManageCrawlsCommandTests(TestCase):
         self.assertEqual(stdout, f"Deleting {c1}\nDry run, skipping deletion\n")
         self.assertEqual(Crawl.objects.count(), 2)
 
+    def test_clean_no_crawls(self):
+        self.assertFalse(Crawl.objects.exists())
+        self.invoke("clean")
+        self.assertFalse(Crawl.objects.exists())
+
     def test_clean(self):
         c1 = Crawl.objects.create(config={}, status=Crawl.Status.STARTED)
         c2 = Crawl.objects.create(config={}, status=Crawl.Status.STARTED)

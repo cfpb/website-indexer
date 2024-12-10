@@ -37,6 +37,10 @@ def delete(crawl_id, dry_run):
 @click.option("--dry-run", is_flag=True)
 @transaction.atomic
 def clean(keep, dry_run):
+    # If there are no crawls, there's nothing to do.
+    if not Crawl.objects.exists():
+        return
+
     # Delete any in-progress crawls that aren't the most recent.
     started_delete = Crawl.objects.filter(status=Crawl.Status.STARTED).exclude(
         pk=Crawl.objects.latest("started").pk
