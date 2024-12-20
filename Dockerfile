@@ -29,6 +29,9 @@ RUN addgroup \
 ENV APP_HOME /home/$USERNAME
 WORKDIR $APP_HOME
 
+# Define frontend environment.
+ENV YARN_VERSION "4.5.3"
+
 # Copy the whole project except for what is in .dockerignore.
 COPY --chown=$USERNAME:$USERNAME . .
 
@@ -68,13 +71,13 @@ ENV NODE_ENV=production
 RUN set -eux; \
         \
         # Needed only at build time, so we can delete after use.
-        apk add --no-cache --virtual .frontend-deps \
-            # TODO: Remove curl once frontend build no longer curls from www.cf.gov.
-            curl \
-            yarn \
-        ; \
-        yarn global add corepack && corepack enable; \
-        yarn && yarn build; \
+        apk add --no-cache --virtual .frontend-deps npm \
+        curl; \
+        npm install -g corepack; \
+        corepack enable; \
+        corepack prepare yarn@${YARN_VERSION} --activate; \
+        yarn install; \
+        yarn build; \
         # We don't need node_modules once we've built our frontend.
         rm -rf ./node_modules; \
         apk del .frontend-deps
