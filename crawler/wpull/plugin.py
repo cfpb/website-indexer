@@ -82,10 +82,6 @@ class DatabaseWritingPlugin(WpullPlugin):
 
         request = item_session.url_record
 
-        # Don't request pages more than once.
-        if request.url in self.requested_urls:
-            return False
-
         # Always skip certain URLs.
         if SKIP_URLS and any(skip_url.match(request.url) for skip_url in SKIP_URLS):
             return False
