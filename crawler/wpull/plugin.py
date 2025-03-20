@@ -80,7 +80,11 @@ class DatabaseWritingPlugin(WpullPlugin):
         if self.at_max_pages:
             return False
 
-        request = item_session.url_record
+        request = item_session.request
+
+        # Don't request pages more than once.
+        if request.url in self.requested_urls:
+            return False
 
         # Always skip certain URLs.
         if SKIP_URLS and any(skip_url.match(request.url) for skip_url in SKIP_URLS):
@@ -90,7 +94,7 @@ class DatabaseWritingPlugin(WpullPlugin):
         # But once we've done that, we don't want to keep crawling there.
         # Therefore, don't crawl links that start on different domains.
         if (
-            request.parent_url_info.hostname_with_port
+            item_session.url_record.parent_url_info.hostname_with_port
             != self.start_url.hostname_with_port
         ):
             return False
