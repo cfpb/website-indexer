@@ -124,10 +124,12 @@ class DatabaseWritingPlugin(WpullPlugin):
                         ext_url = ext_urls[0]
 
                         url_properties = URLProperties()
-                        url_properties.level = request.level
-                        url_properties.inline_level = request.inline_level
-                        url_properties.parent_url = request.parent_url
-                        url_properties.root_url = request.root_url
+                        url_properties.level = item_session.url_record.level
+                        url_properties.inline_level = (
+                            item_session.url_record.inline_level
+                        )
+                        url_properties.parent_url = item_session.url_record.parent_url
+                        url_properties.root_url = item_session.url_record.root_url
 
                         item_session.app_session.factory["URLTable"].remove_many(
                             [ext_url]
