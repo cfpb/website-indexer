@@ -1,14 +1,12 @@
 import dataclasses
-import lxml.etree
-import lxml.html.soupparser
 import re
-from urllib import parse
 
 from django.db import models
-from django.utils import timezone
 
 from modelcluster.models import ClusterableModel
 from modelcluster.fields import ParentalManyToManyField
+
+from crawler.parser import parse_html
 
 
 @dataclasses.dataclass
@@ -115,10 +113,6 @@ class Page(Request, ClusterableModel):
     def __str__(self):
         return self.url
 
-    HTML_COMPONENT_SEARCH = re.compile(r"(?:(?:class=\")|\s)((?:o|m|a)-[\w\-]*)")
-    HTML_EXTERNAL_SITE = re.compile("/external-site/")
-    HTML_WHITESPACE = re.compile(r"\s+")
-
     @classmethod
     def from_html(
         cls,
@@ -126,90 +120,24 @@ class Page(Request, ClusterableModel):
         html,
         internal_link_host,
     ):
-        try:
-            tree = lxml.html.fromstring(html)
-        except lxml.etree.ParserError:
-            # https://bugs.launchpad.net/lxml/+bug/1949271
-            tree = lxml.html.soupparser.fromstring(html)
+        parsed_html = parse_html(html, internal_link_host)
 
-        title_tag = tree.find(".//title")
-        title = title_tag.text.strip() if title_tag is not None else None
-        language = tree.find(".").get("lang")
+        if parsed_html is None:
+            return None
 
-        if title is None:
-            return
-
-        body = cls._get_cleaned_body_from_tree(tree)
-
-        if body is not None:
-            text = cls.HTML_WHITESPACE.sub(" ", body.text_content()).strip()
-        else:
-            text = None
-
-        page = Page(
-            timestamp=timezone.now(),
+        return Page(
+            timestamp=parsed_html.timestamp,
             url=url,
-            title=title,
-            language=language,
-            html=html,
-            text=text,
+            title=parsed_html.title,
+            language=parsed_html.language,
+            html=parsed_html.html,
+            text=parsed_html.text,
+            links=[Link(href=href) for href in parsed_html.links],
+            components=[
+                Component(class_name=class_name)
+                for class_name in parsed_html.components
+            ],
         )
-
-        if body is None:
-            return page
-
-        hrefs = list(
-            set(
-                href
-                for element, attribute, href, pos in body.iterlinks()
-                if "a" == element.tag and "href" == attribute
-            )
-        )
-
-        # Remove any external link URL wrapping.
-        for i, href in enumerate(hrefs):
-            parsed_href = parse.urlparse(href)
-            if not cls.HTML_EXTERNAL_SITE.match(parsed_href.path):
-                continue
-
-            if parsed_href.netloc and internal_link_host != parsed_href.netloc:
-                continue
-
-            ext_url = parse.parse_qs(parsed_href.query).get("ext_url")
-            if ext_url:
-                hrefs[i] = ext_url[0]
-
-        page.links = [Link(href=href) for href in sorted(hrefs)]
-
-        body_html = lxml.etree.tostring(body, encoding="unicode")
-
-        class_names = set(cls.HTML_COMPONENT_SEARCH.findall(body_html))
-        page.components = [
-            Component(class_name=class_name) for class_name in sorted(class_names)
-        ]
-
-        return page
-
-    @staticmethod
-    def _get_cleaned_body_from_tree(tree):
-        """Extract page body without header, footer, images, or scripts."""
-        body = tree.find("./body")
-
-        if body is not None:
-            drop_element_selectors = [
-                ".o-header",
-                ".o-footer",
-                ".skip-nav",
-                "img",
-                "script",
-                "style",
-            ]
-
-            for drop_element_selector in drop_element_selectors:
-                for element in body.cssselect(drop_element_selector):
-                    element.drop_tree()
-
-        return body
 
 
 class ErrorBase(Request):
