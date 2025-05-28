@@ -17,7 +17,7 @@
     "@csstools/postcss-sass": "5.1.1",
     "@csstools/sass-import-resolve": "1.0.0",
     "autoprefixer": "^10.4.20",
-    "esbuild": "^0.24.2",
+    "esbuild": "^0.25.0",
     "esbuild-plugin-copy": "^2.1.1",
     "postcss": "^8.4.49",
     "postcss-scss": "4.0.9"
