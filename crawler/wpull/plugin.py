@@ -12,6 +12,7 @@ from wpull.pipeline.item import URLProperties
 from wpull.url import URLInfo
 
 from crawler.models import Crawl, Error, Page, Redirect
+from crawler.parser import HTML_EXTERNAL_SITE
 from crawler.writer import DatabaseWriter
 
 
@@ -117,7 +118,7 @@ class DatabaseWritingPlugin(WpullPlugin):
             if qs:
                 # Don't crawl external link URLs directly.
                 # Instead crawl to their ultimate destination.
-                if Page.HTML_EXTERNAL_SITE.match(request.url_info.path):
+                if HTML_EXTERNAL_SITE.match(request.url_info.path):
                     ext_urls = qs.get("ext_url")
                     if ext_urls:
                         # Add the external URL to the list to be crawled.
