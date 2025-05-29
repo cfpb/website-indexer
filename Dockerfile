@@ -1,16 +1,16 @@
 FROM python:3.12-alpine
 
 # Ensure that the environment uses UTF-8 encoding by default.
-ENV LANG en_US.UTF-8
+ENV LANG=en_US.UTF-8
 
 # Disable pip cache dir.
-ENV PIP_NO_CACHE_DIR 1
+ENV PIP_NO_CACHE_DIR=1
 
 # Allow pip install as root.
-ENV PIP_ROOT_USER_ACTION ignore
+ENV PIP_ROOT_USER_ACTION=ignore
 
 # Stops Python default buffering to stdout, improving logging to the console.
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 
 # Create a non-root user for the container.
 ARG USERNAME=app
@@ -26,11 +26,11 @@ RUN addgroup \
     $USERNAME
 
 # Define app home and workdir.
-ENV APP_HOME /home/$USERNAME
+ENV APP_HOME=/home/$USERNAME
 WORKDIR $APP_HOME
 
 # Define frontend environment.
-ENV YARN_VERSION "4.9.1"
+ENV YARN_VERSION="4.9.1"
 
 # Copy the whole project except for what is in .dockerignore.
 COPY --chown=$USERNAME:$USERNAME . .
@@ -87,6 +87,6 @@ USER $USERNAME
 
 ARG PORT=8000
 EXPOSE $PORT
-ENV PORT $PORT
+ENV PORT=$PORT
 
 CMD python manage.py runserver 0.0.0.0:$PORT
