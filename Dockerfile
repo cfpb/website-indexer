@@ -30,7 +30,7 @@ ENV APP_HOME /home/$USERNAME
 WORKDIR $APP_HOME
 
 # Define frontend environment.
-ENV YARN_VERSION "4.5.3"
+ENV YARN_VERSION "4.9.1"
 
 # Copy the whole project except for what is in .dockerignore.
 COPY --chown=$USERNAME:$USERNAME . .
