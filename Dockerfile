@@ -89,4 +89,4 @@ ARG PORT=8000
 EXPOSE $PORT
 ENV PORT=$PORT
 
-CMD python manage.py runserver 0.0.0.0:$PORT
+CMD ["sh", "-c", "python manage.py runserver 0.0.0.0:$PORT"]
