@@ -1,4 +1,5 @@
 import logging
+import mimetypes
 import re
 from urllib import parse
 
@@ -32,6 +33,24 @@ SKIP_URLS = list(
 )
 
 HEAD_URLS = list(map(re.compile, [r"https://files.consumerfinance.gov/.*"]))
+
+
+def patch_mimetypes():
+    # Patch mimetypes.guess_type to avoid unhandled ValueErrors.
+    #
+    # This works around an issue in ludios_wpull where invalid URLs like
+    # "//[invalid]" cause ValueError to be raised, crashing the crawler.
+    # See https://github.com/ArchiveTeam/ludios_wpull/pull/38.
+    _original_guess_type = mimetypes.guess_type
+
+    def _safe_guess_type(url, strict=True):
+        try:
+            return _original_guess_type(url, strict=strict)
+        except ValueError:
+            breakpoint()
+            return (None, None)
+
+    mimetypes.guess_type = _safe_guess_type
 
 
 def patch_wpull_connection():

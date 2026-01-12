@@ -98,7 +98,11 @@ def _parse_html(html, internal_link_host):
 
     # Remove any external link URL wrapping.
     for i, href in enumerate(hrefs):
-        parsed_href = parse.urlparse(href)
+        try:
+            parsed_href = parse.urlparse(href)
+        except ValueError:
+            continue
+
         if not HTML_EXTERNAL_SITE.match(parsed_href.path):
             continue
 
