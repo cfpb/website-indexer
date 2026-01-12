@@ -13,7 +13,9 @@ jobs:
       with:
         python-version: "3.12"
     - name: Install packages to support building lxml from source
-      run: sudo apt-get install python3.12-dev libxml2-dev libxslt-dev
+      run: |
+        sudo apt-get update
+        sudo apt-get install python3.12-dev libxml2-dev libxslt-dev
     - uses: actions/cache@v4
       name: Configure pip caching
       with:
