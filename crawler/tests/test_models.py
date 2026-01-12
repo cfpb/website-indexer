@@ -80,6 +80,9 @@ class PageTests(SimpleTestCase):
             <a href="https://example.org/external-site/">
                 A link on another domain that also uses /external-site/
             </a>
+            <a href="//[invalid]">
+                A deliberately invalid link
+            </a>
         </div>
 </body>
 </html>
@@ -97,7 +100,8 @@ class PageTests(SimpleTestCase):
                 "A regular link on the same domain. "
                 "An external link pointing to another domain "
                 "An external link missing its target "
-                "A link on another domain that also uses /external-site/"
+                "A link on another domain that also uses /external-site/ "
+                "A deliberately invalid link"
             ),
         )
         self.assertCountEqual(
@@ -111,6 +115,7 @@ class PageTests(SimpleTestCase):
                 "/page/",
                 "https://example.org/",
                 "https://example.org/external-site/",
+                "//[invalid]",
             ],
         )
 
