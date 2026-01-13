@@ -69,6 +69,7 @@ class DatabaseWritingPlugin(WpullPlugin):
     def activate(self):
         super().activate()
 
+        patch_mimetypes()
         patch_wpull_connection()
 
         self.start_url = URLInfo.parse(self.app_session.args.urls[0])
