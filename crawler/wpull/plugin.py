@@ -47,7 +47,6 @@ def patch_mimetypes():
         try:
             return _original_guess_type(url, strict=strict)
         except ValueError:
-            breakpoint()
             return (None, None)
 
     mimetypes.guess_type = _safe_guess_type
