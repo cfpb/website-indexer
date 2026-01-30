@@ -1,6 +1,6 @@
-@use "sass:math";
+@use 'sass:math';
 @use '@cfpb/cfpb-design-system/src/elements/abstracts' as *;
-@use "@cfpb/cfpb-design-system/src/components/cfpb-buttons/button" as *;
+@use '@cfpb/cfpb-design-system/src/components/cfpb-buttons/button' as *;
 
 // Copied from https://github.com/cfpb/consumerfinance.gov/blob/fcb4eab638db45003cac57432b89c0a249bc2aff/cfgov/unprocessed/css/skip-nav.less
 .skip-nav {

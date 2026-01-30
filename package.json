@@ -8,8 +8,7 @@
   "scripts": {
     "build": "node ./esbuild/build.js",
     "clean": "rm -rf ./viewer/static/",
-    "prettier": "prettier . --check",
-    "prettier:fix": "prettier . --write",
+    "lint": "./scripts/lint.sh",
     "watch": "yarn build watch"
   },
   "dependencies": {
@@ -28,6 +27,7 @@
     "prettier-plugin-jinja-template": "^2.1.0"
   },
   "prettier": {
+    "singleQuote": true,
     "plugins": [
       "prettier-plugin-jinja-template"
     ],

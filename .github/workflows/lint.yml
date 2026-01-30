@@ -17,6 +17,6 @@ jobs:
           ${{ runner.OS }}-npm-
     - name: Install dependencies
       run: npm install
-    - name: Run prettier
+    - name: Lint files
       run: |-
-        npm run prettier
+        npm run lint
