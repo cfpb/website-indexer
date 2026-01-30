@@ -16,7 +16,9 @@ jobs:
         restore-keys: |
           ${{ runner.OS }}-npm-
     - name: Install dependencies
-      run: npm install
-    - name: Run prettier
+      run: |
+        corepack enable
+        yarn install
+    - name: Lint files
       run: |-
-        npm run prettier
+        yarn run lint

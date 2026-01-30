@@ -1,18 +1,18 @@
-import { readdirSync } from "node:fs";
-import postcss from "postcss";
-import * as sass from "sass";
-import { pluginProcessIcons } from "./postcss-process-icons.js";
+import { readdirSync } from 'node:fs';
+import postcss from 'postcss';
+import * as sass from 'sass';
+import { pluginProcessIcons } from './postcss-process-icons.js';
 
 const pluginPostCssSass = ({ plugins = [] }) => ({
-  name: "postcss-sass",
+  name: 'postcss-sass',
   setup(build) {
     build.onLoad({ filter: /.\.scss$/ }, async (args) => {
       const sassResult = await sass.compile(args.path, {
         loadPaths: [
-          ...readdirSync("./node_modules/@cfpb").map(
+          ...readdirSync('./node_modules/@cfpb').map(
             (v) => `./node_modules/@cfpb/${v}/src`,
           ),
-          "./node_modules/",
+          './node_modules/',
         ],
       });
 
@@ -25,7 +25,7 @@ const pluginPostCssSass = ({ plugins = [] }) => ({
 
       return {
         contents: result.css,
-        loader: "css",
+        loader: 'css',
       };
     });
   },

@@ -1,5 +1,5 @@
-@use "sass:math";
-@use "@cfpb/cfpb-design-system/src/abstracts" as *;
+@use 'sass:math';
+@use '@cfpb/cfpb-design-system/src/elements/abstracts' as *;
 
 // Copied from https://github.com/cfpb/consumerfinance.gov/blob/f19227f9d13d90f19c06dd1dbd78e9233d1d3432/cfgov/unprocessed/css/breadcrumbs.less
 .m-breadcrumbs {
