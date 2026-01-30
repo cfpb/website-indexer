@@ -16,7 +16,9 @@ jobs:
         restore-keys: |
           ${{ runner.OS }}-npm-
     - name: Install dependencies
-      run: yarn install
+      run: |
+        corepack enable
+        yarn install
     - name: Lint files
       run: |-
         yarn run lint
