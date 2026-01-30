@@ -3,7 +3,6 @@ from django.views.generic import TemplateView
 
 from viewer import views
 
-
 urlpatterns = [
     path("", views.PageListView.as_view(), name="index"),
     path("page/", views.PageDetailView.as_view(), name="page"),

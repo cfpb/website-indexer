@@ -16,7 +16,6 @@ from crawler.models import Crawl, Error, Page, Redirect
 from crawler.parser import HTML_EXTERNAL_SITE
 from crawler.writer import DatabaseWriter
 
-
 logger = logging.getLogger("crawler")
 
 
