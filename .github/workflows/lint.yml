@@ -16,7 +16,7 @@ jobs:
         restore-keys: |
           ${{ runner.OS }}-npm-
     - name: Install dependencies
-      run: npm install
+      run: yarn install
     - name: Lint files
       run: |-
-        npm run lint
+        yarn run lint
