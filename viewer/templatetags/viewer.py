@@ -3,7 +3,6 @@ from django.contrib.humanize.templatetags.humanize import intcomma
 from django.template.defaultfilters import date, pluralize
 from django.templatetags.tz import localtime
 
-
 register = template.Library()
 
 

@@ -2,7 +2,6 @@ import os
 import os.path
 import re
 
-
 ENV_FILENAME_RE = re.compile(r"[A-Z_]+")
 
 

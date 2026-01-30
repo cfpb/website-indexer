@@ -3,7 +3,6 @@ import re
 from django.template.base import Origin
 from django.template.loaders.base import Loader
 
-
 SVG_FILENAME = re.compile(r"^.*\.svg$")
 
 

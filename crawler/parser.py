@@ -11,7 +11,6 @@ from django.utils import timezone
 import lxml.etree
 import lxml.html.soupparser
 
-
 HTML_COMPONENT_SEARCH = re.compile(r"(?:(?:class=\")|\s)((?:o|m|a)-[\w\-]*)")
 HTML_EXTERNAL_SITE = re.compile("/external-site/")
 HTML_WHITESPACE = re.compile(r"\s+")

@@ -4,7 +4,6 @@ from django.db import connections
 
 from crawler.models import Component, Link, Page
 
-
 logger = logging.getLogger("crawler")
 
 

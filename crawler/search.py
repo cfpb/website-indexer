@@ -4,7 +4,6 @@ from django.db.models import Q
 
 from crawler.models import Page
 
-
 _page_values = ["timestamp", "url", "title", "language"]
 
 
