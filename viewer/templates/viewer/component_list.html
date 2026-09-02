@@ -1,7 +1,7 @@
 {% extends './base.html' %} {% load humanize %}
 {% block content %}
   <div class="lead-paragraph">
-    {{ results | length | intcomma }} total
+    {{ details | length | intcomma }} total
     <a class="a-link" href="https://cfpb.github.io/design-system">
       <span class="a-link__text">CFPB Design System</span>
       {% include "external-link.svg" %}</a
@@ -11,7 +11,7 @@
 
   <div class="block block--flush-top">
     <ul class="m-list">
-      {% for component in results %}
+      {% for component in details %}
         <li class="results__item">
           <a
             href="{% url 'index' %}?search_type=components&q={{ component.class_name | escape }}"
