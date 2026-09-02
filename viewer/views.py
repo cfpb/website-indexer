@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import View
 
 from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.renderers import TemplateHTMLRenderer
 
 from crawler.models import Component, Error, Page, Redirect
 from crawler.search import (
@@ -17,7 +18,6 @@ from crawler.search import (
 )
 from viewer.context_processors import crawl_stats
 from viewer.forms import SearchForm
-from viewer.renderers import BetterTemplateHTMLRenderer
 from viewer.serializers import (
     ComponentSerializer,
     ErrorSerializer,
@@ -32,7 +32,7 @@ from viewer.serializers import (
 class AlsoRenderHTMLMixin:
     @property
     def renderer_classes(self):
-        return [BetterTemplateHTMLRenderer] + super().renderer_classes
+        return [TemplateHTMLRenderer] + super().renderer_classes
 
 
 class BetterCSVsMixin:
