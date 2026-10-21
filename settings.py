@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 
+from django.core.management.utils import get_random_secret_key
+
 import dj_database_url
 
 from patch_environ import patch_environ
@@ -16,8 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-a94cjadrz=y0o+c75138ro=gn3oq0*by)gs1cs88k$9+taepp("
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY") or get_random_secret_key()
 
 # Default DEBUG to True unless we explicitly disable it.
 DEBUG = os.getenv("DJANGO_DEBUG", "true").lower() != "false"
