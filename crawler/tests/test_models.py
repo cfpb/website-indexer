@@ -130,7 +130,9 @@ class PageTests(SimpleTestCase):
             self.check_from_html()
 
     def test_from_html_no_body(self):
-        html = '<html lang="en"><head><title>Test page with no body</head></html>'
+        html = (
+            '<html lang="en"><head><title>Test page with no body</title></head></html>'
+        )
         page = Page.from_html("https://example.com/", html, "example.com")
         self.assertEqual(str(page), "https://example.com/")
         self.assertEqual(page.title, "Test page with no body")
